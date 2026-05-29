@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Cormorant_Garamond, DM_Sans } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/providers"
+import { ServiceWorkerRegistration } from "@/components/service-worker"
 
 const displayFont = Cormorant_Garamond({
   variable: "--font-display",
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "Carefree Casa",
   },
   icons: {
@@ -38,6 +39,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#0F1B2D",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export default function RootLayout({
@@ -53,9 +58,15 @@ export default function RootLayout({
     >
       <head>
         <link rel="manifest" href="/manifest.json" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Carefree Casa" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className="min-h-full antialiased">
         <Providers>{children}</Providers>
+        <ServiceWorkerRegistration />
       </body>
     </html>
   )
