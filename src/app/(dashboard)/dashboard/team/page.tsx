@@ -30,7 +30,7 @@ export default async function UsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Users</h1>
+        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Team Members</h1>
         <div className="flex items-center gap-3">
           <span className="text-sm text-slate-500">{staff?.length ?? 0} members</span>
           <CreateUserDialog label="Invite Staff" />

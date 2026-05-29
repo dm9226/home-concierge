@@ -18,8 +18,18 @@ export async function DELETE(request: NextRequest) {
   }
 
   const admin = createAdminClient()
-  const { error } = await admin.auth.admin.deleteUser(userId)
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+
+  // Try to delete from auth. For demo/seed users that only exist in public.users
+  // this will fail -- that's fine, we still clean up the public row below.
+  await admin.auth.admin.deleteUser(userId)
+
+  // Always delete from public.users regardless of auth result.
+  // Nullify FK references first so cascades don't block the delete.
+  await admin.from("properties").update({ primary_concierge_id: null }).eq("primary_concierge_id", userId)
+  await admin.from("work_orders").update({ assigned_to: null }).eq("assigned_to", userId)
+
+  const { error: dbError } = await admin.from("users").delete().eq("id", userId)
+  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 400 })
 
   return NextResponse.json({ success: true })
 }

@@ -26,7 +26,7 @@ const navLinks = [
   { href: "/dashboard/maintenance", label: "Maintenance", icon: Calendar },
   { href: "/dashboard/vendors", label: "Vendors", icon: UserCheck },
   { href: "/dashboard/clients", label: "Clients", icon: Users },
-  { href: "/dashboard/team", label: "Users", icon: Settings },
+  { href: "/dashboard/team", label: "Team Members", icon: Settings },
   { href: "/dashboard/invoices", label: "Invoices", icon: FileText },
   { href: "/dashboard/reports", label: "Reports", icon: BarChart3 },
   { href: "/dashboard/messages", label: "Messages", icon: MessageSquare },
