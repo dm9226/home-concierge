@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { CreateUserDialog } from "@/components/create-user-dialog"
 import { UserActions } from "./user-actions"
 import { Badge } from "@/components/ui/badge"
@@ -12,16 +13,18 @@ const ROLE_LABELS: Record<string, string> = {
 }
 
 export default async function TeamPage() {
+  // Auth via session client, data via admin client to bypass RLS
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
   const isAdmin = profile.role === "admin"
 
-  const { data: staff } = await supabase
+  const { data: staff } = await admin
     .from("users")
     .select("id, full_name, email, phone, role, created_at")
     .in("role", ["admin", "concierge"])
