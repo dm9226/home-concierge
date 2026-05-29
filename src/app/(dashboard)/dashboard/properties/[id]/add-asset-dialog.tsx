@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Camera, Loader2, Sparkles, CheckCircle2 } from "lucide-react"
+import { Plus, Camera, Upload, Loader2, Sparkles, CheckCircle2, PenLine } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 const CATEGORIES = [
   { value: "hvac", label: "HVAC" },
@@ -37,8 +38,10 @@ const EMPTY = {
 
 export function AddAssetDialog({ propertyId }: Props) {
   const router = useRouter()
-  const fileRef = useRef<HTMLInputElement>(null)
+  const cameraRef = useRef<HTMLInputElement>(null)
+  const uploadRef = useRef<HTMLInputElement>(null)
   const [open, setOpen] = useState(false)
+  const [mode, setMode] = useState<"choose" | "scan" | "manual">("choose")
   const [form, setForm] = useState(EMPTY)
   const [scanning, setScanning] = useState(false)
   const [scanned, setScanned] = useState(false)
@@ -51,10 +54,7 @@ export function AddAssetDialog({ propertyId }: Props) {
     setForm(f => ({ ...f, [field]: value }))
   }
 
-  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-
+  async function processImage(file: File) {
     setPreview(URL.createObjectURL(file))
     setScanning(true)
     setScanned(false)
@@ -68,7 +68,8 @@ export function AddAssetDialog({ propertyId }: Props) {
     setScanning(false)
 
     if (!res.ok || result.error) {
-      setScanError("Could not read the label. Fill in the details manually.")
+      setScanError("Could not read the label. Fill in the details below manually.")
+      setMode("manual")
       return
     }
 
@@ -85,6 +86,7 @@ export function AddAssetDialog({ propertyId }: Props) {
       notes: result.notes ?? f.notes,
     }))
     setScanned(true)
+    setMode("manual")
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -119,12 +121,20 @@ export function AddAssetDialog({ propertyId }: Props) {
     setForm(EMPTY)
     setPreview(null)
     setScanned(false)
+    setMode("choose")
     router.refresh()
   }
 
   function handleOpenChange(v: boolean) {
     setOpen(v)
-    if (!v) { setForm(EMPTY); setPreview(null); setScanned(false); setScanError(null); setError(null) }
+    if (!v) {
+      setForm(EMPTY)
+      setPreview(null)
+      setScanned(false)
+      setScanError(null)
+      setError(null)
+      setMode("choose")
+    }
   }
 
   return (
@@ -139,114 +149,208 @@ export function AddAssetDialog({ propertyId }: Props) {
           <DialogTitle className="font-display text-xl">Add Inventory Item</DialogTitle>
         </DialogHeader>
 
-        {/* Scan section */}
-        <div className="rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 p-4 text-center space-y-3">
-          {preview ? (
-            <div className="relative">
-              <img src={preview} alt="Label" className="mx-auto max-h-40 rounded-lg object-contain" />
-              {scanning && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/50">
-                  <div className="text-center text-white">
-                    <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
-                    <p className="text-sm font-medium">Analyzing label...</p>
-                  </div>
+        {/* Mode: choose */}
+        {mode === "choose" && (
+          <div className="space-y-3 py-2">
+            <p className="text-sm text-slate-500">How do you want to add this item?</p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setMode("scan")}
+                className="flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-slate-200 p-6 text-center hover:border-[#C9A96E] hover:bg-amber-50/50 transition-colors"
+              >
+                <Sparkles className="h-8 w-8 text-[#C9A96E]" />
+                <div>
+                  <p className="font-semibold text-[#0F1B2D] text-sm">Scan Label</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Photo auto-fills details</p>
                 </div>
-              )}
-              {scanned && (
-                <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-emerald-500 px-2 py-1 text-xs font-medium text-white">
-                  <CheckCircle2 className="h-3 w-3" /> Details extracted
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode("manual")}
+                className="flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-slate-200 p-6 text-center hover:border-[#C9A96E] hover:bg-amber-50/50 transition-colors"
+              >
+                <PenLine className="h-8 w-8 text-slate-400" />
+                <div>
+                  <p className="font-semibold text-[#0F1B2D] text-sm">Enter Manually</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Type the details yourself</p>
                 </div>
-              )}
-            </div>
-          ) : (
-            <div className="py-2">
-              <Sparkles className="h-8 w-8 text-[#C9A96E] mx-auto mb-2" />
-              <p className="text-sm font-medium text-[#0F1B2D] dark:text-white">Scan a label to auto-fill</p>
-              <p className="text-xs text-slate-500 mt-0.5">Take a photo of the serial number plate or data label</p>
-            </div>
-          )}
-
-          {scanError && <p className="text-xs text-amber-600">{scanError}</p>}
-
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            className="hidden"
-            onChange={handleImageChange}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="gap-2"
-            onClick={() => fileRef.current?.click()}
-            disabled={scanning}
-          >
-            <Camera className="h-4 w-4" />
-            {preview ? "Scan a different label" : "Take Photo / Upload Image"}
-          </Button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-3 pt-1">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2 space-y-1.5">
-              <Label htmlFor="name">Item Name *</Label>
-              <Input id="name" value={form.name} onChange={e => set("name", e.target.value)} placeholder="e.g. Central Air Handler" required />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Category *</Label>
-              <Select value={form.category} onValueChange={v => set("category", v)} required>
-                <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>
-                  {CATEGORIES.map(c => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="brand">Brand</Label>
-              <Input id="brand" value={form.brand} onChange={e => set("brand", e.target.value)} placeholder="e.g. Lennox" />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="model">Model Number</Label>
-              <Input id="model" value={form.model} onChange={e => set("model", e.target.value)} placeholder="e.g. CBX32MV-036" />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="serial">Serial Number</Label>
-              <Input id="serial" value={form.serial_number} onChange={e => set("serial_number", e.target.value)} placeholder="e.g. 5812A12345" />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="install_date">Install Date</Label>
-              <Input id="install_date" type="date" value={form.install_date} onChange={e => set("install_date", e.target.value)} />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="warranty">Warranty Expires</Label>
-              <Input id="warranty" type="date" value={form.warranty_expiration} onChange={e => set("warranty_expiration", e.target.value)} />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="lifespan">Expected Lifespan (years)</Label>
-              <Input id="lifespan" type="number" value={form.expected_lifespan_years} onChange={e => set("expected_lifespan_years", e.target.value)} placeholder="e.g. 15" />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="location">Location in Home</Label>
-              <Input id="location" value={form.location_in_home} onChange={e => set("location_in_home", e.target.value)} placeholder="e.g. Basement, Utility Room" />
-            </div>
-            <div className="col-span-2 space-y-1.5">
-              <Label htmlFor="notes">Notes</Label>
-              <Textarea id="notes" value={form.notes} onChange={e => set("notes", e.target.value)} placeholder="BTU rating, voltage, capacity, refrigerant type..." rows={2} />
+              </button>
             </div>
           </div>
+        )}
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+        {/* Mode: scan */}
+        {mode === "scan" && (
+          <div className="space-y-4 py-2">
+            {preview ? (
+              <div className="relative">
+                <img src={preview} alt="Label" className="mx-auto max-h-48 rounded-xl object-contain w-full" />
+                {scanning && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/50">
+                    <div className="text-center text-white">
+                      <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+                      <p className="text-sm font-medium">Analyzing label...</p>
+                    </div>
+                  </div>
+                )}
+                {scanned && (
+                  <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-emerald-500 px-2.5 py-1 text-xs font-medium text-white shadow">
+                    <CheckCircle2 className="h-3 w-3" /> Details extracted
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-slate-200 py-10">
+                <Sparkles className="h-10 w-10 text-[#C9A96E]" />
+                <div className="text-center">
+                  <p className="font-medium text-[#0F1B2D]">Take a photo of the label</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Serial number plate, data tag, or nameplate</p>
+                </div>
+              </div>
+            )}
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button type="submit" disabled={saving} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
-              {saving ? "Saving..." : "Save to Inventory"}
+            {scanError && (
+              <p className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-700">{scanError}</p>
+            )}
+
+            {/* Hidden file inputs -- one for camera, one for gallery */}
+            <input
+              ref={cameraRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="hidden"
+              onChange={e => { const f = e.target.files?.[0]; if (f) processImage(f) }}
+            />
+            <input
+              ref={uploadRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={e => { const f = e.target.files?.[0]; if (f) processImage(f) }}
+            />
+
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-2"
+                onClick={() => cameraRef.current?.click()}
+                disabled={scanning}
+              >
+                <Camera className="h-4 w-4" />
+                Take Photo
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-2"
+                onClick={() => uploadRef.current?.click()}
+                disabled={scanning}
+              >
+                <Upload className="h-4 w-4" />
+                Upload Image
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex-1 border-t border-slate-200" />
+              <span className="text-xs text-slate-400">or</span>
+              <div className="flex-1 border-t border-slate-200" />
+            </div>
+
+            <Button
+              type="button"
+              variant="ghost"
+              className="w-full text-slate-500"
+              onClick={() => setMode("manual")}
+            >
+              Enter details manually instead
             </Button>
           </div>
-        </form>
+        )}
+
+        {/* Mode: manual (form) -- shown after scan too */}
+        {mode === "manual" && (
+          <form onSubmit={handleSubmit} className="space-y-4 pt-1">
+            {scanned && preview && (
+              <div className="flex items-center gap-3 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
+                <img src={preview} alt="Label" className="h-12 w-12 rounded object-cover shrink-0" />
+                <div className="flex items-center gap-1.5 text-sm font-medium text-emerald-700">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Details extracted from label -- review and confirm
+                </div>
+              </div>
+            )}
+
+            {scanError && (
+              <p className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-700">{scanError}</p>
+            )}
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="col-span-2 space-y-1.5">
+                <Label htmlFor="name">Item Name *</Label>
+                <Input id="name" value={form.name} onChange={e => set("name", e.target.value)} placeholder="e.g. Central Air Handler" required />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Category *</Label>
+                <Select value={form.category} onValueChange={v => set("category", v)} required>
+                  <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectContent>
+                    {CATEGORIES.map(c => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="brand">Brand</Label>
+                <Input id="brand" value={form.brand} onChange={e => set("brand", e.target.value)} placeholder="e.g. Lennox" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="model">Model Number</Label>
+                <Input id="model" value={form.model} onChange={e => set("model", e.target.value)} placeholder="e.g. CBX32MV-036" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="serial">Serial Number</Label>
+                <Input id="serial" value={form.serial_number} onChange={e => set("serial_number", e.target.value)} placeholder="e.g. 5812A12345" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="location">Location in Home</Label>
+                <Input id="location" value={form.location_in_home} onChange={e => set("location_in_home", e.target.value)} placeholder="e.g. Basement" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="install_date">Install Date</Label>
+                <Input id="install_date" type="date" value={form.install_date} onChange={e => set("install_date", e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="warranty">Warranty Expires</Label>
+                <Input id="warranty" type="date" value={form.warranty_expiration} onChange={e => set("warranty_expiration", e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="lifespan">Expected Lifespan (yrs)</Label>
+                <Input id="lifespan" type="number" value={form.expected_lifespan_years} onChange={e => set("expected_lifespan_years", e.target.value)} placeholder="e.g. 15" />
+              </div>
+              <div className="col-span-2 space-y-1.5">
+                <Label htmlFor="notes">Notes</Label>
+                <Textarea id="notes" value={form.notes} onChange={e => set("notes", e.target.value)} placeholder="BTU rating, voltage, refrigerant type..." rows={2} />
+              </div>
+            </div>
+
+            {error && <p className="text-sm text-red-600">{error}</p>}
+
+            <div className="flex justify-between gap-3 pt-1">
+              <Button type="button" variant="ghost" size="sm" onClick={() => setMode("choose")} className="text-slate-400">
+                Back
+              </Button>
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+                <Button type="submit" disabled={saving} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
+                  {saving ? "Saving..." : "Save to Inventory"}
+                </Button>
+              </div>
+            </div>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   )

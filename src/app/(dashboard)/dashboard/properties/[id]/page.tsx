@@ -356,9 +356,9 @@ export default async function PropertyDetailPage({
                 <Package className="h-12 w-12 text-slate-300 mb-3" />
                 <p className="font-medium text-slate-500">No inventory items yet</p>
                 <p className="text-sm text-slate-400 mt-1">Add home systems and appliances to track warranties and service history</p>
-                <Button className="mt-4" size="sm">
-                  <Plus className="h-4 w-4" /> Add Asset
-                </Button>
+                <div className="mt-4">
+                  <AddAssetDialog propertyId={property.id} />
+                </div>
               </div>
             )}
           </div>
