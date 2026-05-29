@@ -15,6 +15,7 @@ import {
   CheckCircle2, AlertCircle, XCircle, Shield
 } from "lucide-react"
 import { AssignOwnerDialog } from "./assign-owner-dialog"
+import { AddAssetDialog } from "./add-asset-dialog"
 
 export default async function PropertyDetailPage({
   params,
@@ -283,6 +284,9 @@ export default async function PropertyDetailPage({
         {/* INVENTORY TAB */}
         <TabsContent value="inventory">
           <div className="space-y-6">
+            <div className="flex justify-end">
+              <AddAssetDialog propertyId={property.id} />
+            </div>
             {Object.entries(assetsByCategory).map(([category, items]) => (
               <div key={category}>
                 <h3 className="mb-3 font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
