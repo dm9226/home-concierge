@@ -185,6 +185,7 @@ export type Database = {
           brand: string | null
           model: string | null
           serial_number: string | null
+          manufacture_date: string | null
           install_date: string | null
           warranty_expiration: string | null
           expected_lifespan_years: number | null
@@ -204,6 +205,7 @@ export type Database = {
           brand?: string | null
           model?: string | null
           serial_number?: string | null
+          manufacture_date?: string | null
           install_date?: string | null
           warranty_expiration?: string | null
           expected_lifespan_years?: number | null
@@ -223,6 +225,7 @@ export type Database = {
           brand?: string | null
           model?: string | null
           serial_number?: string | null
+          manufacture_date?: string | null
           install_date?: string | null
           warranty_expiration?: string | null
           expected_lifespan_years?: number | null

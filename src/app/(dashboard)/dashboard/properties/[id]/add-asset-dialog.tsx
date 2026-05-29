@@ -32,8 +32,9 @@ interface Props {
 
 const EMPTY = {
   name: "", brand: "", model: "", serial_number: "",
-  category: "", install_date: "", warranty_expiration: "",
-  expected_lifespan_years: "", location_in_home: "", notes: "",
+  category: "", manufacture_date: "", install_date: "",
+  warranty_expiration: "", expected_lifespan_years: "",
+  location_in_home: "", notes: "",
 }
 
 export function AddAssetDialog({ propertyId }: Props) {
@@ -43,6 +44,7 @@ export function AddAssetDialog({ propertyId }: Props) {
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState<"choose" | "scan" | "manual">("choose")
   const [form, setForm] = useState(EMPTY)
+  const [warrantyEstimated, setWarrantyEstimated] = useState(false)
   const [scanning, setScanning] = useState(false)
   const [scanned, setScanned] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -103,11 +105,13 @@ export function AddAssetDialog({ propertyId }: Props) {
       model: result.model ?? f.model,
       serial_number: result.serial_number ?? f.serial_number,
       category: result.category ?? f.category,
+      manufacture_date: result.manufacture_date ?? f.manufacture_date,
       install_date: result.install_date ?? f.install_date,
       warranty_expiration: result.warranty_expiration ?? f.warranty_expiration,
       expected_lifespan_years: result.expected_lifespan_years ? String(result.expected_lifespan_years) : f.expected_lifespan_years,
       notes: result.notes ?? f.notes,
     }))
+    setWarrantyEstimated(!!result.warranty_estimated)
     setScanned(true)
     setMode("manual")
   }
@@ -129,6 +133,7 @@ export function AddAssetDialog({ propertyId }: Props) {
       model: form.model || null,
       serial_number: form.serial_number || null,
       category: form.category as any,
+      manufacture_date: form.manufacture_date || null,
       install_date: form.install_date || null,
       warranty_expiration: form.warranty_expiration || null,
       expected_lifespan_years: form.expected_lifespan_years ? parseInt(form.expected_lifespan_years) : null,
@@ -144,6 +149,7 @@ export function AddAssetDialog({ propertyId }: Props) {
     setForm(EMPTY)
     setPreview(null)
     setScanned(false)
+    setWarrantyEstimated(false)
     setMode("choose")
     router.refresh()
   }
@@ -154,6 +160,7 @@ export function AddAssetDialog({ propertyId }: Props) {
       setForm(EMPTY)
       setPreview(null)
       setScanned(false)
+      setWarrantyEstimated(false)
       setScanError(null)
       setError(null)
       setMode("choose")
@@ -342,12 +349,21 @@ export function AddAssetDialog({ propertyId }: Props) {
                 <Input id="location" value={form.location_in_home} onChange={e => set("location_in_home", e.target.value)} placeholder="e.g. Basement" />
               </div>
               <div className="space-y-1.5">
+                <Label htmlFor="manufacture_date">Manufacture Date</Label>
+                <Input id="manufacture_date" type="date" value={form.manufacture_date} onChange={e => set("manufacture_date", e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
                 <Label htmlFor="install_date">Install Date</Label>
                 <Input id="install_date" type="date" value={form.install_date} onChange={e => set("install_date", e.target.value)} />
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="warranty">Warranty Expires</Label>
-                <Input id="warranty" type="date" value={form.warranty_expiration} onChange={e => set("warranty_expiration", e.target.value)} />
+              <div className="col-span-2 space-y-1.5">
+                <Label htmlFor="warranty">
+                  Warranty Expires
+                  {warrantyEstimated && (
+                    <span className="ml-2 text-xs font-normal text-amber-600">(estimated from manufacture date -- update if you have paperwork)</span>
+                  )}
+                </Label>
+                <Input id="warranty" type="date" value={form.warranty_expiration} onChange={e => { set("warranty_expiration", e.target.value); setWarrantyEstimated(false) }} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="lifespan">Expected Lifespan (yrs)</Label>

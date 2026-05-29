@@ -280,6 +280,44 @@ export default async function PropertyDetailPage({
             <div className="flex justify-end">
               <AddAssetDialog propertyId={property.id} />
             </div>
+
+            {/* Warranty alerts */}
+            {(() => {
+              const expiringSoon = (assets ?? []).filter(a => {
+                if (!a.warranty_expiration) return false
+                const days = getDaysUntil(a.warranty_expiration)
+                return days !== null && days >= 0 && days <= 90
+              })
+              const expired = (assets ?? []).filter(a => {
+                if (!a.warranty_expiration) return false
+                const days = getDaysUntil(a.warranty_expiration)
+                return days !== null && days < 0
+              })
+              if (expiringSoon.length === 0 && expired.length === 0) return null
+              return (
+                <div className="space-y-2">
+                  {expired.length > 0 && (
+                    <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-3">
+                      <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
+                      <div className="text-sm">
+                        <span className="font-semibold text-red-700">Warranties expired: </span>
+                        <span className="text-red-600">{expired.map(a => a.name).join(", ")}</span>
+                      </div>
+                    </div>
+                  )}
+                  {expiringSoon.length > 0 && (
+                    <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                      <AlertCircle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                      <div className="text-sm">
+                        <span className="font-semibold text-amber-700">Warranties expiring within 90 days: </span>
+                        <span className="text-amber-600">{expiringSoon.map(a => `${a.name} (${getDaysUntil(a.warranty_expiration!)}d)`).join(", ")}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
+
             {Object.entries(assetsByCategory).map(([category, items]) => (
               <div key={category}>
                 <h3 className="mb-3 font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
@@ -287,13 +325,24 @@ export default async function PropertyDetailPage({
                 </h3>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {items!.map((asset) => {
-                    const warrantyColor = getWarrantyColor(asset.warranty_expiration)
-                    const warrantyDays = asset.warranty_expiration
-                      ? getDaysUntil(asset.warranty_expiration)
+                    const warrantyDays = asset.warranty_expiration ? getDaysUntil(asset.warranty_expiration) : null
+                    const warrantyExpired = warrantyDays !== null && warrantyDays < 0
+                    const warrantyWarningSoon = warrantyDays !== null && warrantyDays >= 0 && warrantyDays <= 90
+
+                    // Age vs lifespan
+                    const ageDate = (asset as any).manufacture_date || asset.install_date
+                    const ageYears = ageDate
+                      ? Math.max(0, (Date.now() - new Date(ageDate).getTime()) / (1000 * 60 * 60 * 24 * 365.25))
                       : null
+                    const lifespanPct = ageYears && asset.expected_lifespan_years
+                      ? Math.min(100, Math.round((ageYears / asset.expected_lifespan_years) * 100))
+                      : null
+                    const ageBarColor = lifespanPct === null ? "" :
+                      lifespanPct >= 90 ? "bg-red-500" :
+                      lifespanPct >= 70 ? "bg-amber-500" : "bg-emerald-500"
 
                     return (
-                      <Card key={asset.id} className="hover:shadow-md transition-shadow">
+                      <Card key={asset.id} className={`hover:shadow-md transition-shadow ${warrantyExpired ? "border-red-200" : warrantyWarningSoon ? "border-amber-200" : ""}`}>
                         <CardContent className="pt-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1 min-w-0">
@@ -304,13 +353,35 @@ export default async function PropertyDetailPage({
                                 </p>
                               )}
                             </div>
+                            {warrantyExpired && <XCircle className="h-4 w-4 text-red-500 shrink-0 ml-2" />}
+                            {warrantyWarningSoon && <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 ml-2" />}
+                            {!warrantyExpired && !warrantyWarningSoon && warrantyDays !== null && <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 ml-2" />}
                           </div>
+
+                          {/* Age vs lifespan bar */}
+                          {lifespanPct !== null && (
+                            <div className="mt-3">
+                              <div className="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>{Math.round(ageYears!)} of {asset.expected_lifespan_years} yrs</span>
+                                <span className={lifespanPct >= 90 ? "text-red-500 font-medium" : lifespanPct >= 70 ? "text-amber-500 font-medium" : "text-emerald-600"}>{lifespanPct}% used</span>
+                              </div>
+                              <div className="h-1.5 w-full rounded-full bg-slate-100">
+                                <div className={`h-full rounded-full transition-all ${ageBarColor}`} style={{ width: `${lifespanPct}%` }} />
+                              </div>
+                            </div>
+                          )}
 
                           <div className="mt-3 space-y-1.5 text-xs">
                             {asset.location_in_home && (
                               <div className="flex justify-between">
                                 <span className="text-slate-400">Location</span>
                                 <span className="text-slate-600 dark:text-slate-400">{asset.location_in_home}</span>
+                              </div>
+                            )}
+                            {(asset as any).manufacture_date && (
+                              <div className="flex justify-between">
+                                <span className="text-slate-400">Manufactured</span>
+                                <span className="text-slate-600 dark:text-slate-400">{formatDateShort((asset as any).manufacture_date)}</span>
                               </div>
                             )}
                             {asset.install_date && (
@@ -322,10 +393,12 @@ export default async function PropertyDetailPage({
                             {asset.warranty_expiration && (
                               <div className="flex justify-between">
                                 <span className="text-slate-400">Warranty</span>
-                                <span className={warrantyColor}>
-                                  {warrantyDays !== null && warrantyDays > 0
-                                    ? `${warrantyDays > 365 ? Math.floor(warrantyDays / 365) + "yr" : warrantyDays + "d"} left`
-                                    : "Expired"}
+                                <span className={warrantyExpired ? "text-red-500 font-medium" : warrantyWarningSoon ? "text-amber-500 font-medium" : "text-emerald-600"}>
+                                  {warrantyExpired
+                                    ? `Expired ${Math.abs(warrantyDays!)}d ago`
+                                    : warrantyDays! > 365
+                                    ? `${Math.floor(warrantyDays! / 365)}yr ${Math.floor((warrantyDays! % 365) / 30)}mo left`
+                                    : `${warrantyDays}d left`}
                                 </span>
                               </div>
                             )}
