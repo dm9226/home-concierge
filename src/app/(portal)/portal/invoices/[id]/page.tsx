@@ -116,7 +116,7 @@ export default async function InvoiceDetailPage({
         <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
           <p className="font-semibold text-[#0F1B2D] dark:text-white mb-1">Payment Instructions</p>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Please contact your concierge to arrange payment by check, ACH transfer, or credit card.
+            Please contact our team to arrange payment by check, ACH transfer, or credit card.
           </p>
         </div>
       )}

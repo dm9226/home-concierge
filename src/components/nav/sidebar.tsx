@@ -30,22 +30,13 @@ const adminLinks = [
   { href: "/dashboard/messages", label: "Messages", icon: MessageSquare },
 ]
 
-const conciergeLinks = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/dashboard/properties", label: "My Properties", icon: Building2 },
-  { href: "/dashboard/work-orders", label: "Work Orders", icon: Wrench },
-  { href: "/dashboard/maintenance", label: "Maintenance", icon: Calendar },
-  { href: "/dashboard/vendors", label: "Vendors", icon: UserCheck },
-  { href: "/dashboard/messages", label: "Messages", icon: MessageSquare },
-]
-
 interface SidebarProps {
   role: "admin" | "concierge" | "client"
 }
 
 export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname()
-  const links = role === "admin" ? adminLinks : conciergeLinks
+  const links = adminLinks
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-slate-200/80 bg-white dark:border-slate-800 dark:bg-[#0a1628] lg:flex">

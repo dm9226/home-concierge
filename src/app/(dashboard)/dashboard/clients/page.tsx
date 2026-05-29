@@ -13,7 +13,6 @@ export default async function ClientsPage() {
 
   const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
-  if (profile.role === "concierge") redirect("/dashboard")
 
   const { data: clients } = await supabase
     .from("users")

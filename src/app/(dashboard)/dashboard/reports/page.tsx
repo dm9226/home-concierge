@@ -11,7 +11,6 @@ export default async function ReportsPage() {
 
   const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
-  if (profile.role === "concierge") redirect("/dashboard")
 
   const now = new Date()
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString()

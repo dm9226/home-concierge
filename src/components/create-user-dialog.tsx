@@ -133,7 +133,7 @@ export function CreateUserDialog({ fixedRole, label }: CreateUserDialogProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="concierge">Concierge</SelectItem>
+                  <SelectItem value="concierge">Team Member</SelectItem>
                   <SelectItem value="client">Client</SelectItem>
                 </SelectContent>
               </Select>

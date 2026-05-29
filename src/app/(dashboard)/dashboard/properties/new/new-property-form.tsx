@@ -16,11 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-interface Props {
-  concierges: { id: string; full_name: string }[]
-}
-
-export function NewPropertyForm({ concierges }: Props) {
+export function NewPropertyForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -34,7 +30,7 @@ export function NewPropertyForm({ concierges }: Props) {
     square_footage: "",
     lot_size: "",
     monthly_retainer_amount: "1500",
-    primary_concierge_id: "",
+
     notes: "",
   })
 
@@ -60,7 +56,7 @@ export function NewPropertyForm({ concierges }: Props) {
         square_footage: form.square_footage ? parseInt(form.square_footage) : null,
         lot_size: form.lot_size || null,
         monthly_retainer_amount: parseFloat(form.monthly_retainer_amount),
-        primary_concierge_id: form.primary_concierge_id || null,
+
         notes: form.notes || null,
         status: "active",
         onboarding_status: "not_started",
@@ -185,19 +181,6 @@ export function NewPropertyForm({ concierges }: Props) {
               onChange={e => set("monthly_retainer_amount", e.target.value)}
               required
             />
-          </div>
-          <div className="space-y-1.5">
-            <Label>Assigned Concierge</Label>
-            <Select value={form.primary_concierge_id} onValueChange={v => set("primary_concierge_id", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Assign later" />
-              </SelectTrigger>
-              <SelectContent>
-                {concierges.map(c => (
-                  <SelectItem key={c.id} value={c.id}>{c.full_name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="notes">Notes</Label>

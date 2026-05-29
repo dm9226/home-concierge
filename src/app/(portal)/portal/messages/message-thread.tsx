@@ -98,7 +98,7 @@ export function MessageThread({
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center py-12">
             <p className="text-slate-400 text-sm">No messages yet.</p>
-            <p className="text-slate-400 text-sm">Send a message to your concierge below.</p>
+            <p className="text-slate-400 text-sm">Send a message to our team below.</p>
           </div>
         )}
 
@@ -149,7 +149,7 @@ export function MessageThread({
                 sendMessage(e as any)
               }
             }}
-            placeholder="Message your concierge..."
+            placeholder="Message your team..."
             rows={1}
             className="flex-1 resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-[#0F1B2D] placeholder:text-slate-400 focus:border-[#0F1B2D] focus:outline-none focus:ring-1 focus:ring-[#0F1B2D] dark:border-slate-700 dark:bg-slate-800 dark:text-white max-h-32"
             style={{ minHeight: "44px" }}

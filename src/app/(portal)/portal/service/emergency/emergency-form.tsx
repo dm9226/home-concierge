@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -54,9 +54,9 @@ export function EmergencyForm({ propertyId, userId }: { propertyId: string; user
       if (error) throw error
 
       setSubmitted(true)
-      toast.success("Emergency request submitted -- your concierge has been alerted")
+      toast.success("Emergency request submitted -- our team has been alerted")
     } catch {
-      toast.error("Failed to submit. Please call your concierge directly.")
+      toast.error("Failed to submit. Please call us directly.")
     } finally {
       setLoading(false)
     }
@@ -71,7 +71,7 @@ export function EmergencyForm({ propertyId, userId }: { propertyId: string; user
           </svg>
         </div>
         <p className="font-semibold text-emerald-800">Emergency request received</p>
-        <p className="text-sm text-emerald-700">Your concierge has been alerted and will respond immediately. Check your messages for updates.</p>
+        <p className="text-sm text-emerald-700">our team has been alerted and will respond immediately. Check your messages for updates.</p>
         <button
           onClick={() => router.push("/portal")}
           className="mt-2 text-sm font-medium text-emerald-800 underline underline-offset-2"

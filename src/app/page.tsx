@@ -1,4 +1,4 @@
-import Link from "next/link"
+﻿import Link from "next/link"
 import {
   Home, Shield, Wrench, Calendar, BarChart3,
   CheckCircle, Star, ArrowRight, Phone, Mail, MapPin
@@ -60,8 +60,7 @@ export default function LandingPage() {
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
             Carefree Casa is the premium home management service for Atlanta's most discerning homeowners.
-            We handle every detail — from routine maintenance to emergency response — so you can
-            simply enjoy your home.
+            We handle every detail so you can simply enjoy your home.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button
@@ -130,7 +129,7 @@ export default function LandingPage() {
                 step: "02",
                 title: "Complete Onboarding",
                 description:
-                  "Our concierge documents every system, appliance, warranty, and vendor contact in your digital home profile.",
+                  "Our team documents every system, appliance, warranty, and vendor contact in your digital home profile.",
               },
               {
                 step: "03",
@@ -142,7 +141,7 @@ export default function LandingPage() {
                 step: "04",
                 title: "Total Peace of Mind",
                 description:
-                  "Your home is protected, maintained, and improving in value — without you lifting a finger.",
+                  "Your home is protected, maintained, and improving in value â€” without you lifting a finger.",
               },
             ].map((item) => (
               <div key={item.step} className="relative">
@@ -243,7 +242,7 @@ export default function LandingPage() {
               },
               {
                 quote:
-                  "When we had a pipe burst at midnight on a Friday, my concierge had a plumber on site within 20 minutes. I didn't even have to think.",
+                  "When we had a pipe burst at midnight on a Friday, the team had a plumber on site within 20 minutes. I didn't even have to think.",
                 author: "Patricia V.",
                 location: "Peachtree Battle",
                 stars: 5,

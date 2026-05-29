@@ -7,7 +7,7 @@ import { ShieldCheck, UserCog } from "lucide-react"
 
 const ROLE_LABELS: Record<string, string> = {
   admin: "Admin",
-  concierge: "Concierge",
+  concierge: "Team Member",
 }
 
 export default async function TeamPage() {

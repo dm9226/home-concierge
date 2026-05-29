@@ -21,8 +21,7 @@ export default async function PropertiesPage() {
     .from("properties")
     .select(`
       *,
-      client:users!properties_client_id_fkey(full_name, email, phone),
-      concierge:users!properties_primary_concierge_id_fkey(full_name)
+      client:users!properties_client_id_fkey(full_name, email, phone)
     `)
     .order("created_at", { ascending: false })
 
@@ -48,7 +47,6 @@ export default async function PropertiesPage() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {properties?.map((property) => {
           const client = (property as any).client
-          const concierge = (property as any).concierge
           return (
             <Link key={property.id} href={`/dashboard/properties/${property.id}`}>
               <Card className="h-full transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
@@ -89,12 +87,6 @@ export default async function PropertiesPage() {
                       <span className="text-slate-500">Client</span>
                       <span className="font-medium text-slate-700 dark:text-slate-300">
                         {client?.full_name ?? "Unassigned"}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-500">Concierge</span>
-                      <span className="font-medium text-slate-700 dark:text-slate-300">
-                        {concierge?.full_name ?? "Unassigned"}
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-sm">

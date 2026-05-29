@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+﻿import { redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
@@ -85,7 +85,7 @@ export default async function InvoicesPage() {
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <FileText className="h-12 w-12 text-slate-300 mb-3" />
           <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No invoices yet</h2>
-          <p className="mt-2 text-slate-500">Invoices from your concierge will appear here.</p>
+          <p className="mt-2 text-slate-500">Invoices from your team will appear here.</p>
         </div>
       )}
     </div>

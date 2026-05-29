@@ -33,8 +33,7 @@ export default async function PropertyDetailPage({
     .from("properties")
     .select(`
       *,
-      client:users!properties_client_id_fkey(id, full_name, email, phone, avatar_url),
-      concierge:users!properties_primary_concierge_id_fkey(id, full_name, email, phone)
+      client:users!properties_client_id_fkey(id, full_name, email, phone, avatar_url)
     `)
     .eq("id", id)
     .single()
@@ -93,7 +92,6 @@ export default async function PropertyDetailPage({
   ])
 
   const client = (property as any).client
-  const concierge = (property as any).concierge
 
   const overdueMaintenanceCount =
     maintenance?.filter(
@@ -172,13 +170,6 @@ export default async function PropertyDetailPage({
                 <AssignOwnerDialog propertyId={property.id} clients={availableClients ?? []} />
               </div>
             )}
-          </div>
-          <div className="flex flex-col justify-center p-4">
-            <p className="text-xs uppercase tracking-wider text-slate-400">Concierge</p>
-            <p className="mt-1 font-semibold text-[#0F1B2D] dark:text-white">
-              {concierge?.full_name ?? "Unassigned"}
-            </p>
-            <p className="text-xs text-slate-500">{concierge?.phone}</p>
           </div>
           <div className="flex flex-col justify-center p-4">
             <p className="text-xs uppercase tracking-wider text-slate-400">Monthly Retainer</p>

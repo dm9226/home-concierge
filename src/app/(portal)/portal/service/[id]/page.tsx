@@ -52,7 +52,7 @@ export default async function ServiceDetailPage({
       {isEmergency && (
         <div className="rounded-xl border border-red-200 bg-red-50 p-4 flex items-center gap-3">
           <AlertTriangle className="h-5 w-5 text-red-600 shrink-0" />
-          <p className="text-sm font-medium text-red-800">Emergency request -- your concierge is coordinating an urgent response</p>
+          <p className="text-sm font-medium text-red-800">Emergency request -- our team is coordinating an urgent response</p>
         </div>
       )}
 
@@ -114,7 +114,7 @@ export default async function ServiceDetailPage({
 
           {workOrder.notes && (
             <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3">
-              <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Notes from your concierge</p>
+              <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Notes from your team</p>
               <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">{workOrder.notes}</p>
             </div>
           )}

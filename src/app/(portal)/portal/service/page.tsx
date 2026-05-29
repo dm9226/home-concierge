@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+﻿import { redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { StatusBadge } from "@/components/status-badge"
@@ -70,7 +70,7 @@ export default async function ServicePage() {
                   <p className="font-medium text-[#0F1B2D] dark:text-white truncate">{wo.title}</p>
                   <p className="text-sm text-slate-500 mt-0.5">
                     Submitted {formatDateShort(wo.created_at)}
-                    {wo.scheduled_date && ` · Scheduled ${formatDateShort(wo.scheduled_date)}`}
+                    {wo.scheduled_date && ` Â· Scheduled ${formatDateShort(wo.scheduled_date)}`}
                   </p>
                 </div>
                 <StatusBadge status={wo.status} />
@@ -111,7 +111,7 @@ export default async function ServicePage() {
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Wrench className="h-12 w-12 text-slate-300 mb-3" />
           <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No service requests yet</h2>
-          <p className="mt-2 text-slate-500 max-w-xs">Submit a request and your concierge will coordinate everything.</p>
+          <p className="mt-2 text-slate-500 max-w-xs">Submit a request and our team will coordinate everything.</p>
           <Link href="/portal/service/new" className="mt-4">
             <Button>Request Service</Button>
           </Link>

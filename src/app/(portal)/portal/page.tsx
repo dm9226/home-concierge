@@ -33,7 +33,6 @@ export default async function PortalHomePage() {
     .from("properties")
     .select(`
       *,
-      concierge:users!properties_primary_concierge_id_fkey(full_name, email, phone, avatar_url)
     `)
     .eq("client_id", user.id)
     .eq("status", "active")
@@ -44,7 +43,7 @@ export default async function PortalHomePage() {
         <div className="text-center">
           <Home className="mx-auto h-12 w-12 text-slate-300 mb-3" />
           <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No properties yet</h2>
-          <p className="mt-2 text-slate-500">Your home profile will appear here once your concierge sets it up.</p>
+          <p className="mt-2 text-slate-500">Your home profile will appear here once your team sets it up.</p>
         </div>
       </div>
     )
@@ -52,7 +51,6 @@ export default async function PortalHomePage() {
 
   // Use first property for the main view
   const property = properties[0]
-  const concierge = (property as any).concierge
   const propertyId = property.id
 
   const [
@@ -177,39 +175,27 @@ export default async function PortalHomePage() {
         </Link>
       )}
 
-      {/* Your Concierge */}
-      {concierge && (
-        <Card>
-          <CardContent className="pt-5">
-            <p className="text-xs uppercase tracking-wider text-slate-400 mb-3">Your Concierge</p>
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0F1B2D] text-white font-semibold">
-                {concierge.full_name.split(" ").map((n: string) => n[0]).join("")}
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-[#0F1B2D] dark:text-white">{concierge.full_name}</p>
-                <p className="text-sm text-slate-500">Personal Home Concierge</p>
-              </div>
-              <div className="flex gap-2">
-                {concierge.phone && (
-                  <a
-                    href={`tel:${concierge.phone}`}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 hover:bg-slate-50 transition-colors"
-                  >
-                    <Phone className="h-4 w-4 text-slate-600" />
-                  </a>
-                )}
-                <Link
-                  href="/portal/messages"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 hover:bg-slate-50 transition-colors"
-                >
-                  <Mail className="h-4 w-4 text-slate-600" />
-                </Link>
-              </div>
+      {/* Contact team */}
+      <Card>
+        <CardContent className="pt-5">
+          <p className="text-xs uppercase tracking-wider text-slate-400 mb-3">Your Team</p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0F1B2D] text-white font-semibold">
+              CC
             </div>
-          </CardContent>
-        </Card>
-      )}
+            <div className="flex-1">
+              <p className="font-semibold text-[#0F1B2D] dark:text-white">Carefree Casa</p>
+              <p className="text-sm text-slate-500">Home Management Team</p>
+            </div>
+            <Link
+              href="/portal/messages"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 hover:bg-slate-50 transition-colors"
+            >
+              <Mail className="h-4 w-4 text-slate-600" />
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Upcoming visits */}
       {upcomingWork && upcomingWork.length > 0 && (

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+﻿import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { formatDateShort, getDaysUntil } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
@@ -120,7 +120,7 @@ export default async function MaintenancePage() {
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <CheckCircle className="h-12 w-12 text-slate-300 mb-3" />
           <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No maintenance scheduled</h2>
-          <p className="mt-2 text-slate-500">Your maintenance schedule will appear here once your concierge sets it up.</p>
+          <p className="mt-2 text-slate-500">Your maintenance schedule will appear here once your team sets it up.</p>
         </div>
       )}
     </div>
