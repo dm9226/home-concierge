@@ -91,7 +91,7 @@ export function AddAssetDialog({ propertyId }: Props) {
     setScanning(false)
 
     if (!res.ok || result.error) {
-      setScanError("Could not read the label. Fill in the details below manually.")
+      setScanError(`Scan failed (${res.status}): ${result.error ?? "unknown error"}`)
       setMode("manual")
       return
     }
