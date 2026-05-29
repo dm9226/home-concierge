@@ -859,7 +859,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_api_usage: {
+        Args: { p_service: string; p_period: string }
+        Returns: void
+      }
     }
     Enums: {
       [_ in never]: never
