@@ -118,10 +118,11 @@ export function NewPropertyForm() {
     }))
 
     const summary: string[] = []
-    if (data.year_built)     summary.push(`built ${data.year_built}`)
-    if (data.square_footage) summary.push(`${data.square_footage.toLocaleString()} sq ft`)
-    const confidenceNote = data.confidence === "low" ? " · verify before saving" : ""
-    setLookupStatus({ type: "success", msg: (summary.length ? summary.join(" · ") : "Fields populated") + confidenceNote })
+    if (data.year_built)      summary.push(`built ${data.year_built}`)
+    if (data.square_footage)  summary.push(`${Number(data.square_footage).toLocaleString()} sq ft`)
+    if (data.last_sale_price) summary.push(`last sold $${Number(data.last_sale_price).toLocaleString()}${data.last_sale_date ? ` (${new Date(data.last_sale_date).getFullYear()})` : ""}`)
+    if (data.zestimate)       summary.push(`Zestimate $${Number(data.zestimate).toLocaleString()}`)
+    setLookupStatus({ type: "success", msg: summary.length ? summary.join(" · ") : "Fields populated -- review below" })
   }
 
   async function handleSubmit(e: React.FormEvent) {
