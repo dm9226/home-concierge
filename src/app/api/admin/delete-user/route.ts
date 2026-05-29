@@ -11,7 +11,7 @@ export async function DELETE(request: NextRequest) {
   if (!profile || profile.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 })
 
   const params = request.nextUrl.searchParams
-  const userId   = params.get("userId")
+  const userId     = params.get("userId")
   const reassignTo = params.get("reassignTo")
 
   if (!userId) return NextResponse.json({ error: "Missing userId" }, { status: 400 })
@@ -21,14 +21,18 @@ export async function DELETE(request: NextRequest) {
 
   const admin = createAdminClient()
 
-  // Nullable FK references
+  // Nullable FK references -- set to null
   await admin.from("properties").update({ primary_concierge_id: null }).eq("primary_concierge_id", userId)
   await admin.from("work_orders").update({ assigned_to: null }).eq("assigned_to", userId)
 
-  // NOT NULL FK references -- reassign to selected team member
+  // NOT NULL FK references -- reassign to chosen team member
   await admin.from("work_orders").update({ requested_by: reassignTo }).eq("requested_by", userId)
   await admin.from("messages").update({ sender_id: reassignTo }).eq("sender_id", userId)
   await admin.from("messages").update({ recipient_id: reassignTo }).eq("recipient_id", userId)
+  await admin.from("activity_logs").update({ user_id: reassignTo }).eq("user_id", userId)
+
+  // Personal records -- delete rather than reassign
+  await admin.from("notifications").delete().eq("user_id", userId)
 
   // Remove from auth (best-effort -- seed users may not have an auth row)
   await admin.auth.admin.deleteUser(userId)
