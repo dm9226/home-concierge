@@ -237,14 +237,12 @@ export default async function PropertyDetailPage({
 
         {/* OVERVIEW TAB */}
         <TabsContent value="overview">
-          {property.latitude && property.longitude && (
-            <PropertyMap
-              latitude={Number(property.latitude)}
-              longitude={Number(property.longitude)}
-              address={`${property.address}, ${property.city}, ${property.state} ${property.zip}`}
-              className="h-56 mb-4"
-            />
-          )}
+          <PropertyMap
+            address={`${property.address}, ${property.city}, ${property.state} ${property.zip}`}
+            latitude={property.latitude ? Number(property.latitude) : null}
+            longitude={property.longitude ? Number(property.longitude) : null}
+            className="h-56 mb-4"
+          />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {/* Quick stats */}
             <Card>

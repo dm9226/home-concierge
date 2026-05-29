@@ -1,17 +1,23 @@
 "use client"
 
 interface PropertyMapProps {
-  latitude: number
-  longitude: number
   address: string
+  latitude?: number | null
+  longitude?: number | null
   className?: string
 }
 
-export function PropertyMap({ latitude, longitude, address, className = "" }: PropertyMapProps) {
-  const delta = 0.008
-  const bbox = `${longitude - delta},${latitude - delta},${longitude + delta},${latitude + delta}`
-  const embedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${latitude},${longitude}`
+export function PropertyMap({ address, latitude, longitude, className = "" }: PropertyMapProps) {
   const googleUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
+
+  let embedUrl: string
+  if (latitude && longitude) {
+    const delta = 0.008
+    const bbox = `${longitude - delta},${latitude - delta},${longitude + delta},${latitude + delta}`
+    embedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${latitude},${longitude}`
+  } else {
+    embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&output=embed`
+  }
 
   return (
     <div className={`relative overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800 ${className}`}>
