@@ -16,12 +16,12 @@ export default function LoginPage() {
           <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#C9A96E]">
             <Home className="h-5 w-5 text-[#0F1B2D]" />
           </div>
-          <span className="font-display text-xl font-semibold text-white">HomeGuard Concierge</span>
+          <span className="font-display text-xl font-semibold text-white">Carefree Casa</span>
         </Link>
         <div>
           <blockquote className="mb-8">
             <p className="font-display text-3xl font-light leading-relaxed text-white/90">
-              "Our home has never been in better condition. HomeGuard handles everything — we just enjoy it."
+              "Our home has never been in better condition. Carefree Casa handles everything — we just enjoy it."
             </p>
           </blockquote>
           <div className="flex items-center gap-3">
@@ -42,10 +42,10 @@ export default function LoginPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#0F1B2D]">
                 <Home className="h-4 w-4 text-[#C9A96E]" />
               </div>
-              <span className="font-display text-lg font-semibold text-[#0F1B2D]">HomeGuard</span>
+              <span className="font-display text-lg font-semibold text-[#0F1B2D]">Carefree Casa</span>
             </Link>
             <h1 className="font-display text-3xl font-semibold text-[#0F1B2D]">Welcome back</h1>
-            <p className="mt-2 text-sm text-slate-500">Sign in to your HomeGuard account</p>
+            <p className="mt-2 text-sm text-slate-500">Sign in to your Carefree Casa account</p>
           </div>
 
           <LoginForm />

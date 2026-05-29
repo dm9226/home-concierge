@@ -54,7 +54,7 @@ export function TopNav({ user }: TopNavProps) {
             <Home className="h-4 w-4 text-[#C9A96E]" />
           </div>
           <span className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
-            HomeGuard
+            Carefree Casa
           </span>
         </Link>
 

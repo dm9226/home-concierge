@@ -1,7 +1,7 @@
--- ============================================================
--- 004_seed.sql  --  Demo data for HomeGuard Concierge
+﻿-- ============================================================
+-- 004_seed.sql  --  Demo data for Carefree Casa
 -- Run this LAST in Supabase SQL Editor.
--- All demo accounts use password: HomeGuard2025!
+-- All demo accounts use password: CarefreeCasa2025!
 -- ============================================================
 
 do $$
@@ -45,50 +45,50 @@ begin
 
 -- ----------------------------------------------------------------
 -- Auth users (triggers auto-create public.users rows)
--- All demo accounts: password = HomeGuard2025!
+-- All demo accounts: password = CarefreeCasa2025!
 -- ----------------------------------------------------------------
 insert into auth.users (
   id, instance_id, email, encrypted_password, email_confirmed_at,
   aud, role, raw_user_meta_data, created_at, updated_at
 ) values
-  (admin1, '00000000-0000-0000-0000-000000000000', 'sarah.mitchell@homeguard.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+  (admin1, '00000000-0000-0000-0000-000000000000', 'sarah.mitchell@carefreecasa.com',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Sarah Mitchell","role":"admin"}'::jsonb, now(), now()),
-  (admin2, '00000000-0000-0000-0000-000000000000', 'james.whitfield@homeguard.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+  (admin2, '00000000-0000-0000-0000-000000000000', 'james.whitfield@carefreecasa.com',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"James Whitfield","role":"admin"}'::jsonb, now(), now()),
-  (conc1, '00000000-0000-0000-0000-000000000000', 'emily.chen@homeguard.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+  (conc1, '00000000-0000-0000-0000-000000000000', 'emily.chen@carefreecasa.com',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Emily Chen","role":"concierge"}'::jsonb, now(), now()),
-  (conc2, '00000000-0000-0000-0000-000000000000', 'michael.brooks@homeguard.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+  (conc2, '00000000-0000-0000-0000-000000000000', 'michael.brooks@carefreecasa.com',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Michael Brooks","role":"concierge"}'::jsonb, now(), now()),
-  (conc3, '00000000-0000-0000-0000-000000000000', 'laura.hayes@homeguard.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+  (conc3, '00000000-0000-0000-0000-000000000000', 'laura.hayes@carefreecasa.com',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Laura Hayes","role":"concierge"}'::jsonb, now(), now()),
   (cli1, '00000000-0000-0000-0000-000000000000', 'robert.ashworth@example.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Robert Ashworth","role":"client"}'::jsonb, now(), now()),
   (cli2, '00000000-0000-0000-0000-000000000000', 'patricia.vandenberg@example.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Patricia Vandenberg","role":"client"}'::jsonb, now(), now()),
   (cli3, '00000000-0000-0000-0000-000000000000', 'william.hartley@example.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"William Hartley","role":"client"}'::jsonb, now(), now()),
   (cli4, '00000000-0000-0000-0000-000000000000', 'elizabeth.moore@example.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Elizabeth Moore","role":"client"}'::jsonb, now(), now()),
   (cli5, '00000000-0000-0000-0000-000000000000', 'charles.kingsley@example.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Charles Kingsley","role":"client"}'::jsonb, now(), now()),
   (cli6, '00000000-0000-0000-0000-000000000000', 'margaret.sterling@example.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Margaret Sterling","role":"client"}'::jsonb, now(), now()),
   (cli7, '00000000-0000-0000-0000-000000000000', 'thomas.blackwood@example.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Thomas Blackwood","role":"client"}'::jsonb, now(), now()),
   (cli8, '00000000-0000-0000-0000-000000000000', 'caroline.whitmore@example.com',
-   crypt('HomeGuard2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
+   crypt('CarefreeCasa2025!', gen_salt('bf')), now(), 'authenticated', 'authenticated',
    '{"full_name":"Caroline Whitmore","role":"client"}'::jsonb, now(), now())
 on conflict (id) do nothing;
 

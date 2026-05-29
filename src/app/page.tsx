@@ -16,7 +16,7 @@ export default function LandingPage() {
             <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#0F1B2D]">
               <Home className="h-5 w-5 text-[#C9A96E]" />
             </div>
-            <span className="font-display text-xl font-semibold text-[#0F1B2D]">HomeGuard Concierge</span>
+            <span className="font-display text-xl font-semibold text-[#0F1B2D]">Carefree Casa</span>
           </div>
           <nav className="hidden items-center gap-8 md:flex">
             <a href="#how-it-works" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">
@@ -59,7 +59,7 @@ export default function LandingPage() {
             <span className="text-[#C9A96E]">Perfectly Maintained</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
-            HomeGuard is the premium home management service for Atlanta's most discerning homeowners.
+            Carefree Casa is the premium home management service for Atlanta's most discerning homeowners.
             We handle every detail — from routine maintenance to emergency response — so you can
             simply enjoy your home.
           </p>
@@ -114,7 +114,7 @@ export default function LandingPage() {
           <div className="mb-16 text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-[#C9A96E]">The Process</p>
             <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
-              How HomeGuard Works
+              How Carefree Casa Works
             </h2>
           </div>
 
@@ -236,7 +236,7 @@ export default function LandingPage() {
             {[
               {
                 quote:
-                  "HomeGuard has completely transformed how I think about homeownership. I used to dread the maintenance list. Now it's simply handled.",
+                  "Carefree Casa has completely transformed how I think about homeownership. I used to dread the maintenance list. Now it's simply handled.",
                 author: "Robert A.",
                 location: "Buckhead",
                 stars: 5,
@@ -373,16 +373,16 @@ export default function LandingPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#0F1B2D]">
                 <Home className="h-4 w-4 text-[#C9A96E]" />
               </div>
-              <span className="font-display text-lg font-semibold text-[#0F1B2D]">HomeGuard Concierge</span>
+              <span className="font-display text-lg font-semibold text-[#0F1B2D]">Carefree Casa</span>
             </div>
             <div className="flex items-center gap-6 text-sm text-slate-500">
               <a href="tel:4045550100" className="flex items-center gap-1.5 hover:text-[#0F1B2D] transition-colors">
                 <Phone className="h-3.5 w-3.5" />
                 (404) 555-0100
               </a>
-              <a href="mailto:hello@homeguardconcierge.com" className="flex items-center gap-1.5 hover:text-[#0F1B2D] transition-colors">
+              <a href="mailto:hello@carefreecasa.com" className="flex items-center gap-1.5 hover:text-[#0F1B2D] transition-colors">
                 <Mail className="h-3.5 w-3.5" />
-                hello@homeguardconcierge.com
+                hello@carefreecasa.com
               </a>
               <span className="flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5" />
@@ -391,7 +391,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t border-slate-100 pt-6 text-xs text-slate-400 sm:flex-row">
-            <p>2025 HomeGuard Concierge. All rights reserved.</p>
+            <p>2025 Carefree Casa. All rights reserved.</p>
             <div className="flex gap-4">
               <a href="#" className="hover:text-slate-600">Privacy Policy</a>
               <a href="#" className="hover:text-slate-600">Terms of Service</a>

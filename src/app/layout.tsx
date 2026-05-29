@@ -19,8 +19,8 @@ const bodyFont = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "HomeGuard Concierge",
-    template: "%s | HomeGuard Concierge",
+    default: "Carefree Casa",
+    template: "%s | Carefree Casa",
   },
   description:
     "Premium home management for discerning homeowners. We handle every detail so you never have to worry about your home.",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "HomeGuard",
+    title: "Carefree Casa",
   },
   icons: {
     icon: "/icons/icon-192.png",
