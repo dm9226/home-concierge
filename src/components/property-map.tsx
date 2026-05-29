@@ -1,5 +1,7 @@
 "use client"
 
+import { Navigation } from "lucide-react"
+
 interface PropertyMapProps {
   address: string
   latitude?: number | null
@@ -8,7 +10,7 @@ interface PropertyMapProps {
 }
 
 export function PropertyMap({ address, latitude, longitude, className = "" }: PropertyMapProps) {
-  const googleUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`
 
   let embedUrl: string
   if (latitude && longitude) {
@@ -20,21 +22,22 @@ export function PropertyMap({ address, latitude, longitude, className = "" }: Pr
   }
 
   return (
-    <div className={`relative overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800 ${className}`}>
+    <div className={`overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800 ${className}`}>
       <iframe
         src={embedUrl}
-        className="w-full h-full"
-        style={{ border: 0, minHeight: "inherit" }}
+        className="w-full"
+        style={{ border: 0, height: "calc(100% - 40px)", minHeight: "160px" }}
         loading="lazy"
         title={`Map of ${address}`}
       />
       <a
-        href={googleUrl}
+        href={directionsUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute bottom-2 right-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm text-xs text-slate-600 dark:text-slate-300 px-2 py-1 rounded shadow-sm border border-slate-200 dark:border-slate-700 hover:text-[#C9A96E] transition-colors"
+        className="flex items-center justify-center gap-2 h-10 w-full bg-[#0F1B2D] hover:bg-[#1a2d47] text-white text-sm font-medium transition-colors"
       >
-        Open in Google Maps ↗
+        <Navigation className="h-4 w-4" />
+        Get Directions
       </a>
     </div>
   )
