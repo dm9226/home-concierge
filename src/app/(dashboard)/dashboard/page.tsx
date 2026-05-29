@@ -18,8 +18,9 @@ export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
+  const userId = user.id
 
-  const { data: profile } = await supabase.from("users").select("*").eq("id", user.id).single()
+  const { data: profile } = await supabase.from("users").select("*").eq("id", userId).single()
   if (!profile) redirect("/login")
 
   // All data fetches use the admin client so RLS never limits company-wide visibility.
@@ -40,7 +41,7 @@ export default async function DashboardPage() {
 
   // Which properties are specifically assigned to the current user
   const myPropertyIds = new Set(
-    properties?.filter(p => p.primary_concierge_id === user.id).map(p => p.id) ?? []
+    properties?.filter(p => p.primary_concierge_id === userId).map(p => p.id) ?? []
   )
 
   const propertyById: Record<string, { address: string; city: string }> = {}
@@ -195,7 +196,7 @@ export default async function DashboardPage() {
 
   // Items specifically assigned to / related to the current user
   function isMyItem(propertyId: string, assignedTo?: string | null) {
-    return assignedTo === user.id || myPropertyIds.has(propertyId)
+    return assignedTo === userId || myPropertyIds.has(propertyId)
   }
 
   return (
