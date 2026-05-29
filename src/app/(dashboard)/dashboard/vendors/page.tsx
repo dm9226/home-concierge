@@ -36,28 +36,14 @@ export default async function VendorsPage() {
 
   const admin = createAdminClient()
 
-  let debugError: string | null = null
-
-  let profile: { role: string } | null = null
-  try {
-    const res = await admin.from("users").select("role").eq("id", user.id).single()
-    profile = res.data
-    if (res.error) debugError = `profile query: ${res.error.message}`
-  } catch (e: any) {
-    debugError = `profile catch: ${e?.message}`
-  }
-  if (debugError) return <pre className="p-6 text-red-600 text-sm">{debugError}</pre>
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
-  let vendors: any[] | null = null
-  try {
-    const res = await admin.from("vendors").select("*").neq("status", "blacklisted").order("company_name", { ascending: true })
-    vendors = res.data
-    if (res.error) debugError = `vendors query: ${res.error.message}`
-  } catch (e: any) {
-    debugError = `vendors catch: ${e?.message}`
-  }
-  if (debugError) return <pre className="p-6 text-red-600 text-sm">{debugError}</pre>
+  const { data: vendors } = await admin
+    .from("vendors")
+    .select("*")
+    .neq("status", "blacklisted")
+    .order("company_name", { ascending: true })
 
   // Group by first specialty category
   const byCategory: Record<string, typeof vendors> = {}
@@ -104,24 +90,16 @@ export default async function VendorsPage() {
                         </div>
                         <div className="flex items-center gap-3 mt-2">
                           {vendor.phone && (
-                            <a
-                              href={`tel:${vendor.phone}`}
-                              onClick={e => e.stopPropagation()}
-                              className="flex items-center gap-1 text-xs text-slate-500 hover:text-[#0F1B2D]"
-                            >
+                            <span className="flex items-center gap-1 text-xs text-slate-500">
                               <Phone className="h-3 w-3" />
                               {vendor.phone}
-                            </a>
+                            </span>
                           )}
                           {vendor.email && (
-                            <a
-                              href={`mailto:${vendor.email}`}
-                              onClick={e => e.stopPropagation()}
-                              className="flex items-center gap-1 text-xs text-slate-500 hover:text-[#0F1B2D]"
-                            >
+                            <span className="flex items-center gap-1 text-xs text-slate-500">
                               <Mail className="h-3 w-3" />
                               Email
-                            </a>
+                            </span>
                           )}
                         </div>
                       </div>

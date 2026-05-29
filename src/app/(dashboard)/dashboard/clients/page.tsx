@@ -84,7 +84,6 @@ export default async function ClientsPage() {
                             key={p.id}
                             href={`/dashboard/properties/${p.id}`}
                             className="flex items-center gap-2 text-sm text-slate-600 hover:text-[#C9A96E] transition-colors"
-                            onClick={e => e.stopPropagation()}
                           >
                             <Home className="h-3.5 w-3.5 text-slate-400 shrink-0" />
                             {p.address}, {p.city}
