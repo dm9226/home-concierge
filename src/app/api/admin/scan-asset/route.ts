@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import Anthropic from "@anthropic-ai/sdk"
 
+export const maxDuration = 30
+
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(request: NextRequest) {
@@ -11,6 +13,10 @@ export async function POST(request: NextRequest) {
 
   const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json({ error: "ANTHROPIC_API_KEY not configured" }, { status: 500 })
+  }
 
   const formData = await request.formData()
   const file = formData.get("image") as File | null
