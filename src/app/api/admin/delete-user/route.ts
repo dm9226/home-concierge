@@ -16,20 +16,35 @@ export async function DELETE(request: NextRequest) {
 
   if (!userId) return NextResponse.json({ error: "Missing userId" }, { status: 400 })
   if (userId === user.id) return NextResponse.json({ error: "You cannot delete your own account" }, { status: 400 })
-  if (!reassignTo) return NextResponse.json({ error: "Select a team member to reassign work to before deleting" }, { status: 400 })
-  if (reassignTo === userId) return NextResponse.json({ error: "Reassign target cannot be the same user" }, { status: 400 })
 
   const admin = createAdminClient()
+
+  // Check the role of the user being deleted to determine strategy
+  const { data: target } = await admin.from("users").select("role").eq("id", userId).single()
+  const isClient = target?.role === "client"
+
+  if (!isClient) {
+    if (!reassignTo) return NextResponse.json({ error: "Select a team member to reassign work to before deleting" }, { status: 400 })
+    if (reassignTo === userId) return NextResponse.json({ error: "Reassign target cannot be the same user" }, { status: 400 })
+  }
 
   // Nullable FK references -- set to null
   await admin.from("properties").update({ primary_concierge_id: null }).eq("primary_concierge_id", userId)
   await admin.from("work_orders").update({ assigned_to: null }).eq("assigned_to", userId)
 
-  // NOT NULL FK references -- reassign to chosen team member
-  await admin.from("work_orders").update({ requested_by: reassignTo }).eq("requested_by", userId)
-  await admin.from("messages").update({ sender_id: reassignTo }).eq("sender_id", userId)
-  await admin.from("messages").update({ recipient_id: reassignTo }).eq("recipient_id", userId)
-  await admin.from("activity_logs").update({ user_id: reassignTo }).eq("user_id", userId)
+  if (isClient) {
+    // For clients: delete their messages and activity logs, reassign work orders to the deleting admin
+    await admin.from("messages").delete().eq("sender_id", userId)
+    await admin.from("messages").delete().eq("recipient_id", userId)
+    await admin.from("work_orders").update({ requested_by: user.id }).eq("requested_by", userId)
+    await admin.from("activity_logs").delete().eq("user_id", userId)
+  } else {
+    // For staff: reassign everything to the chosen team member
+    await admin.from("work_orders").update({ requested_by: reassignTo! }).eq("requested_by", userId)
+    await admin.from("messages").update({ sender_id: reassignTo! }).eq("sender_id", userId)
+    await admin.from("messages").update({ recipient_id: reassignTo! }).eq("recipient_id", userId)
+    await admin.from("activity_logs").update({ user_id: reassignTo! }).eq("user_id", userId)
+  }
 
   // Personal records -- delete rather than reassign
   await admin.from("notifications").delete().eq("user_id", userId)

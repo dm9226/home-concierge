@@ -60,12 +60,12 @@ export default async function ClientsPage() {
                 <div className="flex items-start gap-4">
                   {/* Avatar */}
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0F1B2D] text-white font-semibold text-sm shrink-0">
-                    {client.full_name.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
+                    {(client.full_name ?? "?").split(" ").map((n: string) => n[0]).join("").slice(0, 2) || "?"}
                   </div>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[#0F1B2D] dark:text-white">{client.full_name}</p>
+                    <p className="font-semibold text-[#0F1B2D] dark:text-white">{client.full_name ?? "Unknown"}</p>
                     <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm text-slate-500">
                       <span className="flex items-center gap-1">
                         <Mail className="h-3.5 w-3.5" />{client.email}
