@@ -234,7 +234,7 @@ export function AddAssetDialog({ propertyId }: Props) {
             )}
 
             {scanError && (
-              <p className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-700">{scanError}</p>
+              <p className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-sm font-medium text-amber-800">{scanError}</p>
             )}
 
             {/* Hidden file inputs -- one for camera, one for gallery */}
@@ -308,7 +308,7 @@ export function AddAssetDialog({ propertyId }: Props) {
             )}
 
             {scanError && (
-              <p className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-700">{scanError}</p>
+              <p className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-sm font-medium text-amber-800">{scanError}</p>
             )}
 
             <div className="grid grid-cols-2 gap-3">
