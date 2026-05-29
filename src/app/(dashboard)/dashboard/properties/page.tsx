@@ -89,12 +89,6 @@ export default async function PropertiesPage() {
                         {client?.full_name ?? "Unassigned"}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-500">Monthly Retainer</span>
-                      <span className="font-medium text-[#0F1B2D] dark:text-white">
-                        {formatCurrency(property.monthly_retainer_amount)}
-                      </span>
-                    </div>
                   </div>
 
                   <div className="mt-4 flex items-center justify-between">

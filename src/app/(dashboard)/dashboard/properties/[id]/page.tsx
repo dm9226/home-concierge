@@ -155,7 +155,7 @@ export default async function PropertyDetailPage({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 divide-x divide-slate-200 border-t border-slate-200 sm:grid-cols-4 dark:divide-slate-800 dark:border-slate-800">
+        <div className="grid grid-cols-2 divide-x divide-slate-200 border-t border-slate-200 sm:grid-cols-2 dark:divide-slate-800 dark:border-slate-800">
           <div className="flex flex-col items-center p-4">
             <HealthScoreGauge score={property.health_score} size="sm" showLabel />
           </div>
@@ -171,13 +171,6 @@ export default async function PropertyDetailPage({
                 <AssignOwnerDialog propertyId={property.id} clients={availableClients ?? []} />
               </div>
             )}
-          </div>
-          <div className="flex flex-col justify-center p-4">
-            <p className="text-xs uppercase tracking-wider text-slate-400">Monthly Retainer</p>
-            <p className="mt-1 font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">
-              {formatCurrency(property.monthly_retainer_amount)}
-            </p>
-            <p className="text-xs text-slate-500">since {property.contract_start_date ? formatDateShort(property.contract_start_date) : "N/A"}</p>
           </div>
         </div>
       </div>
