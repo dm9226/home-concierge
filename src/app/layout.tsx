@@ -3,6 +3,7 @@ import { Cormorant_Garamond, DM_Sans } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/providers"
 import { ServiceWorkerRegistration } from "@/components/service-worker"
+import { SessionRefresher } from "@/components/session-refresher"
 
 const displayFont = Cormorant_Garamond({
   variable: "--font-display",
@@ -67,6 +68,7 @@ export default function RootLayout({
       <body className="min-h-full antialiased">
         <Providers>{children}</Providers>
         <ServiceWorkerRegistration />
+        <SessionRefresher />
       </body>
     </html>
   )
