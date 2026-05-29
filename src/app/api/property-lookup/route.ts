@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import Anthropic from "@anthropic-ai/sdk"
+
+export const maxDuration = 30
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient()
@@ -16,57 +21,48 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "street, city, state, and zip are all required" }, { status: 400 })
   }
 
-  const token = process.env.ESTATED_API_KEY
-  if (!token) {
-    return NextResponse.json({ error: "Property lookup is not configured (missing ESTATED_API_KEY)" }, { status: 503 })
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json({ error: "ANTHROPIC_API_KEY not configured" }, { status: 503 })
   }
 
-  const url = new URL("https://apis.estated.com/v4/property")
-  url.searchParams.set("token", token)
-  url.searchParams.set("street", street)
-  url.searchParams.set("city", city)
-  url.searchParams.set("state", state)
-  url.searchParams.set("zip", zip)
+  const address = `${street}, ${city}, ${state} ${zip}`
 
-  let json: any
-  try {
-    const res = await fetch(url.toString(), { next: { revalidate: 0 } })
-    json = await res.json()
-  } catch {
-    return NextResponse.json({ error: "Could not reach Estated API" }, { status: 502 })
-  }
+  const message = await anthropic.messages.create({
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 512,
+    messages: [
+      {
+        role: "user",
+        content: `You are a property data assistant with knowledge of US public property records, county assessor databases, Zillow, Redfin, and similar sources.
 
-  const data = json?.data
-  if (!data || json?.status?.code === "0x02") {
-    return NextResponse.json({ error: "Property not found" }, { status: 404 })
-  }
+Look up this address and return whatever public property data you have: ${address}
 
-  const structure = data.structure ?? {}
-  const lot       = data.lot ?? {}
-  const valuation = data.valuation ?? {}
+Return ONLY a valid JSON object with these fields (use null for any you don't know):
+{
+  "year_built": number or null,
+  "square_footage": number or null,
+  "lot_size": "X.XX acres" or "XXXX sq ft" or null,
+  "beds": number or null,
+  "baths": number or null,
+  "property_type": "single_family" or "townhome" or "condo" or null,
+  "stories": number or null,
+  "garage": "attached" or "detached" or "none" or null,
+  "confidence": "high" or "medium" or "low"
+}
 
-  // Map Estated structure type to our enum
-  const rawType = (structure.type ?? "").toLowerCase()
-  let property_type: "single_family" | "townhome" | "condo" = "single_family"
-  if (rawType.includes("condo")) property_type = "condo"
-  else if (rawType.includes("town")) property_type = "townhome"
-
-  // Format lot size
-  let lot_size: string | null = null
-  if (lot.area_acres) lot_size = `${lot.area_acres} acres`
-  else if (lot.area_sq_ft) lot_size = `${lot.area_sq_ft.toLocaleString()} sq ft`
-
-  return NextResponse.json({
-    year_built:       structure.year_built        ?? null,
-    square_footage:   structure.living_square_feet ?? null,
-    lot_size,
-    property_type,
-    beds:             structure.beds_count         ?? null,
-    baths:            structure.baths              ?? null,
-    stories:          structure.stories            ?? null,
-    garage:           structure.garage_type        ?? null,
-    roof:             structure.roof_material_type ?? null,
-    construction:     structure.construction_type  ?? null,
-    estimated_value:  valuation.value              ?? null,
+Return only the JSON object. No markdown, no explanation.`,
+      },
+    ],
   })
+
+  const raw = message.content[0].type === "text" ? message.content[0].text.trim() : ""
+  const match = raw.match(/\{[\s\S]*\}/)
+  if (!match) return NextResponse.json({ error: "Could not parse property data" }, { status: 422 })
+
+  try {
+    const parsed = JSON.parse(match[0])
+    return NextResponse.json(parsed)
+  } catch {
+    return NextResponse.json({ error: "Could not parse property data" }, { status: 422 })
+  }
 }

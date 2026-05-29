@@ -103,12 +103,10 @@ export function NewPropertyForm() {
     }
 
     const extras: string[] = []
-    if (data.beds)         extras.push(`${data.beds} bed`)
-    if (data.baths)        extras.push(`${data.baths} bath`)
-    if (data.stories)      extras.push(`${data.stories} ${data.stories === 1 ? "story" : "stories"}`)
-    if (data.garage)       extras.push(`${data.garage} garage`)
-    if (data.roof)         extras.push(`${data.roof} roof`)
-    if (data.construction) extras.push(`${data.construction} construction`)
+    if (data.beds)    extras.push(`${data.beds} bed`)
+    if (data.baths)   extras.push(`${data.baths} bath`)
+    if (data.stories) extras.push(`${data.stories} ${data.stories === 1 ? "story" : "stories"}`)
+    if (data.garage && data.garage !== "none") extras.push(`${data.garage} garage`)
 
     setForm(f => ({
       ...f,
@@ -122,8 +120,8 @@ export function NewPropertyForm() {
     const summary: string[] = []
     if (data.year_built)     summary.push(`built ${data.year_built}`)
     if (data.square_footage) summary.push(`${data.square_footage.toLocaleString()} sq ft`)
-    if (data.estimated_value) summary.push(`~$${(data.estimated_value / 1000).toFixed(0)}k estimated value`)
-    setLookupStatus({ type: "success", msg: summary.length ? summary.join(" · ") : "Property found -- review fields below" })
+    const confidenceNote = data.confidence === "low" ? " · verify before saving" : ""
+    setLookupStatus({ type: "success", msg: (summary.length ? summary.join(" · ") : "Fields populated") + confidenceNote })
   }
 
   async function handleSubmit(e: React.FormEvent) {
