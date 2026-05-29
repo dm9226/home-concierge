@@ -18,6 +18,7 @@ import {
 import { AssignOwnerDialog } from "./assign-owner-dialog"
 import { AddAssetDialog } from "./add-asset-dialog"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
+import { PropertyMap } from "@/components/property-map"
 
 export default async function PropertyDetailPage({
   params,
@@ -236,6 +237,14 @@ export default async function PropertyDetailPage({
 
         {/* OVERVIEW TAB */}
         <TabsContent value="overview">
+          {property.latitude && property.longitude && (
+            <PropertyMap
+              latitude={Number(property.latitude)}
+              longitude={Number(property.longitude)}
+              address={`${property.address}, ${property.city}, ${property.state} ${property.zip}`}
+              className="h-56 mb-4"
+            />
+          )}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {/* Quick stats */}
             <Card>

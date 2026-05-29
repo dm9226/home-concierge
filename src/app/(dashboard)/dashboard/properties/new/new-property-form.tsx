@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { PropertyMap } from "@/components/property-map"
 import { Sparkles, Loader2, CheckCircle2, AlertCircle } from "lucide-react"
 
 const GOOGLE_KEY = process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY
@@ -37,6 +38,7 @@ export function NewPropertyForm() {
     billing_period: "monthly" as "monthly" | "quarterly" | "annually",
     notes: "",
   })
+  const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null)
 
   const [placesReady, setPlacesReady] = useState(false)
   const [looking, setLooking] = useState(false)
@@ -92,25 +94,18 @@ export function NewPropertyForm() {
     setLookupStatus(null)
     setPendingConfirm(false)
 
-    const params = new URLSearchParams({
-      street: form.address,
-      city: form.city,
-      state: form.state,
-      zip: form.zip,
-    })
+    const params = new URLSearchParams({ street: form.address, city: form.city, state: form.state, zip: form.zip })
     if (confirmed) params.set("confirmed", "1")
 
     const res = await fetch(`/api/property-lookup?${params}`)
     const data = await res.json()
     setLooking(false)
 
-    // Usage warning -- ask for confirmation
     if (res.status === 402 && data.usage_warning) {
-      const overFree = data.over_free_tier
       setPendingConfirm(true)
       setLookupStatus({
         type: "warn",
-        msg: overFree
+        msg: data.over_free_tier
           ? `You've used all ${data.limit} free lookups this month. Each additional lookup costs $0.20. Continue?`
           : `You've used ${data.count} of ${data.limit} free lookups this month. This lookup costs $0.20. Continue?`,
       })
@@ -123,6 +118,9 @@ export function NewPropertyForm() {
     }
 
     if (data.usage_count != null) setUsageCount(data.usage_count)
+    if (data.latitude && data.longitude) setCoords({ lat: data.latitude, lon: data.longitude })
+
+    const notesContent = data.notes_lines?.join("\n") ?? ""
 
     setForm(f => ({
       ...f,
@@ -130,15 +128,16 @@ export function NewPropertyForm() {
       square_footage: data.square_footage ? String(data.square_footage) : f.square_footage,
       lot_size:       data.lot_size       ?? f.lot_size,
       property_type:  data.property_type  ?? f.property_type,
-      notes: data.features?.length
-        ? data.features.join(", ") + (f.notes ? "\n" + f.notes : "")
-        : f.notes,
+      notes: notesContent + (f.notes ? "\n" + f.notes : ""),
     }))
 
     const summary: string[] = []
-    if (data.year_built)      summary.push(`built ${data.year_built}`)
-    if (data.square_footage)  summary.push(`${Number(data.square_footage).toLocaleString()} sq ft`)
-    if (data.last_sale_price) summary.push(`last sold $${Number(data.last_sale_price).toLocaleString()}${data.last_sale_date ? ` (${new Date(data.last_sale_date).getFullYear()})` : ""}`)
+    if (data.year_built)       summary.push(`built ${data.year_built}`)
+    if (data.square_footage)   summary.push(`${Number(data.square_footage).toLocaleString()} sq ft`)
+    if (data.last_sale_price)  summary.push(`last sold $${Number(data.last_sale_price).toLocaleString()}${data.last_sale_date ? ` (${new Date(data.last_sale_date).getFullYear()})` : ""}`)
+    if (data.estimated_value)  summary.push(`est. value $${Number(data.estimated_value).toLocaleString()}`)
+    if (data.estimated_rent)   summary.push(`est. rent $${Number(data.estimated_rent).toLocaleString()}/mo`)
+    if (data.annual_tax)       summary.push(`taxes $${Number(data.annual_tax).toLocaleString()}/yr`)
     setLookupStatus({ type: "success", msg: summary.length ? summary.join(" · ") : "Fields populated -- review below" })
   }
 
@@ -162,6 +161,8 @@ export function NewPropertyForm() {
         fee_amount: parseFloat(form.fee_amount),
         billing_period: form.billing_period,
         notes: form.notes || null,
+        latitude: coords?.lat ?? null,
+        longitude: coords?.lon ?? null,
         status: "active",
         onboarding_status: "not_started",
       })
@@ -174,6 +175,7 @@ export function NewPropertyForm() {
   }
 
   const canLookup = !!(form.address && form.city && form.state && form.zip)
+  const fullAddress = [form.address, form.city, form.state, form.zip].filter(Boolean).join(", ")
 
   return (
     <>
@@ -202,11 +204,7 @@ export function NewPropertyForm() {
                   onClick={() => lookupProperty(false)}
                   className="gap-1.5 text-xs h-8"
                 >
-                  {looking ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  ) : (
-                    <Sparkles className="h-3.5 w-3.5 text-[#C9A96E]" />
-                  )}
+                  {looking ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5 text-[#C9A96E]" />}
                   {looking ? "Looking up..." : "Look up property"}
                 </Button>
               </div>
@@ -214,33 +212,21 @@ export function NewPropertyForm() {
 
             {lookupStatus && (
               <div className={`flex items-start gap-2 rounded-md px-3 py-2 text-sm ${
-                lookupStatus.type === "success"
-                  ? "bg-emerald-50 text-emerald-700"
-                  : lookupStatus.type === "warn"
-                  ? "bg-amber-50 text-amber-700"
-                  : "bg-red-50 text-red-700"
+                lookupStatus.type === "success" ? "bg-emerald-50 text-emerald-700"
+                : lookupStatus.type === "warn"  ? "bg-amber-50 text-amber-700"
+                : "bg-red-50 text-red-700"
               }`}>
-                <AlertCircle className={`h-4 w-4 mt-0.5 shrink-0 ${lookupStatus.type === "success" ? "hidden" : ""}`} />
-                {lookupStatus.type === "success" && <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />}
+                {lookupStatus.type === "success"
+                  ? <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
+                  : <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />}
                 <div className="flex-1">
                   <span>{lookupStatus.msg}</span>
                   {pendingConfirm && (
                     <div className="mt-2 flex gap-2">
-                      <Button
-                        type="button"
-                        size="sm"
-                        className="h-7 text-xs bg-amber-600 hover:bg-amber-700 text-white"
-                        onClick={() => lookupProperty(true)}
-                      >
+                      <Button type="button" size="sm" className="h-7 text-xs bg-amber-600 hover:bg-amber-700 text-white" onClick={() => lookupProperty(true)}>
                         Yes, look it up ($0.20)
                       </Button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="outline"
-                        className="h-7 text-xs"
-                        onClick={() => { setLookupStatus(null); setPendingConfirm(false) }}
-                      >
+                      <Button type="button" size="sm" variant="outline" className="h-7 text-xs" onClick={() => { setLookupStatus(null); setPendingConfirm(false) }}>
                         Cancel
                       </Button>
                     </div>
@@ -251,15 +237,7 @@ export function NewPropertyForm() {
 
             <div className="space-y-1.5">
               <Label htmlFor="address">Street Address</Label>
-              <Input
-                id="address"
-                ref={addressRef}
-                placeholder="123 Peachtree Rd NE"
-                value={form.address}
-                onChange={e => set("address", e.target.value)}
-                required
-                autoComplete="off"
-              />
+              <Input id="address" ref={addressRef} placeholder="123 Peachtree Rd NE" value={form.address} onChange={e => set("address", e.target.value)} required autoComplete="off" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
@@ -288,6 +266,15 @@ export function NewPropertyForm() {
                 </Select>
               </div>
             </div>
+
+            {coords && (
+              <PropertyMap
+                latitude={coords.lat}
+                longitude={coords.lon}
+                address={fullAddress}
+                className="h-48 mt-2"
+              />
+            )}
           </CardContent>
         </Card>
 
@@ -327,13 +314,7 @@ export function NewPropertyForm() {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="notes">Notes</Label>
-              <Textarea
-                id="notes"
-                placeholder="Any initial notes about this property..."
-                value={form.notes}
-                onChange={e => set("notes", e.target.value)}
-                rows={3}
-              />
+              <Textarea id="notes" placeholder="Any initial notes about this property..." value={form.notes} onChange={e => set("notes", e.target.value)} rows={4} />
             </div>
           </CardContent>
         </Card>

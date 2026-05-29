@@ -1,0 +1,35 @@
+"use client"
+
+interface PropertyMapProps {
+  latitude: number
+  longitude: number
+  address: string
+  className?: string
+}
+
+export function PropertyMap({ latitude, longitude, address, className = "" }: PropertyMapProps) {
+  const delta = 0.008
+  const bbox = `${longitude - delta},${latitude - delta},${longitude + delta},${latitude + delta}`
+  const embedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${latitude},${longitude}`
+  const googleUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
+
+  return (
+    <div className={`relative overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800 ${className}`}>
+      <iframe
+        src={embedUrl}
+        className="w-full h-full"
+        style={{ border: 0, minHeight: "inherit" }}
+        loading="lazy"
+        title={`Map of ${address}`}
+      />
+      <a
+        href={googleUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute bottom-2 right-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm text-xs text-slate-600 dark:text-slate-300 px-2 py-1 rounded shadow-sm border border-slate-200 dark:border-slate-700 hover:text-[#C9A96E] transition-colors"
+      >
+        Open in Google Maps ↗
+      </a>
+    </div>
+  )
+}

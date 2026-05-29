@@ -60,6 +60,8 @@ export type Database = {
           primary_concierge_id: string | null
           fee_amount: number
           billing_period: "monthly" | "quarterly" | "annually"
+          latitude: number | null
+          longitude: number | null
           contract_start_date: string | null
           status: "active" | "paused" | "cancelled"
           cover_photo_url: string | null
@@ -82,6 +84,8 @@ export type Database = {
           primary_concierge_id?: string | null
           fee_amount?: number
           billing_period?: "monthly" | "quarterly" | "annually"
+          latitude?: number | null
+          longitude?: number | null
           contract_start_date?: string | null
           status?: "active" | "paused" | "cancelled"
           cover_photo_url?: string | null
@@ -104,6 +108,8 @@ export type Database = {
           primary_concierge_id?: string | null
           fee_amount?: number
           billing_period?: "monthly" | "quarterly" | "annually"
+          latitude?: number | null
+          longitude?: number | null
           contract_start_date?: string | null
           status?: "active" | "paused" | "cancelled"
           cover_photo_url?: string | null
