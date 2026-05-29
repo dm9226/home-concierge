@@ -701,6 +701,24 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      api_usage: {
+        Row: {
+          service: string
+          period: string
+          count: number
+        }
+        Insert: {
+          service: string
+          period: string
+          count?: number
+        }
+        Update: {
+          service?: string
+          period?: string
+          count?: number
+        }
+        Relationships: Rel[]
+      }
       activity_logs: {
         Row: {
           id: string
