@@ -24,8 +24,14 @@ export async function POST(request: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 })
 
-  if (phone && data.user) {
-    await admin.from("users").update({ phone }).eq("id", data.user.id)
+  // Explicitly write all fields to public.users so the role is correct
+  // regardless of how the Supabase trigger sets defaults.
+  if (data.user) {
+    await admin.from("users").update({
+      full_name,
+      role,
+      ...(phone ? { phone } : {}),
+    }).eq("id", data.user.id)
   }
 
   return NextResponse.json({ success: true, userId: data.user?.id })
