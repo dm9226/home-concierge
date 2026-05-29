@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.verifyOtp({ type, token_hash })
 
     if (!error) {
-      if (type === "recovery") {
+      if (type === "recovery" || type === "invite") {
         return NextResponse.redirect(`${origin}/auth/reset-password`)
       }
       return NextResponse.redirect(`${origin}${next}`)

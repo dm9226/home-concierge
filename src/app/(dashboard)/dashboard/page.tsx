@@ -4,144 +4,196 @@ import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { HealthScoreGauge } from "@/components/health-score-gauge"
-import { StatusBadge, PriorityBadge } from "@/components/status-badge"
+import { PriorityBadge } from "@/components/status-badge"
 import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import {
-  Building2,
-  Wrench,
-  Calendar,
-  AlertTriangle,
-  TrendingUp,
-  Plus,
-  ArrowRight,
-  Clock,
+  Building2, Wrench, Calendar, AlertTriangle, TrendingUp,
+  Plus, ArrowRight, Clock, DollarSign, Home, MessageSquare,
+  ShieldAlert, Package,
 } from "lucide-react"
 
 export default async function DashboardPage() {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
+  const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
   const { data: profile } = await supabase.from("users").select("*").eq("id", user.id).single()
   if (!profile) redirect("/login")
 
-  const isAdmin = profile.role === "admin"
-
-  // Fetch properties (scoped by RLS)
+  // Step 1: properties (needed for all subsequent queries)
   const { data: properties } = await supabase
     .from("properties")
-    .select("*, users!properties_client_id_fkey(full_name, email, phone)")
+    .select("*, client:users!properties_client_id_fkey(id, full_name, email)")
     .eq("status", "active")
     .order("created_at", { ascending: false })
 
-  const propertyIds = properties?.map((p) => p.id) ?? []
+  const propertyIds = properties?.map(p => p.id) ?? []
+  const clientIds = properties
+    ?.map(p => p.client_id)
+    .filter((id): id is string => !!id) ?? []
 
-  // Fetch work orders this week
-  const weekAgo = new Date()
-  weekAgo.setDate(weekAgo.getDate() - 7)
+  // Lookup maps for message display
+  const propertyById: Record<string, { address: string; city: string }> = {}
+  const clientNameById: Record<string, string> = {}
+  properties?.forEach(p => {
+    propertyById[p.id] = { address: p.address, city: p.city }
+    const client = (p as any).client
+    if (p.client_id && client?.full_name) clientNameById[p.client_id] = client.full_name
+  })
 
-  const { data: recentWorkOrders } = await supabase
-    .from("work_orders")
-    .select("*, properties(address, city)")
-    .in("property_id", propertyIds)
-    .gte("created_at", weekAgo.toISOString())
-    .order("created_at", { ascending: false })
-    .limit(10)
+  const avgHealthScore = properties?.length
+    ? Math.round(properties.reduce((sum, p) => sum + (p.health_score ?? 0), 0) / properties.length)
+    : 0
 
-  // Active emergencies
-  const { data: emergencies } = await supabase
-    .from("work_orders")
-    .select("*, properties(address)")
-    .in("property_id", propertyIds)
-    .eq("is_emergency", true)
-    .not("status", "in", '("completed","cancelled")')
+  const now = new Date()
+  const ttmStart = new Date(now); ttmStart.setFullYear(ttmStart.getFullYear() - 1)
+  const monthStart = new Date(now); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0)
+  const nextWeek = new Date(now); nextWeek.setDate(now.getDate() + 7)
+  const ninetyDays = new Date(now); ninetyDays.setDate(now.getDate() + 90)
+  const todayStr = now.toISOString().split("T")[0]
 
-  // Overdue maintenance
-  const { data: overdueItems } = await supabase
-    .from("maintenance_schedules")
-    .select("*, properties(address, city)")
-    .in("property_id", propertyIds)
-    .eq("is_active", true)
-    .lt("next_due", new Date().toISOString().split("T")[0])
-    .order("next_due", { ascending: true })
-    .limit(5)
+  // Step 2: parallel fetch everything
+  const [
+    { data: emergencies },
+    { data: ttmInvoices },
+    { data: monthPaidInvoices },
+    { data: outstandingInvoices },
+    { data: submittedOrders },
+    { data: overdueItems },
+    { data: upcomingWork },
+    { data: rawClientMessages },
+    { data: expiringWarranties },
+    { data: agingAssets },
+  ] = await Promise.all([
+    supabase
+      .from("work_orders")
+      .select("id, title, property_id, properties(address)")
+      .in("property_id", propertyIds)
+      .eq("is_emergency", true)
+      .not("status", "in", '("completed","cancelled")'),
 
-  // Upcoming scheduled work (next 7 days)
-  const nextWeek = new Date()
-  nextWeek.setDate(nextWeek.getDate() + 7)
+    supabase
+      .from("invoices")
+      .select("total")
+      .in("property_id", propertyIds)
+      .in("status", ["paid", "sent", "overdue"])
+      .gte("created_at", ttmStart.toISOString()),
 
-  const { data: upcomingWork } = await supabase
-    .from("work_orders")
-    .select("*, properties(address, city)")
-    .in("property_id", propertyIds)
-    .eq("status", "scheduled")
-    .gte("scheduled_date", new Date().toISOString())
-    .lte("scheduled_date", nextWeek.toISOString())
-    .order("scheduled_date", { ascending: true })
-    .limit(5)
+    supabase
+      .from("invoices")
+      .select("total")
+      .in("property_id", propertyIds)
+      .eq("status", "paid")
+      .gte("created_at", monthStart.toISOString()),
 
-  // Recent activity
-  const { data: recentActivity } = await supabase
-    .from("activity_logs")
-    .select("*, users(full_name), properties(address)")
-    .in("property_id", propertyIds)
-    .order("created_at", { ascending: false })
-    .limit(8)
+    supabase
+      .from("invoices")
+      .select("total")
+      .in("property_id", propertyIds)
+      .in("status", ["sent", "overdue"]),
 
-  const stats = [
-    {
-      label: "Active Properties",
-      value: properties?.length ?? 0,
-      icon: Building2,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-    },
-    {
-      label: "Work Orders This Week",
-      value: recentWorkOrders?.length ?? 0,
-      icon: Wrench,
-      color: "text-violet-600",
-      bg: "bg-violet-50",
-    },
-    {
-      label: "Overdue Maintenance",
-      value: overdueItems?.length ?? 0,
-      icon: Calendar,
-      color: overdueItems?.length ? "text-red-600" : "text-emerald-600",
-      bg: overdueItems?.length ? "bg-red-50" : "bg-emerald-50",
-    },
-    {
-      label: "Active Emergencies",
-      value: emergencies?.length ?? 0,
-      icon: AlertTriangle,
-      color: emergencies?.length ? "text-red-600" : "text-emerald-600",
-      bg: emergencies?.length ? "bg-red-50" : "bg-emerald-50",
-    },
-  ]
+    supabase
+      .from("work_orders")
+      .select("id, title, priority, property_id, properties(address, city)")
+      .in("property_id", propertyIds)
+      .eq("status", "submitted")
+      .order("created_at", { ascending: false })
+      .limit(6),
+
+    supabase
+      .from("maintenance_schedules")
+      .select("id, title, next_due, property_id, properties(address, city)")
+      .in("property_id", propertyIds)
+      .eq("is_active", true)
+      .lt("next_due", todayStr)
+      .order("next_due", { ascending: true })
+      .limit(6),
+
+    supabase
+      .from("work_orders")
+      .select("id, title, scheduled_date, property_id, properties(address, city)")
+      .in("property_id", propertyIds)
+      .eq("status", "scheduled")
+      .gte("scheduled_date", now.toISOString())
+      .lte("scheduled_date", nextWeek.toISOString())
+      .order("scheduled_date", { ascending: true })
+      .limit(8),
+
+    clientIds.length
+      ? supabase
+          .from("messages")
+          .select("id, body, created_at, property_id, sender_id, is_read")
+          .in("property_id", propertyIds)
+          .in("sender_id", clientIds)
+          .order("created_at", { ascending: false })
+          .limit(6)
+      : Promise.resolve({ data: [] as any[], error: null }),
+
+    supabase
+      .from("assets")
+      .select("id, name, warranty_expiration, property_id, properties(address)")
+      .in("property_id", propertyIds)
+      .eq("status", "active")
+      .not("warranty_expiration", "is", null)
+      .gte("warranty_expiration", todayStr)
+      .lte("warranty_expiration", ninetyDays.toISOString().split("T")[0])
+      .order("warranty_expiration", { ascending: true })
+      .limit(4),
+
+    supabase
+      .from("assets")
+      .select("id, name, install_date, expected_lifespan_years, property_id, properties(address)")
+      .in("property_id", propertyIds)
+      .eq("status", "active")
+      .not("install_date", "is", null)
+      .not("expected_lifespan_years", "is", null),
+  ])
+
+  // Derived values
+  const arr = ttmInvoices?.reduce((sum, inv) => sum + inv.total, 0) ?? 0
+  const monthRevenue = monthPaidInvoices?.reduce((sum, inv) => sum + inv.total, 0) ?? 0
+  const outstanding = outstandingInvoices?.reduce((sum, inv) => sum + inv.total, 0) ?? 0
+
+  const atRiskAssets = (agingAssets ?? [])
+    .filter(asset => {
+      if (!asset.install_date || !asset.expected_lifespan_years) return false
+      const age = now.getFullYear() - new Date(asset.install_date).getFullYear()
+      return age / asset.expected_lifespan_years >= 0.75
+    })
+    .slice(0, 4)
+
+  const unassignedProps = (properties ?? []).filter(p => !p.client_id)
+  const atRiskProperties = (properties ?? []).filter(p => (p.health_score ?? 100) < 65)
+  const recentClientMessages = (rawClientMessages ?? []) as any[]
+
+  const totalActionItems =
+    (submittedOrders?.length ?? 0) +
+    (overdueItems?.length ?? 0) +
+    unassignedProps.length
+
+  const hasProactiveAlerts =
+    atRiskProperties.length > 0 ||
+    (expiringWarranties?.length ?? 0) > 0 ||
+    atRiskAssets.length > 0
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">
             Good {getTimeOfDay()}, {profile.full_name.split(" ")[0]}
           </h1>
           <p className="mt-0.5 text-sm text-slate-500">
-            {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            {now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button asChild variant="outline" size="sm">
-            <Link href="/dashboard/work-orders/new">
-              <Plus className="h-4 w-4" />
-              New Work Order
-            </Link>
-          </Button>
-        </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/dashboard/work-orders/new">
+            <Plus className="h-4 w-4" />
+            New Work Order
+          </Link>
+        </Button>
       </div>
 
       {/* Emergency Banner */}
@@ -155,137 +207,313 @@ export default async function DashboardPage() {
               </p>
               <div className="mt-2 space-y-1">
                 {emergencies.map((e) => (
-                  <p key={e.id} className="text-sm text-red-700">
-                    {(e as any).properties?.address} &mdash; {e.title}
-                  </p>
+                  <Link key={e.id} href={`/dashboard/work-orders/${e.id}`} className="block text-sm text-red-700 hover:underline">
+                    {(e as any).properties?.address} -- {e.title}
+                  </Link>
                 ))}
               </div>
             </div>
-            <Button variant="emergency" size="sm" asChild>
+            <Button asChild size="sm" className="bg-red-600 hover:bg-red-700 text-white shrink-0">
               <Link href="/dashboard/work-orders?filter=emergency">View All</Link>
             </Button>
           </div>
         </div>
       )}
 
-      {/* Stats */}
+      {/* KPI Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.label}>
-            <CardContent className="flex items-center gap-4 pt-6">
-              <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${stat.bg}`}>
-                <stat.icon className={`h-6 w-6 ${stat.color}`} />
+        {/* ARR */}
+        <Link href="/dashboard/reports" className="group">
+          <Card className="h-full hover:shadow-md transition-all cursor-pointer border-[#C9A96E]/30 hover:border-[#C9A96E]/60">
+            <CardContent className="pt-5 pb-5">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Revenue (TTM)</p>
+                <TrendingUp className="h-4 w-4 text-[#C9A96E]" />
               </div>
-              <div>
-                <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">{stat.value}</p>
-                <p className="text-sm text-slate-500">{stat.label}</p>
-              </div>
+              <p className="font-display text-2xl font-bold text-[#0F1B2D] dark:text-white">
+                {formatCurrency(arr)}
+              </p>
+              <p className="text-xs text-slate-500 mt-1">
+                +{formatCurrency(monthRevenue)} collected this month
+              </p>
+              <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#C9A96E] group-hover:underline">
+                View reports <ArrowRight className="h-3 w-3" />
+              </p>
             </CardContent>
           </Card>
-        ))}
+        </Link>
+
+        {/* Properties */}
+        <Link href="/dashboard/properties" className="group">
+          <Card className="h-full hover:shadow-md transition-all cursor-pointer">
+            <CardContent className="pt-5 pb-5">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Properties</p>
+                <Building2 className="h-4 w-4 text-blue-500" />
+              </div>
+              <p className="font-display text-2xl font-bold text-[#0F1B2D] dark:text-white">
+                {properties?.length ?? 0}
+              </p>
+              <p className="text-xs text-slate-500 mt-1">Avg health score: {avgHealthScore}</p>
+              <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#C9A96E] group-hover:underline">
+                View all <ArrowRight className="h-3 w-3" />
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        {/* Action Items */}
+        <Link href="/dashboard/work-orders" className="group">
+          <Card className={`h-full hover:shadow-md transition-all cursor-pointer ${totalActionItems > 0 ? "border-amber-200" : ""}`}>
+            <CardContent className="pt-5 pb-5">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Action Items</p>
+                <AlertTriangle className={`h-4 w-4 ${totalActionItems > 0 ? "text-amber-500" : "text-emerald-500"}`} />
+              </div>
+              <p className={`font-display text-2xl font-bold ${totalActionItems > 0 ? "text-amber-600" : "text-emerald-600"}`}>
+                {totalActionItems}
+              </p>
+              <p className="text-xs text-slate-500 mt-1">
+                {submittedOrders?.length ?? 0} pending &bull; {overdueItems?.length ?? 0} overdue
+              </p>
+              <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#C9A96E] group-hover:underline">
+                View work orders <ArrowRight className="h-3 w-3" />
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        {/* Outstanding */}
+        <Link href="/dashboard/invoices" className="group">
+          <Card className={`h-full hover:shadow-md transition-all cursor-pointer ${outstanding > 0 ? "border-amber-200" : ""}`}>
+            <CardContent className="pt-5 pb-5">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Outstanding</p>
+                <DollarSign className={`h-4 w-4 ${outstanding > 0 ? "text-amber-500" : "text-emerald-500"}`} />
+              </div>
+              <p className="font-display text-2xl font-bold text-[#0F1B2D] dark:text-white">
+                {formatCurrency(outstanding)}
+              </p>
+              <p className="text-xs text-slate-500 mt-1">Receivables due</p>
+              <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#C9A96E] group-hover:underline">
+                View invoices <ArrowRight className="h-3 w-3" />
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
+      {/* Main content: Action Items + Messages */}
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Properties list */}
-        <div className="lg:col-span-2 space-y-4">
+        {/* Open Action Items */}
+        <div className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
-              {isAdmin ? "All Properties" : "Your Properties"}
+              Open Action Items
             </h2>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/dashboard/properties">
-                View all <ArrowRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
+            {totalActionItems > 0 && (
+              <Badge variant="warning" className="text-xs">{totalActionItems} open</Badge>
+            )}
           </div>
-          <div className="space-y-3">
-            {properties?.slice(0, 5).map((property) => {
-              const client = (property as any).users
-              return (
-                <Link
-                  key={property.id}
-                  href={`/dashboard/properties/${property.id}`}
-                  className="flex items-center justify-between rounded-lg border border-slate-200/80 bg-white p-4 transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="hidden sm:block">
-                      <HealthScoreGauge score={property.health_score} size="sm" showLabel={false} />
-                    </div>
-                    <div>
-                      <p className="font-medium text-[#0F1B2D] dark:text-white">
-                        {property.address}
-                      </p>
-                      <p className="text-sm text-slate-500">
-                        {property.city}, {property.state} &bull; {client?.full_name}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="hidden text-sm font-medium text-slate-500 sm:block">
-                      Score: <span className={property.health_score >= 80 ? "text-emerald-600" : property.health_score >= 60 ? "text-amber-500" : "text-red-500"}>
-                        {property.health_score}
-                      </span>
-                    </span>
-                    <ArrowRight className="h-4 w-4 text-slate-400" />
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
 
-        {/* Sidebar: upcoming + activity */}
-        <div className="space-y-6">
-          {/* Upcoming work */}
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base">Upcoming This Week</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {upcomingWork && upcomingWork.length > 0 ? (
-                upcomingWork.map((wo) => (
-                  <Link
-                    key={wo.id}
-                    href={`/dashboard/work-orders/${wo.id}`}
-                    className="block rounded-md p-2 hover:bg-slate-50 dark:hover:bg-white/5"
-                  >
-                    <p className="text-sm font-medium text-[#0F1B2D] dark:text-white line-clamp-1">
-                      {wo.title}
-                    </p>
-                    <div className="mt-1 flex items-center gap-2 text-xs text-slate-500">
-                      <Clock className="h-3 w-3" />
-                      {wo.scheduled_date
-                        ? formatDateShort(wo.scheduled_date)
-                        : "No date"}
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <p className="text-sm text-slate-500 py-2">No upcoming work orders</p>
-              )}
-            </CardContent>
-          </Card>
+          {totalActionItems === 0 && (
+            <div className="flex items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 shrink-0">
+                <span className="text-sm">✓</span>
+              </div>
+              <p className="text-sm font-medium text-emerald-700">All caught up -- no action items right now.</p>
+            </div>
+          )}
 
-          {/* Recent activity */}
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base">Recent Activity</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {recentActivity?.map((log) => (
-                <div key={log.id} className="border-l-2 border-[#C9A96E]/40 pl-3">
-                  <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
-                    {log.description}
-                  </p>
-                  <p className="mt-0.5 text-xs text-slate-400">
-                    {formatDateShort(log.created_at)} &bull; {(log as any).properties?.address?.split(" ").slice(0, 3).join(" ")}
+          {/* Submitted work orders needing scheduling */}
+          {submittedOrders?.map(wo => (
+            <Link key={wo.id} href={`/dashboard/work-orders/${wo.id}`}>
+              <div className="flex items-center gap-3 rounded-lg border border-amber-200 bg-amber-50/40 p-4 hover:shadow-md transition-all">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-100 shrink-0">
+                  <Wrench className="h-4 w-4 text-amber-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-[#0F1B2D] dark:text-white">{wo.title}</p>
+                  <p className="text-sm text-slate-500 truncate">
+                    {(wo as any).properties?.address} &bull; Awaiting scheduling
                   </p>
                 </div>
-              ))}
-            </CardContent>
-          </Card>
+                <PriorityBadge priority={wo.priority} />
+              </div>
+            </Link>
+          ))}
+
+          {/* Overdue maintenance */}
+          {overdueItems?.map(item => {
+            const daysOverdue = Math.abs(getDaysUntil(item.next_due))
+            return (
+              <Link key={item.id} href={`/dashboard/properties/${item.property_id}`}>
+                <div className="flex items-center gap-3 rounded-lg border border-amber-200 bg-amber-50/40 p-4 hover:shadow-md transition-all">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-100 shrink-0">
+                    <Calendar className="h-4 w-4 text-amber-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-[#0F1B2D] dark:text-white">{item.title}</p>
+                    <p className="text-sm text-slate-500 truncate">
+                      {(item as any).properties?.address} &bull; {daysOverdue}d overdue
+                    </p>
+                  </div>
+                  <Badge variant="destructive" className="text-xs shrink-0">Overdue</Badge>
+                </div>
+              </Link>
+            )
+          })}
+
+          {/* Properties with no owner */}
+          {unassignedProps.map(p => (
+            <Link key={p.id} href={`/dashboard/properties/${p.id}`}>
+              <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 shrink-0 dark:bg-slate-800">
+                  <Home className="h-4 w-4 text-slate-500" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-[#0F1B2D] dark:text-white">{p.address}</p>
+                  <p className="text-sm text-slate-500">No owner assigned</p>
+                </div>
+                <Badge variant="secondary" className="text-xs shrink-0">Unassigned</Badge>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Recent Client Messages */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
+              Client Messages
+            </h2>
+            <Link href="/dashboard/messages" className="flex items-center gap-1 text-sm text-[#C9A96E] hover:underline">
+              View all <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          {recentClientMessages.length === 0 && (
+            <div className="rounded-lg border border-slate-200 bg-white p-4 text-center dark:border-slate-800 dark:bg-slate-900">
+              <MessageSquare className="h-8 w-8 text-slate-200 mx-auto mb-2" />
+              <p className="text-sm text-slate-400">No client messages yet</p>
+            </div>
+          )}
+
+          {recentClientMessages.map((msg: any) => {
+            const property = propertyById[msg.property_id]
+            const clientName = clientNameById[msg.sender_id] ?? "Client"
+            const initials = clientName.split(" ").map((n: string) => n[0]).join("")
+            return (
+              <Link key={msg.id} href={`/dashboard/messages/${msg.property_id}`}>
+                <div className={`rounded-lg border p-3 hover:shadow-md transition-all ${
+                  !msg.is_read
+                    ? "border-[#C9A96E]/40 bg-[#C9A96E]/5"
+                    : "border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+                }`}>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0F1B2D] text-white text-xs font-semibold shrink-0">
+                      {initials}
+                    </div>
+                    <p className="font-medium text-sm text-[#0F1B2D] dark:text-white flex-1 truncate">
+                      {clientName}
+                    </p>
+                    {!msg.is_read && (
+                      <div className="h-2 w-2 rounded-full bg-[#C9A96E] shrink-0" />
+                    )}
+                  </div>
+                  {property && (
+                    <p className="text-xs text-slate-400 mb-1 truncate">{property.address}</p>
+                  )}
+                  <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{msg.body}</p>
+                  <p className="text-xs text-slate-400 mt-1.5">{formatDateShort(msg.created_at)}</p>
+                </div>
+              </Link>
+            )
+          })}
         </div>
       </div>
+
+      {/* Proactive Alerts: Things to Watch */}
+      {hasProactiveAlerts && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
+              Things to Watch
+            </h2>
+            <Badge variant="secondary" className="text-xs">
+              {atRiskProperties.length + (expiringWarranties?.length ?? 0) + atRiskAssets.length} items
+            </Badge>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {atRiskProperties.map(p => (
+              <Link key={p.id} href={`/dashboard/properties/${p.id}`}>
+                <div className="h-full rounded-lg border border-red-200 bg-red-50/50 p-4 hover:shadow-md transition-all dark:border-red-900 dark:bg-red-950/20">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <ShieldAlert className="h-3.5 w-3.5 text-red-500" />
+                    <p className="text-xs font-semibold uppercase tracking-wider text-red-500">Low Health Score</p>
+                  </div>
+                  <p className="font-medium text-[#0F1B2D] dark:text-white">{p.address}</p>
+                  <p className="text-sm text-slate-500 mt-0.5">Score: {p.health_score} -- needs attention</p>
+                </div>
+              </Link>
+            ))}
+            {expiringWarranties?.map(asset => (
+              <Link key={asset.id} href={`/dashboard/properties/${asset.property_id}`}>
+                <div className="h-full rounded-lg border border-amber-200 bg-amber-50/50 p-4 hover:shadow-md transition-all dark:border-amber-900 dark:bg-amber-950/20">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <Package className="h-3.5 w-3.5 text-amber-500" />
+                    <p className="text-xs font-semibold uppercase tracking-wider text-amber-500">Warranty Expiring</p>
+                  </div>
+                  <p className="font-medium text-[#0F1B2D] dark:text-white">{asset.name}</p>
+                  <p className="text-sm text-slate-500 mt-0.5">
+                    {(asset as any).properties?.address} &bull; expires {formatDateShort(asset.warranty_expiration!)}
+                  </p>
+                </div>
+              </Link>
+            ))}
+            {atRiskAssets.map(asset => (
+              <Link key={asset.id} href={`/dashboard/properties/${asset.property_id}`}>
+                <div className="h-full rounded-lg border border-slate-200 bg-white p-4 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <Clock className="h-3.5 w-3.5 text-slate-400" />
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Approaching End of Life</p>
+                  </div>
+                  <p className="font-medium text-[#0F1B2D] dark:text-white">{asset.name}</p>
+                  <p className="text-sm text-slate-500 mt-0.5">
+                    {(asset as any).properties?.address} &bull; plan replacement soon
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Scheduled This Week */}
+      {upcomingWork && upcomingWork.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
+            Scheduled This Week
+          </h2>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {upcomingWork.map(wo => (
+              <Link key={wo.id} href={`/dashboard/work-orders/${wo.id}`}>
+                <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-50 shrink-0">
+                    <Clock className="h-4 w-4 text-violet-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-[#0F1B2D] dark:text-white line-clamp-1">{wo.title}</p>
+                    <p className="text-sm text-slate-500 truncate">
+                      {(wo as any).properties?.address} &bull; {wo.scheduled_date ? formatDateShort(wo.scheduled_date) : "TBD"}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

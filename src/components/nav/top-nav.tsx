@@ -26,7 +26,7 @@ const navLinks = [
   { href: "/dashboard/maintenance", label: "Maintenance", icon: Calendar },
   { href: "/dashboard/vendors", label: "Vendors", icon: UserCheck },
   { href: "/dashboard/clients", label: "Clients", icon: Users },
-  { href: "/dashboard/team", label: "Team", icon: Settings },
+  { href: "/dashboard/team", label: "Users", icon: Settings },
   { href: "/dashboard/invoices", label: "Invoices", icon: FileText },
   { href: "/dashboard/reports", label: "Reports", icon: BarChart3 },
   { href: "/dashboard/messages", label: "Messages", icon: MessageSquare },
@@ -45,9 +45,9 @@ export function TopNav({ user }: TopNavProps) {
   useEffect(() => {
     const supabase = createClient()
     supabase
-      .from("notifications")
+      .from("messages")
       .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id)
+      .neq("sender_id", user.id)
       .eq("is_read", false)
       .then(({ count }) => setUnreadCount(count ?? 0))
   }, [user.id])
@@ -95,14 +95,14 @@ export function TopNav({ user }: TopNavProps) {
           {/* Right side */}
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" asChild>
-              <Link href={`${dashboardPath}/notifications`} className="relative">
+              <Link href={`${dashboardPath}/messages`} className="relative">
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
                     {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
                 )}
-                <span className="sr-only">Notifications</span>
+                <span className="sr-only">Messages</span>
               </Link>
             </Button>
 
@@ -127,9 +127,6 @@ export function TopNav({ user }: TopNavProps) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href={`${dashboardPath}/settings`}>Account Settings</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href={`${dashboardPath}/notifications/preferences`}>Notification Preferences</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

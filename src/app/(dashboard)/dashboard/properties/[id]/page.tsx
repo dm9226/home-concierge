@@ -12,10 +12,11 @@ import Link from "next/link"
 import {
   MapPin, Home, User, Phone, Mail, Calendar, Wrench,
   Package, FolderOpen, FileText, Clock, ArrowRight, Plus,
-  CheckCircle2, AlertCircle, XCircle, Shield
+  CheckCircle2, AlertCircle, XCircle, Shield, MessageSquare
 } from "lucide-react"
 import { AssignOwnerDialog } from "./assign-owner-dialog"
 import { AddAssetDialog } from "./add-asset-dialog"
+import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 
 export default async function PropertyDetailPage({
   params,
@@ -54,6 +55,7 @@ export default async function PropertyDetailPage({
     { data: projects },
     { data: invoices },
     { data: activityLogs },
+    { data: messages },
   ] = await Promise.all([
     supabase
       .from("assets")
@@ -90,6 +92,12 @@ export default async function PropertyDetailPage({
       .eq("property_id", id)
       .order("created_at", { ascending: false })
       .limit(30),
+    supabase
+      .from("messages")
+      .select("*")
+      .eq("property_id", id)
+      .order("created_at", { ascending: true })
+      .limit(100),
   ])
 
   const client = (property as any).client
@@ -103,6 +111,20 @@ export default async function PropertyDetailPage({
     workOrders?.filter(
       (wo) => !["completed", "cancelled"].includes(wo.status)
     ).length ?? 0
+
+  const unreadMessageCount =
+    messages?.filter((m) => m.sender_id !== user.id && !m.is_read).length ?? 0
+
+  // Mark client messages as read
+  if (unreadMessageCount > 0) {
+    supabase
+      .from("messages")
+      .update({ is_read: true })
+      .eq("property_id", id)
+      .neq("sender_id", user.id)
+      .eq("is_read", false)
+      .then(() => {})
+  }
 
   // Group assets by category
   const assetsByCategory = (assets ?? []).reduce(
@@ -199,6 +221,14 @@ export default async function PropertyDetailPage({
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
+          <TabsTrigger value="messages" className="gap-1.5">
+            Messages
+            {unreadMessageCount > 0 && (
+              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C9A96E] text-white text-[10px] font-bold px-1">
+                {unreadMessageCount}
+              </span>
+            )}
+          </TabsTrigger>
         </TabsList>
 
         {/* OVERVIEW TAB */}
@@ -658,6 +688,35 @@ export default async function PropertyDetailPage({
               )}
             </div>
           </div>
+        </TabsContent>
+
+        {/* MESSAGES TAB */}
+        <TabsContent value="messages">
+          {client ? (
+            <div className="flex h-[520px] flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex items-center gap-3 border-b border-slate-200/80 px-4 py-3 dark:border-slate-800">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0F1B2D] text-white text-xs font-semibold shrink-0">
+                  {client.full_name.split(" ").map((n: string) => n[0]).join("")}
+                </div>
+                <div>
+                  <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">{client.full_name}</p>
+                  <p className="text-xs text-slate-500">{client.email}</p>
+                </div>
+              </div>
+              <MessageThread
+                messages={messages ?? []}
+                currentUserId={user.id}
+                propertyId={id}
+                concierge={{ id: client.id, full_name: client.full_name }}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <MessageSquare className="h-10 w-10 text-slate-300 mb-3" />
+              <p className="font-medium text-slate-600 dark:text-slate-400">No owner assigned</p>
+              <p className="mt-1 text-sm text-slate-400">Assign an owner to this property to enable messaging.</p>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

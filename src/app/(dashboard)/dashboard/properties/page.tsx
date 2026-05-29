@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { HealthScoreGauge } from "@/components/health-score-gauge"
 import { StatusBadge } from "@/components/status-badge"
 import { formatCurrency } from "@/lib/utils"
-import { Plus, MapPin, Home, ArrowRight } from "lucide-react"
+import { Plus, MapPin, Home, ArrowRight, MessageSquare } from "lucide-react"
 
 export default async function PropertiesPage() {
   const supabase = await createClient()
@@ -24,6 +24,21 @@ export default async function PropertiesPage() {
       client:users!properties_client_id_fkey(full_name, email, phone)
     `)
     .order("created_at", { ascending: false })
+
+  const propertyIds = properties?.map(p => p.id) ?? []
+  const { data: unreadMessages } = propertyIds.length
+    ? await supabase
+        .from("messages")
+        .select("property_id")
+        .in("property_id", propertyIds)
+        .neq("sender_id", user.id)
+        .eq("is_read", false)
+    : { data: [] }
+
+  const unreadByProperty: Record<string, number> = {}
+  unreadMessages?.forEach(m => {
+    unreadByProperty[m.property_id] = (unreadByProperty[m.property_id] ?? 0) + 1
+  })
 
   return (
     <div className="space-y-6">
@@ -92,11 +107,17 @@ export default async function PropertiesPage() {
                   </div>
 
                   <div className="mt-4 flex items-center justify-between">
-                    <div className="flex gap-1.5">
+                    <div className="flex gap-1.5 items-center">
                       {property.onboarding_status !== "complete" && (
                         <Badge variant="warning" className="text-xs">
                           Onboarding
                         </Badge>
+                      )}
+                      {(unreadByProperty[property.id] ?? 0) > 0 && (
+                        <span className="flex items-center gap-1 rounded-full bg-[#C9A96E]/15 px-2 py-0.5 text-xs font-semibold text-[#C9A96E]">
+                          <MessageSquare className="h-3 w-3" />
+                          {unreadByProperty[property.id]}
+                        </span>
                       )}
                     </div>
                     <span className="flex items-center gap-1 text-xs font-medium text-[#C9A96E]">
