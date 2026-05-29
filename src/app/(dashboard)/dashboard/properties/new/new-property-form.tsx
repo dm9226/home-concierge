@@ -33,7 +33,8 @@ export function NewPropertyForm() {
     year_built: "",
     square_footage: "",
     lot_size: "",
-    monthly_retainer_amount: "1500",
+    fee_amount: "1500",
+    billing_period: "monthly" as "monthly" | "quarterly" | "annually",
     notes: "",
   })
 
@@ -142,7 +143,8 @@ export function NewPropertyForm() {
         year_built: form.year_built ? parseInt(form.year_built) : null,
         square_footage: form.square_footage ? parseInt(form.square_footage) : null,
         lot_size: form.lot_size || null,
-        monthly_retainer_amount: parseFloat(form.monthly_retainer_amount),
+        fee_amount: parseFloat(form.fee_amount),
+        billing_period: form.billing_period,
         notes: form.notes || null,
         status: "active",
         onboarding_status: "not_started",
@@ -297,15 +299,30 @@ export function NewPropertyForm() {
                 />
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="retainer">Monthly Retainer ($)</Label>
-              <Input
-                id="retainer"
-                type="number"
-                value={form.monthly_retainer_amount}
-                onChange={e => set("monthly_retainer_amount", e.target.value)}
-                required
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="fee_amount">Management Fee ($)</Label>
+                <Input
+                  id="fee_amount"
+                  type="number"
+                  value={form.fee_amount}
+                  onChange={e => set("fee_amount", e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Billing Period</Label>
+                <Select value={form.billing_period} onValueChange={v => set("billing_period", v)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="monthly">Monthly</SelectItem>
+                    <SelectItem value="quarterly">Quarterly</SelectItem>
+                    <SelectItem value="annually">Annually</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="notes">Notes</Label>

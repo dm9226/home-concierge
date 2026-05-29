@@ -82,8 +82,8 @@ export default async function InvoiceDetailPage({
           {/* Line items */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-slate-600 dark:text-slate-300">Monthly retainer</span>
-              <span className="font-medium text-[#0F1B2D] dark:text-white">{formatCurrency(invoice.retainer_amount)}</span>
+              <span className="text-slate-600 dark:text-slate-300">Management fee</span>
+              <span className="font-medium text-[#0F1B2D] dark:text-white">{formatCurrency(invoice.fee_amount)}</span>
             </div>
             {isArray && additionalCharges.map((charge, i) => (
               <div key={i} className="flex justify-between text-sm">

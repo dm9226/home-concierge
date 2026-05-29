@@ -58,7 +58,8 @@ export type Database = {
           property_type: "single_family" | "townhome" | "condo"
           notes: string | null
           primary_concierge_id: string | null
-          monthly_retainer_amount: number
+          fee_amount: number
+          billing_period: "monthly" | "quarterly" | "annually"
           contract_start_date: string | null
           status: "active" | "paused" | "cancelled"
           cover_photo_url: string | null
@@ -79,7 +80,8 @@ export type Database = {
           property_type?: "single_family" | "townhome" | "condo"
           notes?: string | null
           primary_concierge_id?: string | null
-          monthly_retainer_amount?: number
+          fee_amount?: number
+          billing_period?: "monthly" | "quarterly" | "annually"
           contract_start_date?: string | null
           status?: "active" | "paused" | "cancelled"
           cover_photo_url?: string | null
@@ -100,7 +102,8 @@ export type Database = {
           property_type?: "single_family" | "townhome" | "condo"
           notes?: string | null
           primary_concierge_id?: string | null
-          monthly_retainer_amount?: number
+          fee_amount?: number
+          billing_period?: "monthly" | "quarterly" | "annually"
           contract_start_date?: string | null
           status?: "active" | "paused" | "cancelled"
           cover_photo_url?: string | null
@@ -655,7 +658,7 @@ export type Database = {
           invoice_number: string
           period_start: string
           period_end: string
-          retainer_amount: number
+          fee_amount: number
           additional_charges: Json | null
           total: number
           status: "draft" | "sent" | "paid" | "overdue"
@@ -671,7 +674,7 @@ export type Database = {
           invoice_number: string
           period_start: string
           period_end: string
-          retainer_amount: number
+          fee_amount: number
           additional_charges?: Json | null
           total: number
           status?: "draft" | "sent" | "paid" | "overdue"

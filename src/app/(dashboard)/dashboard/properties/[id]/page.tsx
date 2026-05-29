@@ -662,6 +662,30 @@ export default async function PropertyDetailPage({
         {/* BILLING TAB */}
         <TabsContent value="billing">
           <div className="space-y-4">
+            <Card>
+              <CardContent className="pt-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-slate-400 mb-1">Management Fee</p>
+                    <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">
+                      {formatCurrency(property.fee_amount)}
+                      <span className="text-sm font-normal text-slate-500 ml-1">
+                        / {property.billing_period === "annually" ? "year" : property.billing_period === "quarterly" ? "quarter" : "month"}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs uppercase tracking-wider text-slate-400 mb-1">Annualized</p>
+                    <p className="text-lg font-semibold text-slate-600 dark:text-slate-300">
+                      {formatCurrency(
+                        property.fee_amount * (property.billing_period === "annually" ? 1 : property.billing_period === "quarterly" ? 4 : 12)
+                      )}
+                      <span className="text-sm font-normal text-slate-400 ml-1">/ yr</span>
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             <div className="flex justify-between">
               <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Invoices</h3>
               <Button size="sm">

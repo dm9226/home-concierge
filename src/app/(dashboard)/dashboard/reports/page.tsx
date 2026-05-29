@@ -27,13 +27,19 @@ export default async function ReportsPage() {
   ] = await Promise.all([
     admin.from("work_orders").select("status, priority, created_at, actual_cost, completed_date"),
     admin.from("invoices").select("status, total, paid_date, created_at"),
-    admin.from("properties").select("status, health_score"),
+    admin.from("properties").select("status, health_score, fee_amount, billing_period"),
     admin.from("vendors").select("id, vendor_scorecards(average_satisfaction_rating, total_jobs)"),
   ])
 
-  const totalProperties = properties?.filter(p => p.status === "active").length ?? 0
-  const avgHealthScore = properties?.length
-    ? Math.round(properties.filter(p => p.health_score).reduce((sum, p) => sum + (p.health_score ?? 0), 0) / properties.filter(p => p.health_score).length)
+  const activeProperties = properties?.filter(p => p.status === "active") ?? []
+  const totalProperties = activeProperties.length
+
+  const annualizedFees = activeProperties.reduce((sum, p) => {
+    const multiplier = p.billing_period === "annually" ? 1 : p.billing_period === "quarterly" ? 4 : 12
+    return sum + (p.fee_amount ?? 0) * multiplier
+  }, 0)
+  const avgHealthScore = activeProperties.length
+    ? Math.round(activeProperties.filter(p => p.health_score).reduce((sum, p) => sum + (p.health_score ?? 0), 0) / (activeProperties.filter(p => p.health_score).length || 1))
     : 0
 
   const completedWOs = workOrders?.filter(wo => wo.status === "completed") ?? []
@@ -74,7 +80,7 @@ export default async function ReportsPage() {
           <CardTitle className="flex items-center gap-2"><DollarSign className="h-5 w-5 text-[#C9A96E]" /> Revenue</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Total Collected</p>
               <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">{formatCurrency(totalRevenue)}</p>
@@ -86,6 +92,11 @@ export default async function ReportsPage() {
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Outstanding</p>
               <p className="text-2xl font-bold text-amber-600">{formatCurrency(outstandingAmount)}</p>
+            </div>
+            <div>
+              <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Annualized Fees</p>
+              <p className="text-2xl font-bold text-emerald-600">{formatCurrency(annualizedFees)}</p>
+              <p className="text-xs text-slate-400 mt-0.5">{totalProperties} active properties</p>
             </div>
           </div>
         </CardContent>
