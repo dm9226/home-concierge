@@ -40,15 +40,24 @@ export function NewPropertyForm() {
 
   const [placesReady, setPlacesReady] = useState(false)
   const [looking, setLooking] = useState(false)
-  const [lookupStatus, setLookupStatus] = useState<{ type: "success" | "error"; msg: string } | null>(null)
+  const [lookupStatus, setLookupStatus] = useState<{ type: "success" | "error" | "warn"; msg: string } | null>(null)
+  const [usageCount, setUsageCount] = useState<number | null>(null)
+  const [pendingConfirm, setPendingConfirm] = useState(false)
   const addressRef = useRef<HTMLInputElement>(null)
 
   function set(field: string, value: string) {
     setForm(f => ({ ...f, [field]: value }))
     setLookupStatus(null)
+    setPendingConfirm(false)
   }
 
-  // Initialize Google Places Autocomplete once the script loads
+  useEffect(() => {
+    fetch("/api/property-lookup?usage_only=1")
+      .then(r => r.json())
+      .then(d => { if (d.count != null) setUsageCount(d.count) })
+      .catch(() => {})
+  }, [])
+
   useEffect(() => {
     if (!placesReady || !addressRef.current || !(window as any).google) return
     const ac = new (window as any).google.maps.places.Autocomplete(addressRef.current, {
@@ -59,34 +68,29 @@ export function NewPropertyForm() {
     ac.addListener("place_changed", () => {
       const place = ac.getPlace()
       if (!place?.address_components) return
-
       let streetNumber = "", route = "", city = "", state = "", zip = ""
       for (const comp of place.address_components as any[]) {
         const t = comp.types[0]
-        if (t === "street_number")              streetNumber = comp.long_name
-        if (t === "route")                      route        = comp.long_name
-        if (t === "locality")                   city         = comp.long_name
-        if (t === "administrative_area_level_1") state       = comp.short_name
-        if (t === "postal_code")                zip          = comp.long_name
+        if (t === "street_number")               streetNumber = comp.long_name
+        if (t === "route")                       route        = comp.long_name
+        if (t === "locality")                    city         = comp.long_name
+        if (t === "administrative_area_level_1") state        = comp.short_name
+        if (t === "postal_code")                 zip          = comp.long_name
       }
-      setForm(f => ({
-        ...f,
-        address: `${streetNumber} ${route}`.trim(),
-        city,
-        state,
-        zip,
-      }))
+      setForm(f => ({ ...f, address: `${streetNumber} ${route}`.trim(), city, state, zip }))
       setLookupStatus(null)
+      setPendingConfirm(false)
     })
   }, [placesReady])
 
-  async function lookupProperty() {
+  async function lookupProperty(confirmed = false) {
     if (!form.address || !form.city || !form.state || !form.zip) {
       setLookupStatus({ type: "error", msg: "Fill in the full address first" })
       return
     }
     setLooking(true)
     setLookupStatus(null)
+    setPendingConfirm(false)
 
     const params = new URLSearchParams({
       street: form.address,
@@ -94,35 +98,47 @@ export function NewPropertyForm() {
       state: form.state,
       zip: form.zip,
     })
+    if (confirmed) params.set("confirmed", "1")
+
     const res = await fetch(`/api/property-lookup?${params}`)
     const data = await res.json()
     setLooking(false)
+
+    // Usage warning -- ask for confirmation
+    if (res.status === 402 && data.usage_warning) {
+      const overFree = data.over_free_tier
+      setPendingConfirm(true)
+      setLookupStatus({
+        type: "warn",
+        msg: overFree
+          ? `You've used all ${data.limit} free lookups this month. Each additional lookup costs $0.20. Continue?`
+          : `You've used ${data.count} of ${data.limit} free lookups this month. This lookup costs $0.20. Continue?`,
+      })
+      return
+    }
 
     if (!res.ok) {
       setLookupStatus({ type: "error", msg: data.error ?? "Lookup failed" })
       return
     }
 
-    const extras: string[] = []
-    if (data.beds)    extras.push(`${data.beds} bed`)
-    if (data.baths)   extras.push(`${data.baths} bath`)
-    if (data.stories) extras.push(`${data.stories} ${data.stories === 1 ? "story" : "stories"}`)
-    if (data.garage && data.garage !== "none") extras.push(`${data.garage} garage`)
+    if (data.usage_count != null) setUsageCount(data.usage_count)
 
     setForm(f => ({
       ...f,
-      year_built:     data.year_built      ? String(data.year_built)     : f.year_built,
-      square_footage: data.square_footage  ? String(data.square_footage) : f.square_footage,
-      lot_size:       data.lot_size        ?? f.lot_size,
-      property_type:  data.property_type   ?? f.property_type,
-      notes: extras.length ? extras.join(", ") + (f.notes ? "\n" + f.notes : "") : f.notes,
+      year_built:     data.year_built     ? String(data.year_built)     : f.year_built,
+      square_footage: data.square_footage ? String(data.square_footage) : f.square_footage,
+      lot_size:       data.lot_size       ?? f.lot_size,
+      property_type:  data.property_type  ?? f.property_type,
+      notes: data.features?.length
+        ? data.features.join(", ") + (f.notes ? "\n" + f.notes : "")
+        : f.notes,
     }))
 
     const summary: string[] = []
     if (data.year_built)      summary.push(`built ${data.year_built}`)
     if (data.square_footage)  summary.push(`${Number(data.square_footage).toLocaleString()} sq ft`)
     if (data.last_sale_price) summary.push(`last sold $${Number(data.last_sale_price).toLocaleString()}${data.last_sale_date ? ` (${new Date(data.last_sale_date).getFullYear()})` : ""}`)
-    if (data.zestimate)       summary.push(`Zestimate $${Number(data.zestimate).toLocaleString()}`)
     setLookupStatus({ type: "success", msg: summary.length ? summary.join(" · ") : "Fields populated -- review below" })
   }
 
@@ -174,33 +190,62 @@ export function NewPropertyForm() {
           <CardContent className="pt-6 space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-[#0F1B2D] dark:text-white">Address</h2>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={!canLookup || looking}
-                onClick={lookupProperty}
-                className="gap-1.5 text-xs h-8"
-              >
-                {looking ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : (
-                  <Sparkles className="h-3.5 w-3.5 text-[#C9A96E]" />
+              <div className="flex items-center gap-2">
+                {usageCount !== null && (
+                  <span className="text-xs text-slate-400">{usageCount}/50 lookups</span>
                 )}
-                {looking ? "Looking up..." : "Look up property"}
-              </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  disabled={!canLookup || looking}
+                  onClick={() => lookupProperty(false)}
+                  className="gap-1.5 text-xs h-8"
+                >
+                  {looking ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Sparkles className="h-3.5 w-3.5 text-[#C9A96E]" />
+                  )}
+                  {looking ? "Looking up..." : "Look up property"}
+                </Button>
+              </div>
             </div>
 
             {lookupStatus && (
               <div className={`flex items-start gap-2 rounded-md px-3 py-2 text-sm ${
                 lookupStatus.type === "success"
                   ? "bg-emerald-50 text-emerald-700"
+                  : lookupStatus.type === "warn"
+                  ? "bg-amber-50 text-amber-700"
                   : "bg-red-50 text-red-700"
               }`}>
-                {lookupStatus.type === "success"
-                  ? <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
-                  : <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />}
-                {lookupStatus.msg}
+                <AlertCircle className={`h-4 w-4 mt-0.5 shrink-0 ${lookupStatus.type === "success" ? "hidden" : ""}`} />
+                {lookupStatus.type === "success" && <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />}
+                <div className="flex-1">
+                  <span>{lookupStatus.msg}</span>
+                  {pendingConfirm && (
+                    <div className="mt-2 flex gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="h-7 text-xs bg-amber-600 hover:bg-amber-700 text-white"
+                        onClick={() => lookupProperty(true)}
+                      >
+                        Yes, look it up ($0.20)
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="h-7 text-xs"
+                        onClick={() => { setLookupStatus(null); setPendingConfirm(false) }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
@@ -219,41 +264,22 @@ export function NewPropertyForm() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  placeholder="Atlanta"
-                  value={form.city}
-                  onChange={e => set("city", e.target.value)}
-                  required
-                />
+                <Input id="city" placeholder="Atlanta" value={form.city} onChange={e => set("city", e.target.value)} required />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="zip">ZIP Code</Label>
-                <Input
-                  id="zip"
-                  placeholder="30305"
-                  value={form.zip}
-                  onChange={e => set("zip", e.target.value)}
-                  required
-                />
+                <Input id="zip" placeholder="30305" value={form.zip} onChange={e => set("zip", e.target.value)} required />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="state">State</Label>
-                <Input
-                  id="state"
-                  value={form.state}
-                  onChange={e => set("state", e.target.value)}
-                  required
-                />
+                <Input id="state" value={form.state} onChange={e => set("state", e.target.value)} required />
               </div>
               <div className="space-y-1.5">
                 <Label>Property Type</Label>
                 <Select value={form.property_type} onValueChange={v => set("property_type", v)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="single_family">Single Family</SelectItem>
                     <SelectItem value="townhome">Townhome</SelectItem>
@@ -271,51 +297,26 @@ export function NewPropertyForm() {
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="year_built">Year Built</Label>
-                <Input
-                  id="year_built"
-                  type="number"
-                  placeholder="2005"
-                  value={form.year_built}
-                  onChange={e => set("year_built", e.target.value)}
-                />
+                <Input id="year_built" type="number" placeholder="2005" value={form.year_built} onChange={e => set("year_built", e.target.value)} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="square_footage">Sq Ft</Label>
-                <Input
-                  id="square_footage"
-                  type="number"
-                  placeholder="3200"
-                  value={form.square_footage}
-                  onChange={e => set("square_footage", e.target.value)}
-                />
+                <Input id="square_footage" type="number" placeholder="3200" value={form.square_footage} onChange={e => set("square_footage", e.target.value)} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="lot_size">Lot Size</Label>
-                <Input
-                  id="lot_size"
-                  placeholder="0.25 acres"
-                  value={form.lot_size}
-                  onChange={e => set("lot_size", e.target.value)}
-                />
+                <Input id="lot_size" placeholder="0.25 acres" value={form.lot_size} onChange={e => set("lot_size", e.target.value)} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="fee_amount">Management Fee ($)</Label>
-                <Input
-                  id="fee_amount"
-                  type="number"
-                  value={form.fee_amount}
-                  onChange={e => set("fee_amount", e.target.value)}
-                  required
-                />
+                <Input id="fee_amount" type="number" value={form.fee_amount} onChange={e => set("fee_amount", e.target.value)} required />
               </div>
               <div className="space-y-1.5">
                 <Label>Billing Period</Label>
                 <Select value={form.billing_period} onValueChange={v => set("billing_period", v)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="monthly">Monthly</SelectItem>
                     <SelectItem value="quarterly">Quarterly</SelectItem>
@@ -340,16 +341,10 @@ export function NewPropertyForm() {
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <div className="flex items-center gap-3">
-          <Button
-            type="submit"
-            disabled={loading}
-            className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold"
-          >
+          <Button type="submit" disabled={loading} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold">
             {loading ? "Creating..." : "Create Property"}
           </Button>
-          <Button type="button" variant="outline" onClick={() => router.back()}>
-            Cancel
-          </Button>
+          <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
         </div>
       </form>
     </>
