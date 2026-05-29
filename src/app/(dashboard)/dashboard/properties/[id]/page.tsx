@@ -14,6 +14,7 @@ import {
   Package, FolderOpen, FileText, Clock, ArrowRight, Plus,
   CheckCircle2, AlertCircle, XCircle, Shield
 } from "lucide-react"
+import { AssignOwnerDialog } from "./assign-owner-dialog"
 
 export default async function PropertyDetailPage({
   params,
@@ -39,6 +40,12 @@ export default async function PropertyDetailPage({
     .single()
 
   if (!property) notFound()
+
+  const { data: availableClients } = await supabase
+    .from("users")
+    .select("id, full_name, email")
+    .eq("role", "client")
+    .order("full_name")
 
   const [
     { data: assets },
@@ -154,9 +161,17 @@ export default async function PropertyDetailPage({
             <HealthScoreGauge score={property.health_score} size="sm" showLabel />
           </div>
           <div className="flex flex-col justify-center p-4">
-            <p className="text-xs uppercase tracking-wider text-slate-400">Client</p>
-            <p className="mt-1 font-semibold text-[#0F1B2D] dark:text-white">{client?.full_name}</p>
-            <p className="text-xs text-slate-500">{client?.phone}</p>
+            <p className="text-xs uppercase tracking-wider text-slate-400">Owner</p>
+            {client ? (
+              <>
+                <p className="mt-1 font-semibold text-[#0F1B2D] dark:text-white">{client.full_name}</p>
+                <p className="text-xs text-slate-500">{client.phone}</p>
+              </>
+            ) : (
+              <div className="mt-1">
+                <AssignOwnerDialog propertyId={property.id} clients={availableClients ?? []} />
+              </div>
+            )}
           </div>
           <div className="flex flex-col justify-center p-4">
             <p className="text-xs uppercase tracking-wider text-slate-400">Concierge</p>

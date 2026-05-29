@@ -68,7 +68,7 @@ export type Database = {
         }
         Insert: {
           id?: string
-          client_id: string
+          client_id?: string | null
           address: string
           city: string
           state?: string
