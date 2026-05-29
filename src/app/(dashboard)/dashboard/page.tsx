@@ -345,7 +345,7 @@ export default async function DashboardPage() {
 
           {/* Overdue maintenance */}
           {overdueItems?.map(item => {
-            const daysOverdue = Math.abs(getDaysUntil(item.next_due))
+            const daysOverdue = item.next_due ? Math.abs(getDaysUntil(item.next_due)) : 0
             return (
               <Link key={item.id} href={`/dashboard/properties/${item.property_id}`}>
                 <div className="flex items-center gap-3 rounded-lg border border-amber-200 bg-amber-50/40 p-4 hover:shadow-md transition-all">
