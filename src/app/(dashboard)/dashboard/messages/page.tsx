@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { formatDateShort } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { MessageSquare } from "lucide-react"
@@ -10,11 +11,13 @@ export default async function DashboardMessagesPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
-  // Get all properties this concierge/admin manages
-  let propQuery = supabase
+  // Admins see all properties; concierge see only their assigned ones
+  let propQuery = admin
     .from("properties")
     .select("id, address, city, client:users!properties_client_id_fkey(id, full_name)")
     .eq("status", "active")
@@ -34,29 +37,24 @@ export default async function DashboardMessagesPage() {
     )
   }
 
-  // Get latest message per property
   const propertyIds = properties.map(p => p.id)
-  const { data: latestMessages } = await supabase
+
+  const { data: latestMessages } = await admin
     .from("messages")
     .select("property_id, body, created_at, sender_id, is_read")
     .in("property_id", propertyIds)
     .order("created_at", { ascending: false })
 
-  // Map latest message per property
   const latestByProperty: Record<string, any> = {}
+  const unreadByProperty: Record<string, number> = {}
+
   latestMessages?.forEach(m => {
     if (!latestByProperty[m.property_id]) latestByProperty[m.property_id] = m
-  })
-
-  // Unread count per property (messages not sent by current user, unread)
-  const unreadByProperty: Record<string, number> = {}
-  latestMessages?.forEach(m => {
     if (m.sender_id !== user.id && !m.is_read) {
       unreadByProperty[m.property_id] = (unreadByProperty[m.property_id] ?? 0) + 1
     }
   })
 
-  // Sort by latest message
   const sorted = [...properties].sort((a, b) => {
     const aTime = latestByProperty[a.id]?.created_at ?? ""
     const bTime = latestByProperty[b.id]?.created_at ?? ""

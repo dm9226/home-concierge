@@ -1,6 +1,7 @@
 import { redirect, notFound } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { ArrowLeft } from "lucide-react"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 
@@ -14,10 +15,12 @@ export default async function DashboardMessageThreadPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
-  const { data: property } = await supabase
+  const { data: property } = await admin
     .from("properties")
     .select("id, address, city, client:users!properties_client_id_fkey(id, full_name)")
     .eq("id", propertyId)
@@ -27,7 +30,7 @@ export default async function DashboardMessageThreadPage({
 
   const client = (property as any).client
 
-  const { data: messages } = await supabase
+  const { data: messages } = await admin
     .from("messages")
     .select("*")
     .eq("property_id", propertyId)
@@ -36,7 +39,7 @@ export default async function DashboardMessageThreadPage({
 
   // Mark client messages as read
   if (messages?.some(m => m.sender_id !== user.id && !m.is_read)) {
-    await supabase
+    await admin
       .from("messages")
       .update({ is_read: true })
       .eq("property_id", propertyId)
