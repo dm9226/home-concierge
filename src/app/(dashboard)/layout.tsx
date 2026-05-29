@@ -2,7 +2,6 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { TopNav } from "@/components/nav/top-nav"
 import { Sidebar } from "@/components/nav/sidebar"
-import { BottomNav } from "@/components/nav/bottom-nav"
 
 export default async function DashboardLayout({
   children,
@@ -30,9 +29,8 @@ export default async function DashboardLayout({
       <TopNav user={profile} />
       <div className="flex flex-1">
         <Sidebar role={profile.role as "admin" | "concierge"} />
-        <main className="flex-1 overflow-auto p-4 pb-20 md:p-6 md:pb-6">{children}</main>
+        <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
       </div>
-      <BottomNav />
     </div>
   )
 }
