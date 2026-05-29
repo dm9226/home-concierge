@@ -31,9 +31,7 @@ export default async function PortalHomePage() {
   // Get client's properties
   const { data: properties } = await supabase
     .from("properties")
-    .select(`
-      *,
-    `)
+    .select("*")
     .eq("client_id", user.id)
     .eq("status", "active")
 
