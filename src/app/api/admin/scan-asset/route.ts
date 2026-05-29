@@ -64,8 +64,11 @@ Return only valid JSON, no markdown, no explanation.`,
 
   const raw = message.content[0].type === "text" ? message.content[0].text.trim() : ""
 
+  // Strip markdown code fences if present
+  const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim()
+
   try {
-    const parsed = JSON.parse(raw)
+    const parsed = JSON.parse(cleaned)
     return NextResponse.json(parsed)
   } catch {
     return NextResponse.json({ error: "Could not parse label", raw }, { status: 422 })
