@@ -4,18 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { EditUserDialog } from "@/components/edit-user-dialog"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Pencil, Trash2 } from "lucide-react"
+import { Pencil, Trash2, X, Check } from "lucide-react"
 
 interface Member {
   id: string
@@ -33,6 +22,7 @@ interface UserActionsProps {
 export function UserActions({ currentUserId, member }: UserActionsProps) {
   const router = useRouter()
   const [editOpen, setEditOpen] = useState(false)
+  const [confirming, setConfirming] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
   const isSelf = member.id === currentUserId
@@ -45,6 +35,7 @@ export function UserActions({ currentUserId, member }: UserActionsProps) {
     setDeleting(false)
     if (!res.ok) {
       setDeleteError(data.error ?? "Delete failed")
+      setConfirming(false)
       return
     }
     router.refresh()
@@ -53,48 +44,55 @@ export function UserActions({ currentUserId, member }: UserActionsProps) {
   return (
     <>
       <div className="flex items-center gap-1 shrink-0">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-slate-400 hover:text-slate-700"
-          onClick={() => setEditOpen(true)}
-        >
-          <Pencil className="h-4 w-4" />
-          <span className="sr-only">Edit</span>
-        </Button>
-
-        {!isSelf && (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
+        {confirming ? (
+          <div className="flex items-center gap-1">
+            {deleteError && (
+              <span className="text-xs text-red-600 mr-1">{deleteError}</span>
+            )}
+            <span className="text-xs text-slate-500 mr-1">Remove?</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+              disabled={deleting}
+              onClick={handleDelete}
+            >
+              <Check className="h-4 w-4" />
+              <span className="sr-only">Confirm remove</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-slate-400 hover:text-slate-700"
+              onClick={() => { setConfirming(false); setDeleteError(null) }}
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Cancel</span>
+            </Button>
+          </div>
+        ) : (
+          <>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-slate-400 hover:text-slate-700"
+              onClick={() => setEditOpen(true)}
+            >
+              <Pencil className="h-4 w-4" />
+              <span className="sr-only">Edit</span>
+            </Button>
+            {!isSelf && (
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-8 w-8 text-slate-400 hover:text-red-600"
-                disabled={deleting}
+                onClick={() => setConfirming(true)}
               >
                 <Trash2 className="h-4 w-4" />
                 <span className="sr-only">Delete</span>
               </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Remove {member.full_name}?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will permanently delete their account and revoke access. This cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              {deleteError && <p className="text-sm text-red-600 px-1">{deleteError}</p>}
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDelete}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  {deleting ? "Removing..." : "Remove User"}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+            )}
+          </>
         )}
       </div>
 
