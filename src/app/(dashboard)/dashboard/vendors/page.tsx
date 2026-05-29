@@ -36,14 +36,28 @@ export default async function VendorsPage() {
 
   const admin = createAdminClient()
 
-  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
+  let debugError: string | null = null
+
+  let profile: { role: string } | null = null
+  try {
+    const res = await admin.from("users").select("role").eq("id", user.id).single()
+    profile = res.data
+    if (res.error) debugError = `profile query: ${res.error.message}`
+  } catch (e: any) {
+    debugError = `profile catch: ${e?.message}`
+  }
+  if (debugError) return <pre className="p-6 text-red-600 text-sm">{debugError}</pre>
   if (!profile || profile.role === "client") redirect("/portal")
 
-  const { data: vendors } = await admin
-    .from("vendors")
-    .select("*")
-    .neq("status", "blacklisted")
-    .order("company_name", { ascending: true })
+  let vendors: any[] | null = null
+  try {
+    const res = await admin.from("vendors").select("*").neq("status", "blacklisted").order("company_name", { ascending: true })
+    vendors = res.data
+    if (res.error) debugError = `vendors query: ${res.error.message}`
+  } catch (e: any) {
+    debugError = `vendors catch: ${e?.message}`
+  }
+  if (debugError) return <pre className="p-6 text-red-600 text-sm">{debugError}</pre>
 
   // Group by first specialty category
   const byCategory: Record<string, typeof vendors> = {}
