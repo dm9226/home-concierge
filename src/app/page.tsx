@@ -79,7 +79,7 @@ export default function LandingPage() {
               variant="outline"
               className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 w-full sm:w-auto"
             >
-              <Link href="/login">Client Login</Link>
+              <Link href="/login">Login</Link>
             </Button>
           </div>
           <p className="mt-6 text-sm text-white/40">
