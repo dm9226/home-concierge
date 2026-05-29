@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Script from "next/script"
-import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -146,31 +145,29 @@ export function NewPropertyForm() {
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
-    const { data, error } = await supabase
-      .from("properties")
-      .insert({
-        address: form.address,
-        city: form.city,
-        state: form.state,
-        zip: form.zip,
-        property_type: form.property_type,
-        year_built: form.year_built ? parseInt(form.year_built) : null,
+    const res = await fetch("/api/properties", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        address:        form.address,
+        city:           form.city,
+        state:          form.state,
+        zip:            form.zip,
+        property_type:  form.property_type,
+        year_built:     form.year_built     ? parseInt(form.year_built)     : null,
         square_footage: form.square_footage ? parseInt(form.square_footage) : null,
-        lot_size: form.lot_size || null,
-        fee_amount: parseFloat(form.fee_amount),
+        lot_size:       form.lot_size  || null,
+        fee_amount:     parseFloat(form.fee_amount),
         billing_period: form.billing_period,
-        notes: form.notes || null,
-        latitude: coords?.lat ?? null,
-        longitude: coords?.lon ?? null,
-        status: "active",
-        onboarding_status: "not_started",
-      })
-      .select("id")
-      .single()
+        notes:          form.notes     || null,
+        latitude:       coords?.lat    ?? null,
+        longitude:      coords?.lon    ?? null,
+      }),
+    })
 
+    const data = await res.json()
     setLoading(false)
-    if (error) { setError(error.message); return }
+    if (!res.ok) { setError(data.error ?? "Failed to create property"); return }
     router.push(`/dashboard/properties/${data.id}`)
   }
 
