@@ -73,6 +73,13 @@ export default async function UsersPage() {
                     phone: member.phone,
                     role: member.role,
                   }}
+                  allStaff={staff?.map(s => ({
+                    id: s.id,
+                    full_name: s.full_name,
+                    email: s.email,
+                    phone: s.phone,
+                    role: s.role,
+                  })) ?? []}
                 />
               </div>
             </CardContent>
