@@ -1,6 +1,7 @@
 import { redirect, notFound } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { formatCurrency, formatDateShort } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
@@ -16,10 +17,12 @@ export default async function DashboardInvoiceDetailPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
-  const { data: invoice } = await supabase
+  const { data: invoice } = await admin
     .from("invoices")
     .select("*, property:properties(id, address, city, client:users!properties_client_id_fkey(full_name, email))")
     .eq("id", id)

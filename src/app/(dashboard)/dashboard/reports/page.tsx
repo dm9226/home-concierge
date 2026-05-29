@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/utils"
 import { BarChart3, TrendingUp, Wrench, DollarSign, Home, Star } from "lucide-react"
@@ -9,7 +10,9 @@ export default async function ReportsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
   const now = new Date()
@@ -22,10 +25,10 @@ export default async function ReportsPage() {
     { data: properties },
     { data: vendors },
   ] = await Promise.all([
-    supabase.from("work_orders").select("status, priority, created_at, actual_cost, completed_date"),
-    supabase.from("invoices").select("status, total, paid_date, created_at"),
-    supabase.from("properties").select("status, health_score"),
-    supabase.from("vendors").select("id, vendor_scorecards(average_satisfaction_rating, total_jobs)"),
+    admin.from("work_orders").select("status, priority, created_at, actual_cost, completed_date"),
+    admin.from("invoices").select("status, total, paid_date, created_at"),
+    admin.from("properties").select("status, health_score"),
+    admin.from("vendors").select("id, vendor_scorecards(average_satisfaction_rating, total_jobs)"),
   ])
 
   const totalProperties = properties?.filter(p => p.status === "active").length ?? 0

@@ -1,5 +1,6 @@
 import { redirect, notFound } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { HealthScoreGauge } from "@/components/health-score-gauge"
 import { StatusBadge } from "@/components/status-badge"
@@ -31,7 +32,9 @@ export default async function PropertyDetailPage({
 
   if (!user) redirect("/login")
 
-  const { data: property } = await supabase
+  const admin = createAdminClient()
+
+  const { data: property } = await admin
     .from("properties")
     .select(`
       *,
@@ -42,7 +45,7 @@ export default async function PropertyDetailPage({
 
   if (!property) notFound()
 
-  const { data: availableClients } = await supabase
+  const { data: availableClients } = await admin
     .from("users")
     .select("id, full_name, email")
     .eq("role", "client")
@@ -57,42 +60,42 @@ export default async function PropertyDetailPage({
     { data: activityLogs },
     { data: messages },
   ] = await Promise.all([
-    supabase
+    admin
       .from("assets")
       .select("*")
       .eq("property_id", id)
       .eq("status", "active")
       .order("category"),
-    supabase
+    admin
       .from("work_orders")
       .select("*, vendor:vendors(company_name)")
       .eq("property_id", id)
       .order("created_at", { ascending: false })
       .limit(20),
-    supabase
+    admin
       .from("maintenance_schedules")
       .select("*")
       .eq("property_id", id)
       .eq("is_active", true)
       .order("next_due", { ascending: true }),
-    supabase
+    admin
       .from("projects")
       .select("*, project_tasks(*)")
       .eq("property_id", id)
       .order("created_at", { ascending: false }),
-    supabase
+    admin
       .from("invoices")
       .select("*")
       .eq("property_id", id)
       .order("created_at", { ascending: false })
       .limit(12),
-    supabase
+    admin
       .from("activity_logs")
       .select("*, user:users(full_name)")
       .eq("property_id", id)
       .order("created_at", { ascending: false })
       .limit(30),
-    supabase
+    admin
       .from("messages")
       .select("*")
       .eq("property_id", id)
@@ -117,7 +120,7 @@ export default async function PropertyDetailPage({
 
   // Mark client messages as read
   if (unreadMessageCount > 0) {
-    supabase
+    admin
       .from("messages")
       .update({ is_read: true })
       .eq("property_id", id)

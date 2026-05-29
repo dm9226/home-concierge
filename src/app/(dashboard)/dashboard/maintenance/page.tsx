@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { formatDateShort, getDaysUntil } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -11,19 +12,21 @@ export default async function MaintenanceDashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
   let propertyIds: string[] | null = null
   if (profile.role === "concierge") {
-    const { data: props } = await supabase
+    const { data: props } = await admin
       .from("properties")
       .select("id")
       .eq("primary_concierge_id", user.id)
     propertyIds = props?.map(p => p.id) ?? []
   }
 
-  let query = supabase
+  let query = admin
     .from("maintenance_schedules")
     .select("*, property:properties(id, address, city)")
     .eq("is_active", true)

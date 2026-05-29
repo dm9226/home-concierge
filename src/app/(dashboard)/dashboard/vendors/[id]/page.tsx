@@ -1,6 +1,7 @@
 import { redirect, notFound } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency, formatDateShort } from "@/lib/utils"
@@ -23,10 +24,12 @@ export default async function VendorDetailPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
-  const { data: vendor } = await supabase
+  const { data: vendor } = await admin
     .from("vendors")
     .select("*")
     .eq("id", id)
@@ -34,13 +37,13 @@ export default async function VendorDetailPage({
 
   if (!vendor) notFound()
 
-  const { data: scorecard } = await supabase
+  const { data: scorecard } = await admin
     .from("vendor_scorecards")
     .select("*")
     .eq("vendor_id", id)
     .single()
 
-  const { data: workOrders } = await supabase
+  const { data: workOrders } = await admin
     .from("work_orders")
     .select("id, title, status, completed_date, actual_cost, property:properties(address)")
     .eq("vendor_id", id)

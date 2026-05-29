@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -17,7 +18,9 @@ export default async function PropertiesPage() {
 
   if (!user) redirect("/login")
 
-  const { data: properties } = await supabase
+  const admin = createAdminClient()
+
+  const { data: properties } = await admin
     .from("properties")
     .select(`
       *,
@@ -27,7 +30,7 @@ export default async function PropertiesPage() {
 
   const propertyIds = properties?.map(p => p.id) ?? []
   const { data: unreadMessages } = propertyIds.length
-    ? await supabase
+    ? await admin
         .from("messages")
         .select("property_id")
         .in("property_id", propertyIds)

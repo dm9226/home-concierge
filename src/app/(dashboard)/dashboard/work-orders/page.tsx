@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { StatusBadge, PriorityBadge } from "@/components/status-badge"
 import { formatDateShort } from "@/lib/utils"
 import { AlertTriangle, Wrench } from "lucide-react"
@@ -10,10 +11,12 @@ export default async function WorkOrdersPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
-  let query = supabase
+  let query = admin
     .from("work_orders")
     .select(`
       *,
@@ -23,7 +26,7 @@ export default async function WorkOrdersPage() {
     .order("created_at", { ascending: false })
 
   if (profile.role === "concierge") {
-    const { data: props } = await supabase
+    const { data: props } = await admin
       .from("properties")
       .select("id")
       .eq("primary_concierge_id", user.id)

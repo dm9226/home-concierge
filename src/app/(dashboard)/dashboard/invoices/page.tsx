@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -19,16 +20,18 @@ export default async function DashboardInvoicesPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
-  let query = supabase
+  let query = admin
     .from("invoices")
     .select("*, property:properties(id, address, city, client:users!properties_client_id_fkey(full_name))")
     .order("created_at", { ascending: false })
 
   if (profile.role === "concierge") {
-    const { data: props } = await supabase.from("properties").select("id").eq("primary_concierge_id", user.id)
+    const { data: props } = await admin.from("properties").select("id").eq("primary_concierge_id", user.id)
     const ids = props?.map(p => p.id) ?? []
     if (ids.length) query = query.in("property_id", ids)
   }

@@ -7,7 +7,9 @@ export async function PUT(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
+  const admin = createAdminClient()
+
+  const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 })
 
   const { userId, full_name, phone, role } = await request.json()
@@ -15,8 +17,6 @@ export async function PUT(request: NextRequest) {
   if (!userId || !full_name || !role) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
   }
-
-  const admin = createAdminClient()
 
   const { error: authError } = await admin.auth.admin.updateUserById(userId, {
     user_metadata: { full_name, role },
