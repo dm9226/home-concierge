@@ -458,7 +458,7 @@ export default async function DashboardPage() {
                     </div>
                     <p className="font-medium text-sm text-[#0F1B2D] dark:text-white flex-1 truncate">{clientName}</p>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      {mine && <Star className="h-3 w-3 text-[#C9A96E]" title="Your property" />}
+                      {mine && <Star className="h-3 w-3 text-[#C9A96E]" />}
                       {!msg.is_read && <div className="h-2 w-2 rounded-full bg-[#C9A96E]" />}
                     </div>
                   </div>
