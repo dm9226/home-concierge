@@ -3,6 +3,7 @@ import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent } from "@/components/ui/card"
 import { HealthScoreGauge } from "@/components/health-score-gauge"
+import { CreateUserDialog } from "@/components/create-user-dialog"
 import { Users, Home } from "lucide-react"
 
 export default async function ClientsPage() {
@@ -31,7 +32,10 @@ export default async function ClientsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Clients</h1>
-        <span className="text-sm text-slate-500">{clients?.length ?? 0} clients</span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-slate-500">{clients?.length ?? 0} clients</span>
+          <CreateUserDialog fixedRole="client" label="New Client" />
+        </div>
       </div>
 
       {clients?.length === 0 && (
