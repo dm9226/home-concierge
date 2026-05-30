@@ -8,7 +8,8 @@ import { Badge } from "@/components/ui/badge"
 import { HealthScoreGauge } from "@/components/health-score-gauge"
 import { StatusBadge } from "@/components/status-badge"
 import { formatCurrency } from "@/lib/utils"
-import { Plus, MapPin, Home, ArrowRight, MessageSquare } from "lucide-react"
+import { Plus, MapPin, ArrowRight, MessageSquare } from "lucide-react"
+import { PropertyPlaceholder } from "@/components/property-placeholder"
 
 export default async function PropertiesPage() {
   const supabase = await createClient()
@@ -77,9 +78,7 @@ export default async function PropertiesPage() {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="h-full w-full navy-gradient flex items-center justify-center">
-                      <Home className="h-10 w-10 text-white/30" />
-                    </div>
+                    <PropertyPlaceholder />
                   )}
                   <div className="absolute top-3 right-3">
                     <StatusBadge status={property.status} />
