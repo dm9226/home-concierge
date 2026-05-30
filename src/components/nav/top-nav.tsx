@@ -9,6 +9,15 @@ import {
   Users, UserCheck, Settings, FileText, BarChart3,
   MessageSquare, ChevronDown,
 } from "lucide-react"
+
+const portalNavLinks = [
+  { href: "/portal", label: "Home", icon: Home, exact: true },
+  { href: "/portal/service", label: "Service", icon: Wrench },
+  { href: "/portal/property", label: "My Home", icon: Building2 },
+  { href: "/portal/maintenance", label: "Schedule", icon: Calendar },
+  { href: "/portal/invoices", label: "Invoices", icon: FileText },
+  { href: "/portal/messages", label: "Messages", icon: MessageSquare },
+]
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -161,8 +170,8 @@ export function TopNav({ user }: TopNavProps) {
               </button>
             </div>
             <nav className="flex-1 overflow-y-auto p-3">
-              {navLinks.map((link) => {
-                const active = isActive(link.href, link.exact)
+              {(user.role === "client" ? portalNavLinks : navLinks).map((link) => {
+                const active = isActive(link.href, (link as any).exact)
                 return (
                   <Link
                     key={link.href}

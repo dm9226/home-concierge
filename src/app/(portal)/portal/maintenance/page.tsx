@@ -1,43 +1,8 @@
-﻿import { redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { formatDateShort, getDaysUntil } from "@/lib/utils"
-import { Card, CardContent } from "@/components/ui/card"
+import { getDaysUntil } from "@/lib/utils"
 import { AlertTriangle, CheckCircle, Clock } from "lucide-react"
-
-const FREQUENCY_LABELS: Record<string, string> = {
-  monthly: "Monthly",
-  quarterly: "Quarterly",
-  semi_annual: "Every 6 months",
-  annual: "Annual",
-  custom: "Custom schedule",
-}
-
-function StatusChip({ days }: { days: number | null }) {
-  if (days === null) return <span className="text-xs text-slate-400">Scheduled</span>
-  if (days < 0) return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700">
-      <AlertTriangle className="h-3 w-3" />
-      {Math.abs(days)}d overdue
-    </span>
-  )
-  if (days === 0) return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700">
-      Due today
-    </span>
-  )
-  if (days <= 14) return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700">
-      <Clock className="h-3 w-3" />
-      In {days}d
-    </span>
-  )
-  return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
-      <CheckCircle className="h-3 w-3" />
-      In {days}d
-    </span>
-  )
-}
+import { MaintenanceItemCard } from "@/components/maintenance-item-card"
 
 export default async function MaintenancePage() {
   const supabase = await createClient()
@@ -82,7 +47,7 @@ export default async function MaintenancePage() {
           </h2>
           <div className="space-y-2">
             {overdue.map(item => (
-              <MaintenanceCard key={item.id} item={item} />
+              <MaintenanceItemCard key={item.id} item={item} />
             ))}
           </div>
         </section>
@@ -96,7 +61,7 @@ export default async function MaintenancePage() {
           </h2>
           <div className="space-y-2">
             {upcoming.map(item => (
-              <MaintenanceCard key={item.id} item={item} />
+              <MaintenanceItemCard key={item.id} item={item} />
             ))}
           </div>
         </section>
@@ -110,7 +75,7 @@ export default async function MaintenancePage() {
           </h2>
           <div className="space-y-2">
             {future.map(item => (
-              <MaintenanceCard key={item.id} item={item} />
+              <MaintenanceItemCard key={item.id} item={item} />
             ))}
           </div>
         </section>
@@ -124,33 +89,5 @@ export default async function MaintenancePage() {
         </div>
       )}
     </div>
-  )
-}
-
-function MaintenanceCard({ item }: { item: any }) {
-  const days = item.next_due ? getDaysUntil(item.next_due) : null
-
-  return (
-    <Card>
-      <CardContent className="pt-4 pb-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <p className="font-medium text-[#0F1B2D] dark:text-white">{item.title}</p>
-            {item.description && (
-              <p className="text-sm text-slate-500 mt-0.5 line-clamp-2">{item.description}</p>
-            )}
-            <div className="flex items-center gap-3 mt-2">
-              {item.frequency && (
-                <span className="text-xs text-slate-400">{FREQUENCY_LABELS[item.frequency] ?? item.frequency}</span>
-              )}
-              {item.next_due && (
-                <span className="text-xs text-slate-400">{formatDateShort(item.next_due)}</span>
-              )}
-            </div>
-          </div>
-          <StatusChip days={days} />
-        </div>
-      </CardContent>
-    </Card>
   )
 }

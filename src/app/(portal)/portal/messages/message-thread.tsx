@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
-import { Send, Loader2 } from "lucide-react"
+import { Send, Loader2, Paperclip, X, Play } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Message {
@@ -12,6 +12,8 @@ interface Message {
   body: string
   created_at: string
   is_read: boolean
+  attachment_url: string | null
+  attachment_type: string | null
 }
 
 export function MessageThread({
@@ -28,7 +30,11 @@ export function MessageThread({
   const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [text, setText] = useState("")
   const [sending, setSending] = useState(false)
+  const [attachment, setAttachment] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+  const [lightbox, setLightbox] = useState<Message | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
   const supabase = createClient()
 
   useEffect(() => {
@@ -59,25 +65,66 @@ export function MessageThread({
     return () => { supabase.removeChannel(channel) }
   }, [propertyId])
 
+  function pickFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null
+    setAttachment(file)
+    if (file) {
+      setPreview(URL.createObjectURL(file))
+    } else {
+      setPreview(null)
+    }
+  }
+
+  function clearAttachment() {
+    setAttachment(null)
+    setPreview(null)
+    if (fileRef.current) fileRef.current.value = ""
+  }
+
   async function sendMessage(e: React.FormEvent) {
     e.preventDefault()
     const body = text.trim()
-    if (!body || sending) return
+    if ((!body && !attachment) || sending) return
 
     setSending(true)
+    const optimisticText = body
+    const optimisticAttachment = attachment
     setText("")
+    clearAttachment()
+
     try {
+      let attachmentUrl: string | null = null
+      let attachmentType: string | null = null
+
+      if (optimisticAttachment) {
+        const fd = new FormData()
+        fd.append("file", optimisticAttachment)
+        fd.append("bucket", "message-attachments")
+        fd.append("path", propertyId)
+
+        const uploadRes = await fetch("/api/upload", { method: "POST", body: fd })
+        if (!uploadRes.ok) {
+          const err = await uploadRes.json()
+          throw new Error(err.error ?? "Upload failed")
+        }
+        const { url } = await uploadRes.json()
+        attachmentUrl = url
+        attachmentType = optimisticAttachment.type.startsWith("video/") ? "video" : "image"
+      }
+
       const { error } = await supabase.from("messages").insert({
         property_id: propertyId,
         sender_id: currentUserId,
         recipient_id: concierge?.id ?? currentUserId,
-        body,
+        body: body || " ",
         subject: "Message",
+        attachment_url: attachmentUrl,
+        attachment_type: attachmentType,
       })
       if (error) throw error
-    } catch {
-      setText(body)
-      toast.error("Failed to send message")
+    } catch (err: any) {
+      setText(optimisticText)
+      toast.error(err?.message ?? "Failed to send message")
     } finally {
       setSending(false)
     }
@@ -118,14 +165,37 @@ export function MessageThread({
               )}
               <div className={cn("flex", isOwn ? "justify-end" : "justify-start")}>
                 <div className="max-w-[80%] space-y-1">
-                  <div className={cn(
-                    "rounded-2xl px-4 py-2.5 text-sm",
-                    isOwn
-                      ? "bg-[#0F1B2D] text-white rounded-br-sm"
-                      : "bg-white dark:bg-slate-800 text-[#0F1B2D] dark:text-white border border-slate-200/80 dark:border-slate-700 rounded-bl-sm"
-                  )}>
-                    {msg.body}
-                  </div>
+                  {msg.attachment_url && (
+                    <div
+                      className="rounded-xl overflow-hidden cursor-pointer"
+                      onClick={() => setLightbox(msg)}
+                    >
+                      {msg.attachment_type === "video" ? (
+                        <div className="relative aspect-video bg-black rounded-xl overflow-hidden">
+                          <video src={msg.attachment_url} className="h-full w-full object-cover" muted playsInline />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                            <Play className="h-8 w-8 text-white drop-shadow" />
+                          </div>
+                        </div>
+                      ) : (
+                        <img
+                          src={msg.attachment_url}
+                          alt="attachment"
+                          className="max-h-48 w-auto rounded-xl object-cover"
+                        />
+                      )}
+                    </div>
+                  )}
+                  {msg.body.trim() && msg.body !== " " && (
+                    <div className={cn(
+                      "rounded-2xl px-4 py-2.5 text-sm",
+                      isOwn
+                        ? "bg-[#0F1B2D] text-white rounded-br-sm"
+                        : "bg-white dark:bg-slate-800 text-[#0F1B2D] dark:text-white border border-slate-200/80 dark:border-slate-700 rounded-bl-sm"
+                    )}>
+                      {msg.body}
+                    </div>
+                  )}
                   <p className={cn("text-xs text-slate-400", isOwn ? "text-right" : "text-left")}>
                     {formatTime(msg.created_at)}
                   </p>
@@ -137,9 +207,44 @@ export function MessageThread({
         <div ref={bottomRef} />
       </div>
 
+      {/* Attachment preview */}
+      {preview && attachment && (
+        <div className="px-4 pt-2">
+          <div className="relative inline-block">
+            {attachment.type.startsWith("video/") ? (
+              <video src={preview} className="h-20 rounded-lg object-cover" muted />
+            ) : (
+              <img src={preview} alt="preview" className="h-20 rounded-lg object-cover" />
+            )}
+            <button
+              type="button"
+              onClick={clearAttachment}
+              className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-slate-700 text-white flex items-center justify-center hover:bg-slate-900 transition-colors"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Composer */}
       <form onSubmit={sendMessage} className="px-4 py-3 border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900">
-        <div className="flex items-end gap-3">
+        <div className="flex items-end gap-2">
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            disabled={sending}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors disabled:opacity-40"
+          >
+            <Paperclip className="h-4 w-4" />
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*,video/*"
+            className="hidden"
+            onChange={pickFile}
+          />
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
@@ -156,13 +261,44 @@ export function MessageThread({
           />
           <button
             type="submit"
-            disabled={!text.trim() || sending}
+            disabled={(!text.trim() && !attachment) || sending}
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#0F1B2D] text-white disabled:opacity-40 hover:bg-[#1a2d47] transition-colors"
           >
             {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </button>
         </div>
       </form>
+
+      {/* Lightbox */}
+      {lightbox?.attachment_url && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-white/80 hover:text-white"
+            onClick={() => setLightbox(null)}
+          >
+            <X className="h-6 w-6" />
+          </button>
+          <div onClick={e => e.stopPropagation()}>
+            {lightbox.attachment_type === "video" ? (
+              <video
+                src={lightbox.attachment_url}
+                controls
+                autoPlay
+                className="max-h-[85vh] max-w-full rounded-lg"
+              />
+            ) : (
+              <img
+                src={lightbox.attachment_url}
+                alt="attachment"
+                className="max-h-[85vh] max-w-full object-contain rounded-lg"
+              />
+            )}
+          </div>
+        </div>
+      )}
     </>
   )
 }

@@ -2,37 +2,38 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Wrench, Building2, FileText, MessageSquare } from "lucide-react"
+import { Home, Wrench, Building2, FileText, MessageSquare, Calendar } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
   { href: "/portal", label: "Home", icon: Home, exact: true },
   { href: "/portal/service", label: "Service", icon: Wrench },
   { href: "/portal/property", label: "My Home", icon: Building2 },
+  { href: "/portal/maintenance", label: "Schedule", icon: Calendar },
   { href: "/portal/invoices", label: "Invoices", icon: FileText },
   { href: "/portal/messages", label: "Messages", icon: MessageSquare },
 ]
 
-export function PortalMobileNav() {
+export function PortalDesktopNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/80 bg-white/95 backdrop-blur-sm md:hidden dark:border-slate-800 dark:bg-[#0a1628]/95">
-      <div className="flex items-center justify-around px-2 py-2">
-        {navItems.map((item) => {
+    <nav className="hidden md:block border-b border-slate-200/80 bg-white/95 backdrop-blur-sm dark:border-slate-800 dark:bg-[#0a1628]/95">
+      <div className="max-w-2xl mx-auto px-4 flex gap-0.5">
+        {navItems.map(item => {
           const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-1 flex-col items-center gap-0.5 rounded-md py-1.5 text-xs font-medium transition-colors",
+                "flex items-center gap-2 px-3 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
                 isActive
-                  ? "text-[#0F1B2D] dark:text-white"
-                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  ? "border-[#C9A96E] text-[#0F1B2D] dark:text-white"
+                  : "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
               )}
             >
-              <item.icon className={cn("h-5 w-5", isActive && "text-[#C9A96E]")} />
+              <item.icon className={cn("h-4 w-4", isActive && "text-[#C9A96E]")} />
               {item.label}
             </Link>
           )

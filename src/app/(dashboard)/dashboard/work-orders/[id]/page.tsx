@@ -139,18 +139,14 @@ export default async function WorkOrderDetailPage({
         </Card>
       )}
 
-      {photos.length > 0 && (
-        <div>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Photos</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {photos.map((p: any) => (
-              <div key={p.id} className="aspect-video rounded-xl overflow-hidden bg-slate-100">
-                <img src={p.url} alt={p.caption ?? ""} className="h-full w-full object-cover" />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Photos &amp; Videos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <WorkOrderMedia workOrderId={wo.id} initialMedia={photos} />
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -167,5 +163,5 @@ function DetailRow({ icon, label, children }: { icon: React.ReactNode; label: st
   )
 }
 
-// Inline client component for notes editing
 import { ConciergeNotesEditor } from "./concierge-notes-editor"
+import { WorkOrderMedia } from "./work-order-media"

@@ -20,6 +20,10 @@ import { AddAssetDialog } from "./add-asset-dialog"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { MarketStatsCard } from "@/components/market-stats-card"
+import { CoverPhotoEditor } from "@/components/cover-photo-editor"
+import { LoadStandardScheduleButton } from "./load-standard-schedule-button"
+import { AddMaintenanceItemDialog } from "./add-maintenance-dialog"
+import { MaintenanceItemCard } from "@/components/maintenance-item-card"
 
 export default async function PropertyDetailPage({
   params,
@@ -159,17 +163,15 @@ export default async function PropertyDetailPage({
     <div className="space-y-6">
       {/* Property Header */}
       <div className="overflow-hidden rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900">
-        <div className="relative h-48 overflow-hidden">
-          {property.cover_photo_url ? (
-            <img
-              src={property.cover_photo_url}
-              alt={property.address}
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="h-full w-full navy-gradient" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <CoverPhotoEditor
+          propertyId={property.id}
+          coverPhotoUrl={property.cover_photo_url}
+          address={`${property.address}, ${property.city}, ${property.state} ${property.zip}`}
+          latitude={property.latitude ? Number(property.latitude) : null}
+          longitude={property.longitude ? Number(property.longitude) : null}
+          canEdit
+          className="h-48"
+        >
           <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between">
             <div>
               <h1 className="font-display text-2xl font-semibold text-white">{property.address}</h1>
@@ -180,7 +182,7 @@ export default async function PropertyDetailPage({
             </div>
             <StatusBadge status={property.status} className="bg-white/20 backdrop-blur-sm border-white/30 text-white" />
           </div>
-        </div>
+        </CoverPhotoEditor>
 
         <div className="grid grid-cols-2 divide-x divide-slate-200 border-t border-slate-200 sm:grid-cols-2 dark:divide-slate-800 dark:border-slate-800">
           <div className="flex flex-col items-center p-4">
@@ -525,55 +527,24 @@ export default async function PropertyDetailPage({
         {/* MAINTENANCE TAB */}
         <TabsContent value="maintenance">
           <div className="space-y-4">
-            <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
-              Maintenance Schedule
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
+                Maintenance Schedule
+              </h3>
+              <div className="flex items-center gap-2">
+                <AddMaintenanceItemDialog propertyId={property.id} />
+                <LoadStandardScheduleButton propertyId={property.id} />
+              </div>
+            </div>
             <div className="space-y-2">
-              {maintenance?.map((item) => {
-                const daysUntil = item.next_due ? getDaysUntil(item.next_due) : null
-                const isOverdue = daysUntil !== null && daysUntil < 0
-                const isDueSoon = daysUntil !== null && daysUntil >= 0 && daysUntil <= 14
-
-                return (
-                  <div
-                    key={item.id}
-                    className={`rounded-lg border p-4 ${
-                      isOverdue
-                        ? "border-red-200 bg-red-50"
-                        : isDueSoon
-                        ? "border-amber-200 bg-amber-50"
-                        : "border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <p className="font-medium text-[#0F1B2D] dark:text-white">{item.title}</p>
-                        <div className="mt-1 flex items-center gap-3 text-xs text-slate-500">
-                          <span className="capitalize">{item.frequency.replace("_", " ")}</span>
-                          {item.season && <span className="capitalize">{item.season}</span>}
-                          {item.estimated_cost && <span>{formatCurrency(item.estimated_cost)}</span>}
-                        </div>
-                      </div>
-                      <div className="ml-4 text-right">
-                        <p className={`text-sm font-semibold ${isOverdue ? "text-red-600" : isDueSoon ? "text-amber-600" : "text-slate-600"}`}>
-                          {item.next_due ? formatDateShort(item.next_due) : "Not scheduled"}
-                        </p>
-                        <p className={`text-xs ${isOverdue ? "text-red-500" : isDueSoon ? "text-amber-500" : "text-slate-400"}`}>
-                          {isOverdue
-                            ? `${Math.abs(daysUntil!)}d overdue`
-                            : daysUntil === 0
-                            ? "Due today"
-                            : daysUntil !== null
-                            ? `in ${daysUntil} days`
-                            : ""}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
+              {maintenance?.map((item) => (
+                <MaintenanceItemCard key={item.id} item={item} canEditCost />
+              ))}
               {(!maintenance || maintenance.length === 0) && (
-                <div className="py-12 text-center text-slate-500">No maintenance schedule set up</div>
+                <div className="py-12 text-center space-y-3">
+                  <p className="text-slate-500">No maintenance schedule yet.</p>
+                  <p className="text-sm text-slate-400">Use "Load standard schedule" above to populate 26 recommended tasks automatically.</p>
+                </div>
               )}
             </div>
           </div>

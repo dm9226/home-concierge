@@ -414,6 +414,7 @@ export type Database = {
           url: string
           phase: "before" | "during" | "after"
           caption: string | null
+          media_type: "image" | "video"
           uploaded_at: string
         }
         Insert: {
@@ -422,6 +423,7 @@ export type Database = {
           url: string
           phase: "before" | "during" | "after"
           caption?: string | null
+          media_type?: "image" | "video"
           uploaded_at?: string
         }
         Update: {
@@ -430,6 +432,7 @@ export type Database = {
           url?: string
           phase?: "before" | "during" | "after"
           caption?: string | null
+          media_type?: "image" | "video"
           uploaded_at?: string
         }
         Relationships: Rel[]
@@ -767,6 +770,8 @@ export type Database = {
           subject: string
           body: string
           is_read: boolean
+          attachment_url: string | null
+          attachment_type: string | null
           created_at: string
         }
         Insert: {
@@ -777,6 +782,8 @@ export type Database = {
           subject: string
           body: string
           is_read?: boolean
+          attachment_url?: string | null
+          attachment_type?: string | null
           created_at?: string
         }
         Update: {
@@ -787,6 +794,8 @@ export type Database = {
           subject?: string
           body?: string
           is_read?: boolean
+          attachment_url?: string | null
+          attachment_type?: string | null
           created_at?: string
         }
         Relationships: Rel[]
@@ -870,6 +879,10 @@ export type Database = {
     Functions: {
       increment_api_usage: {
         Args: { p_service: string; p_period: string }
+        Returns: void
+      }
+      create_standard_maintenance_schedule: {
+        Args: { p_property_id: string }
         Returns: void
       }
     }
