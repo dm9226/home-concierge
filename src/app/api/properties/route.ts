@@ -2,51 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 
-async function fetchStreetViewAndStore(
-  propertyId: string,
-  address: string,
-  city: string,
-  state: string,
-  zip: string,
-  lat?: number | null,
-  lon?: number | null,
-  admin: ReturnType<typeof createAdminClient> = createAdminClient(),
-): Promise<string | null> {
-  const key = process.env.GOOGLE_MAPS_KEY
-  if (!key) return null
-
-  const location = lat && lon
-    ? `${lat},${lon}`
-    : encodeURIComponent(`${address}, ${city}, ${state} ${zip}`)
-
-  try {
-    // Check metadata first -- avoids storing a gray "no imagery" image
-    const metaRes = await fetch(
-      `https://maps.googleapis.com/maps/api/streetview/metadata?location=${location}&key=${key}`
-    )
-    const meta = await metaRes.json()
-    if (meta.status !== "OK") return null
-
-    const imgRes = await fetch(
-      `https://maps.googleapis.com/maps/api/streetview?size=1200x480&location=${location}&fov=85&pitch=5&key=${key}`
-    )
-    if (!imgRes.ok) return null
-
-    const buffer = await imgRes.arrayBuffer()
-    const filePath = `covers/${propertyId}/street-view.jpg`
-
-    const { error: uploadErr } = await admin.storage
-      .from("property-media")
-      .upload(filePath, buffer, { contentType: "image/jpeg", upsert: true })
-
-    if (uploadErr) return null
-
-    const { data: { publicUrl } } = admin.storage.from("property-media").getPublicUrl(filePath)
-    return publicUrl
-  } catch {
-    return null
-  }
-}
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
@@ -88,21 +43,6 @@ export async function POST(request: NextRequest) {
 
   // Seed standard maintenance schedule (non-fatal)
   try { await admin.rpc("create_standard_maintenance_schedule", { p_property_id: data.id }) } catch (_) {}
-
-  // Auto-fetch Google Street View and store as cover photo (non-fatal)
-  const coverUrl = await fetchStreetViewAndStore(
-    data.id,
-    body.address,
-    body.city,
-    body.state,
-    body.zip,
-    body.latitude,
-    body.longitude,
-    admin,
-  )
-  if (coverUrl) {
-    await admin.from("properties").update({ cover_photo_url: coverUrl }).eq("id", data.id)
-  }
 
   return NextResponse.json({ id: data.id })
 }
