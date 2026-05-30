@@ -16,25 +16,21 @@ export default async function WorkOrdersPage() {
   const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
 
-  let query = admin
-    .from("work_orders")
-    .select(`
-      *,
-      property:properties(address, city)
-    `)
-    .order("priority", { ascending: false })
-    .order("created_at", { ascending: false })
+  // Scope to active properties only -- archived/cancelled properties are excluded
+  const propQuery = admin.from("properties").select("id").eq("status", "active")
+  if (profile.role === "concierge") propQuery.eq("primary_concierge_id", user.id)
+  const { data: activeProps } = await propQuery
+  const activePropertyIds = activeProps?.map(p => p.id) ?? []
 
-  if (profile.role === "concierge") {
-    const { data: props } = await admin
-      .from("properties")
-      .select("id")
-      .eq("primary_concierge_id", user.id)
-    const ids = props?.map(p => p.id) ?? []
-    if (ids.length) query = query.in("property_id", ids)
-  }
-
-  const { data: workOrders } = await query.limit(100)
+  const { data: workOrders } = activePropertyIds.length
+    ? await admin
+        .from("work_orders")
+        .select("*, property:properties(address, city)")
+        .in("property_id", activePropertyIds)
+        .order("priority", { ascending: false })
+        .order("created_at", { ascending: false })
+        .limit(100)
+    : { data: [] }
 
   const emergency = workOrders?.filter(wo => wo.priority === "emergency" && wo.status !== "completed") ?? []
   const active = workOrders?.filter(wo => !["completed", "cancelled"].includes(wo.status) && wo.priority !== "emergency") ?? []

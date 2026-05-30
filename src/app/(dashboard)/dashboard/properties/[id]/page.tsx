@@ -206,6 +206,25 @@ export default async function PropertyDetailPage({
         </div>
       </div>
 
+      {/* Archived banner */}
+      {property.status !== "active" && (
+        <div className={`rounded-xl border p-4 flex items-center gap-3 ${
+          property.status === "cancelled"
+            ? "border-red-200 bg-red-50 dark:border-red-900/40 dark:bg-red-950/20"
+            : "border-amber-200 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/20"
+        }`}>
+          <AlertCircle className={`h-5 w-5 shrink-0 ${property.status === "cancelled" ? "text-red-500" : "text-amber-500"}`} />
+          <div>
+            <p className={`font-semibold ${property.status === "cancelled" ? "text-red-800 dark:text-red-400" : "text-amber-800 dark:text-amber-400"}`}>
+              This property is {property.status === "cancelled" ? "cancelled" : "paused"}
+            </p>
+            <p className={`text-sm ${property.status === "cancelled" ? "text-red-700 dark:text-red-500" : "text-amber-700 dark:text-amber-500"}`}>
+              All data is preserved. The homeowner portal is inactive. Use the status button above to reactivate.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Main tabs */}
       <Tabs defaultValue="overview">
         <TabsList className="w-full overflow-x-auto scrollbar-hide">
