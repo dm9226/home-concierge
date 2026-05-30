@@ -11,22 +11,31 @@ import { formatCurrency } from "@/lib/utils"
 import { Plus, MapPin, ArrowRight, MessageSquare } from "lucide-react"
 import { PropertyPlaceholder } from "@/components/property-placeholder"
 
-export default async function PropertiesPage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+export default async function PropertiesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>
+}) {
+  const { status: statusParam } = await searchParams
+  const activeTab = (statusParam === "paused" || statusParam === "cancelled") ? statusParam : "active"
 
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
   const admin = createAdminClient()
 
+  // Counts for each tab
+  const [{ count: activeCount }, { count: pausedCount }, { count: cancelledCount }] = await Promise.all([
+    admin.from("properties").select("*", { count: "exact", head: true }).eq("status", "active"),
+    admin.from("properties").select("*", { count: "exact", head: true }).eq("status", "paused"),
+    admin.from("properties").select("*", { count: "exact", head: true }).eq("status", "cancelled"),
+  ])
+
   const { data: properties } = await admin
     .from("properties")
-    .select(`
-      *,
-      client:users!properties_client_id_fkey(full_name, email, phone)
-    `)
+    .select(`*, client:users!properties_client_id_fkey(full_name, email, phone)`)
+    .eq("status", activeTab)
     .order("created_at", { ascending: false })
 
   const propertyIds = properties?.map(p => p.id) ?? []
@@ -52,7 +61,7 @@ export default async function PropertiesPage() {
             Properties
           </h1>
           <p className="mt-0.5 text-sm text-slate-500">
-            {properties?.length ?? 0} active properties under management
+            {properties?.length ?? 0} {activeTab} {properties?.length === 1 ? "property" : "properties"}
           </p>
         </div>
         <Button asChild>
@@ -61,6 +70,33 @@ export default async function PropertiesPage() {
             Add Property
           </Link>
         </Button>
+      </div>
+
+      <div className="flex gap-1 rounded-lg bg-slate-100 dark:bg-slate-800 p-1 w-fit">
+        {[
+          { label: "Active", value: "active", count: activeCount ?? 0 },
+          { label: "Paused", value: "paused", count: pausedCount ?? 0 },
+          { label: "Cancelled", value: "cancelled", count: cancelledCount ?? 0 },
+        ].map(tab => (
+          <Link
+            key={tab.value}
+            href={tab.value === "active" ? "/dashboard/properties" : `/dashboard/properties?status=${tab.value}`}
+            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              activeTab === tab.value
+                ? "bg-white dark:bg-slate-900 text-[#0F1B2D] dark:text-white shadow-sm"
+                : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+            }`}
+          >
+            {tab.label}
+            <span className={`rounded-full px-1.5 py-0.5 text-xs font-semibold ${
+              activeTab === tab.value
+                ? "bg-[#C9A96E]/15 text-[#C9A96E]"
+                : "bg-slate-200 dark:bg-slate-700 text-slate-500"
+            }`}>
+              {tab.count}
+            </span>
+          </Link>
+        ))}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
