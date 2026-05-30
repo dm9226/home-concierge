@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 
-async function fetchStreetViewAndStore(
+async function fetchMapboxSatelliteAndStore(
   propertyId: string,
   address: string,
   city: string,
@@ -12,32 +12,34 @@ async function fetchStreetViewAndStore(
   lon?: number | null,
   admin: ReturnType<typeof createAdminClient> = createAdminClient(),
 ): Promise<string | null> {
-  const key = process.env.GOOGLE_MAPS_KEY
-  if (!key) return null
-
-  const location = lat && lon
-    ? `${lat},${lon}`
-    : encodeURIComponent(`${address}, ${city}, ${state} ${zip}`)
-
-  // Check metadata first to avoid storing a "no imagery" gray image
-  try {
-    const metaRes = await fetch(
-      `https://maps.googleapis.com/maps/api/streetview/metadata?location=${location}&key=${key}`
-    )
-    const meta = await metaRes.json()
-    if (meta.status !== "OK") return null
-  } catch {
-    return null
-  }
+  const token = process.env.MAPBOX_TOKEN
+  if (!token) return null
 
   try {
+    let lng = lon
+    let latitude = lat
+
+    // Geocode if coordinates not provided
+    if (!latitude || !lng) {
+      const query = encodeURIComponent(`${address}, ${city}, ${state} ${zip}`)
+      const geoRes = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?types=address&limit=1&access_token=${token}`
+      )
+      if (!geoRes.ok) return null
+      const geo = await geoRes.json()
+      const coords = geo.features?.[0]?.center
+      if (!coords) return null
+      ;[lng, latitude] = coords
+    }
+
+    // Fetch satellite image (zoom 18 = ~house-level detail)
     const imgRes = await fetch(
-      `https://maps.googleapis.com/maps/api/streetview?size=1200x480&location=${location}&fov=85&pitch=5&key=${key}`
+      `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/${lng},${latitude},18,0/1200x480?access_token=${token}`
     )
     if (!imgRes.ok) return null
 
     const buffer = await imgRes.arrayBuffer()
-    const filePath = `covers/${propertyId}/street-view.jpg`
+    const filePath = `covers/${propertyId}/aerial.jpg`
 
     const { error: uploadErr } = await admin.storage
       .from("property-media")
@@ -93,8 +95,8 @@ export async function POST(request: NextRequest) {
   // Seed standard maintenance schedule (non-fatal)
   try { await admin.rpc("create_standard_maintenance_schedule", { p_property_id: data.id }) } catch (_) {}
 
-  // Auto-fetch Street View and store as cover photo (non-fatal)
-  const coverUrl = await fetchStreetViewAndStore(
+  // Auto-fetch Mapbox satellite image and store as cover photo (non-fatal)
+  const coverUrl = await fetchMapboxSatelliteAndStore(
     data.id,
     body.address,
     body.city,
