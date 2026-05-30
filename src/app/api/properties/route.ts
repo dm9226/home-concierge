@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
   // Seed the standard maintenance schedule for new properties (non-fatal if it fails)
-  await admin.rpc("create_standard_maintenance_schedule", { p_property_id: data.id }).catch(() => {})
+  try { await admin.rpc("create_standard_maintenance_schedule", { p_property_id: data.id }) } catch (_) {}
 
   return NextResponse.json({ id: data.id })
 }
