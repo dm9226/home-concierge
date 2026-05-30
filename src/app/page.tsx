@@ -28,6 +28,9 @@ export default function LandingPage() {
             <a href="#testimonials" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">
               Testimonials
             </a>
+            <Link href="/plans" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">
+              Plans
+            </Link>
           </nav>
           <div className="flex items-center gap-3">
             <Button variant="ghost" asChild size="sm">
@@ -283,19 +286,24 @@ export default function LandingPage() {
             Your Home, <span className="text-[#C9A96E]">Handled.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg text-white/70">
-            Membership begins at $1,500/month. Custom plans available for larger estates.
+            Plans starting at $335/month. Custom options available for larger estates.
             Limited availability in select Atlanta neighborhoods.
           </p>
-          <Button
-            asChild
-            size="xl"
-            className="mt-10 bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold"
-          >
-            <a href="#contact">
-              Schedule Your Private Consultation
-              <ArrowRight className="h-5 w-5" />
-            </a>
-          </Button>
+          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Button
+              asChild
+              size="xl"
+              className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold"
+            >
+              <a href="#contact">
+                Schedule Your Private Consultation
+                <ArrowRight className="h-5 w-5" />
+              </a>
+            </Button>
+            <Button asChild size="xl" variant="outline" className="border-white/30 text-white hover:bg-white/10">
+              <Link href="/plans">View Plans &amp; Pricing</Link>
+            </Button>
+          </div>
         </div>
       </section>
 

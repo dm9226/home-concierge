@@ -65,6 +65,7 @@ export type Database = {
           market_data: Json | null
           contract_start_date: string | null
           status: "active" | "paused" | "cancelled"
+          plan_tier: "proactive" | "proactive_plus"
           cover_photo_url: string | null
           health_score: number
           onboarding_status: "not_started" | "in_progress" | "complete"
@@ -90,6 +91,7 @@ export type Database = {
           market_data?: Json | null
           contract_start_date?: string | null
           status?: "active" | "paused" | "cancelled"
+          plan_tier?: "proactive" | "proactive_plus"
           cover_photo_url?: string | null
           health_score?: number
           onboarding_status?: "not_started" | "in_progress" | "complete"
@@ -115,6 +117,7 @@ export type Database = {
           market_data?: Json | null
           contract_start_date?: string | null
           status?: "active" | "paused" | "cancelled"
+          plan_tier?: "proactive" | "proactive_plus"
           cover_photo_url?: string | null
           health_score?: number
           onboarding_status?: "not_started" | "in_progress" | "complete"

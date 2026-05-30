@@ -297,6 +297,12 @@ export default async function PropertyDetailPage({
                   <span className="font-medium text-[#0F1B2D] dark:text-white capitalize">{property.property_type.replace("_", " ")}</span>
                 </div>
                 <div className="flex justify-between">
+                  <span className="text-slate-500">Plan</span>
+                  <span className={`font-medium ${(property as any).plan_tier === "proactive_plus" ? "text-[#C9A96E]" : "text-[#0F1B2D] dark:text-white"}`}>
+                    {(property as any).plan_tier === "proactive_plus" ? "Proactive + OnDemand" : "Proactive"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
                   <span className="text-slate-500">Fee</span>
                   <span className="font-medium text-[#0F1B2D] dark:text-white">
                     {formatCurrency(property.fee_amount)}/{property.billing_period === "annually" ? "yr" : property.billing_period === "quarterly" ? "qtr" : "mo"}
