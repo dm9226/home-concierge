@@ -19,7 +19,6 @@ import { ManageOwnersPanel } from "@/components/manage-owners-panel"
 import { AddAssetDialog } from "./add-asset-dialog"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
-import { MarketStatsCard } from "@/components/market-stats-card"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
 import { LoadStandardScheduleButton } from "./load-standard-schedule-button"
 import { AddMaintenanceItemDialog } from "./add-maintenance-dialog"
@@ -249,52 +248,55 @@ export default async function PropertyDetailPage({
             className="h-56 mb-4"
           />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Quick stats */}
+            {/* Property details */}
             <Card>
-              <CardHeader><CardTitle className="text-sm">Property Details</CardTitle></CardHeader>
-              <CardContent className="space-y-2 text-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">Property Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2.5 text-sm">
                 {property.year_built && (
                   <div className="flex justify-between">
                     <span className="text-slate-500">Year Built</span>
-                    <span className="font-medium">{property.year_built}</span>
+                    <span className="font-medium text-[#0F1B2D] dark:text-white">{property.year_built}</span>
                   </div>
                 )}
                 {property.square_footage && (
                   <div className="flex justify-between">
                     <span className="text-slate-500">Size</span>
-                    <span className="font-medium">{property.square_footage.toLocaleString()} sq ft</span>
+                    <span className="font-medium text-[#0F1B2D] dark:text-white">{property.square_footage.toLocaleString()} sq ft</span>
                   </div>
                 )}
                 {property.lot_size && (
                   <div className="flex justify-between">
                     <span className="text-slate-500">Lot</span>
-                    <span className="font-medium">{property.lot_size}</span>
+                    <span className="font-medium text-[#0F1B2D] dark:text-white">{property.lot_size}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span className="text-slate-500">Type</span>
-                  <span className="font-medium capitalize">{property.property_type.replace("_", " ")}</span>
+                  <span className="font-medium text-[#0F1B2D] dark:text-white capitalize">{property.property_type.replace("_", " ")}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Fee</span>
+                  <span className="font-medium text-[#0F1B2D] dark:text-white">
+                    {formatCurrency(property.fee_amount)}/{property.billing_period === "annually" ? "yr" : property.billing_period === "quarterly" ? "qtr" : "mo"}
+                  </span>
                 </div>
               </CardContent>
             </Card>
 
-            {property.market_data && (
-              <MarketStatsCard
-                marketData={property.market_data as Record<string, any>}
-                zipCode={property.zip}
-              />
-            )}
-
             {/* Work order summary */}
             <Card>
-              <CardHeader><CardTitle className="text-sm">Work Order Summary</CardTitle></CardHeader>
-              <CardContent className="space-y-2 text-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">Work Orders</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2.5 text-sm">
                 {(["submitted", "in_progress", "scheduled", "completed"] as const).map((status) => {
                   const count = workOrders?.filter((wo) => wo.status === status).length ?? 0
                   return (
                     <div key={status} className="flex justify-between items-center">
                       <StatusBadge status={status} />
-                      <span className="font-medium">{count}</span>
+                      <span className="font-semibold text-[#0F1B2D] dark:text-white">{count}</span>
                     </div>
                   )
                 })}
@@ -303,24 +305,31 @@ export default async function PropertyDetailPage({
 
             {/* Maintenance snapshot */}
             <Card>
-              <CardHeader><CardTitle className="text-sm">Next Up</CardTitle></CardHeader>
-              <CardContent className="space-y-2">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">Next Up</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2.5">
                 {maintenance?.slice(0, 4).map((item) => {
                   const daysUntil = item.next_due ? getDaysUntil(item.next_due) : null
                   const isOverdue = daysUntil !== null && daysUntil < 0
                   return (
                     <div key={item.id} className="flex items-center justify-between text-sm">
                       <span className="text-slate-700 dark:text-slate-300 truncate flex-1">{item.title}</span>
-                      <span className={`ml-2 shrink-0 text-xs font-medium ${isOverdue ? "text-red-500" : daysUntil && daysUntil <= 14 ? "text-amber-500" : "text-slate-400"}`}>
+                      <span className={`ml-2 shrink-0 text-xs font-semibold ${isOverdue ? "text-red-500" : daysUntil !== null && daysUntil <= 14 ? "text-amber-500" : "text-slate-400"}`}>
                         {isOverdue
                           ? `${Math.abs(daysUntil!)}d overdue`
                           : daysUntil === 0
                           ? "Today"
-                          : `${daysUntil}d`}
+                          : daysUntil !== null
+                          ? `${daysUntil}d`
+                          : "--"}
                       </span>
                     </div>
                   )
                 })}
+                {(!maintenance || maintenance.length === 0) && (
+                  <p className="text-sm text-slate-400">No schedule yet</p>
+                )}
               </CardContent>
             </Card>
           </div>
