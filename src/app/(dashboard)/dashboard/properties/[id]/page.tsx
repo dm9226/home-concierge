@@ -23,6 +23,7 @@ import { CoverPhotoEditor } from "@/components/cover-photo-editor"
 import { LoadStandardScheduleButton } from "./load-standard-schedule-button"
 import { AddMaintenanceItemDialog } from "./add-maintenance-dialog"
 import { MaintenanceItemCard } from "@/components/maintenance-item-card"
+import { PropertyStatusButton } from "./property-status-button"
 
 export default async function PropertyDetailPage({
   params,
@@ -187,7 +188,7 @@ export default async function PropertyDetailPage({
                 {property.city}, {property.state} {property.zip}
               </p>
             </div>
-            <StatusBadge status={property.status} className="bg-white/20 backdrop-blur-sm border-white/30 text-white" />
+            <PropertyStatusButton propertyId={property.id} currentStatus={property.status} />
           </div>
         </CoverPhotoEditor>
 
