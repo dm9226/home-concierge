@@ -5,13 +5,6 @@ import { Camera, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
-function streetViewUrl(address: string, lat?: number | null, lon?: number | null): string | null {
-  const key = process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY
-  if (!key) return null
-  const location = lat && lon ? `${lat},${lon}` : encodeURIComponent(address)
-  return `https://maps.googleapis.com/maps/api/streetview?size=1200x480&location=${location}&fov=85&pitch=5&key=${key}`
-}
-
 interface CoverPhotoEditorProps {
   propertyId: string
   coverPhotoUrl: string | null
@@ -27,19 +20,15 @@ export function CoverPhotoEditor({
   propertyId,
   coverPhotoUrl: initialUrl,
   address,
-  latitude,
-  longitude,
   canEdit = false,
   className,
   children,
 }: CoverPhotoEditorProps) {
   const [url, setUrl] = useState(initialUrl)
-  const [streetViewFailed, setStreetViewFailed] = useState(false)
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
-  const svUrl = !url && !streetViewFailed ? streetViewUrl(address, latitude, longitude) : null
-  const displayUrl = url ?? svUrl
+  const displayUrl = url
 
   async function handleFile(file: File) {
     setUploading(true)
@@ -79,9 +68,7 @@ export function CoverPhotoEditor({
           src={displayUrl}
           alt={address}
           className="h-full w-full object-cover"
-          onError={() => {
-            if (!url) setStreetViewFailed(true)
-          }}
+          onError={() => setUrl(null)}
         />
       ) : (
         <div className="h-full w-full navy-gradient" />
