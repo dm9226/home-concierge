@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { ManageOwnersPanel } from "@/components/manage-owners-panel"
 import { AddAssetDialog } from "./add-asset-dialog"
+import { BulkScanDialog } from "./bulk-scan-dialog"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
@@ -27,10 +28,13 @@ import { PropertyStatusButton } from "./property-status-button"
 
 export default async function PropertyDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ tab?: string; status?: string }>
 }) {
   const { id } = await params
+  const { tab } = await searchParams
   const supabase = await createClient()
   const {
     data: { user },
@@ -226,7 +230,7 @@ export default async function PropertyDetailPage({
       )}
 
       {/* Main tabs */}
-      <Tabs defaultValue="overview">
+      <Tabs defaultValue={tab ?? "overview"}>
         <TabsList className="w-full overflow-x-auto scrollbar-hide">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="inventory">
@@ -364,7 +368,8 @@ export default async function PropertyDetailPage({
         {/* INVENTORY TAB */}
         <TabsContent value="inventory">
           <div className="space-y-6">
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
+              <BulkScanDialog propertyId={property.id} />
               <AddAssetDialog propertyId={property.id} />
             </div>
 
