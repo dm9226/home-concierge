@@ -11,21 +11,27 @@ import {
   XCircle, Shield, Wrench, Package, FolderOpen, Clock,
 } from "lucide-react"
 
-export default async function PortalPropertyPage() {
+export default async function PortalPropertyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ id?: string }>
+}) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
+
+  const { id: requestedId } = await searchParams
 
   const { data: properties } = await supabase
     .from("properties")
     .select("*")
     .eq("client_id", user.id)
     .eq("status", "active")
-    .limit(1)
+    .order("created_at", { ascending: true })
 
   if (!properties || properties.length === 0) redirect("/portal")
 
-  const property = properties[0]
+  const property = (requestedId ? properties.find(p => p.id === requestedId) : null) ?? properties[0]
   const propertyId = property.id
 
   const [

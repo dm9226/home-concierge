@@ -22,7 +22,11 @@ const FREQ_LABELS: Record<string, string> = {
   semi_annual: "Every 6 mo", annual: "Annual", custom: "Custom",
 }
 
-export default async function PortalHomePage() {
+export default async function PortalHomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ p?: string }>
+}) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
@@ -32,6 +36,7 @@ export default async function PortalHomePage() {
     .select("*")
     .eq("client_id", user.id)
     .eq("status", "active")
+    .order("created_at", { ascending: true })
 
   if (!properties || properties.length === 0) {
     return (
@@ -45,7 +50,8 @@ export default async function PortalHomePage() {
     )
   }
 
-  const property = properties[0]
+  const { p: selectedId } = await searchParams
+  const property = properties.find(p => p.id === selectedId) ?? properties[0]
   const propertyId = property.id
   const now = new Date()
   const todayStr = now.toISOString().split("T")[0]
@@ -172,6 +178,26 @@ export default async function PortalHomePage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
+
+      {/* ── PROPERTY SWITCHER (only when multiple) ───────────────────── */}
+      {properties.length > 1 && (
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {properties.map(p => (
+            <Link
+              key={p.id}
+              href={`/portal?p=${p.id}`}
+              className={`shrink-0 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
+                p.id === property.id
+                  ? "border-[#C9A96E] bg-[#C9A96E]/10 text-[#0F1B2D] dark:text-white"
+                  : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
+              }`}
+            >
+              <p className="font-semibold">{p.address}</p>
+              <p className="text-xs opacity-70">{p.city}, {p.state}</p>
+            </Link>
+          ))}
+        </div>
+      )}
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -398,7 +424,7 @@ export default async function PortalHomePage() {
         <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
           <Home className="h-4 w-4 text-[#C9A96E]" />
           <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">Property Details</p>
-          <Link href="/portal/property" className="ml-auto text-xs text-[#C9A96E] flex items-center gap-1 hover:underline">
+          <Link href={`/portal/property?id=${propertyId}`} className="ml-auto text-xs text-[#C9A96E] flex items-center gap-1 hover:underline">
             Full profile <ArrowRight className="h-3 w-3" />
           </Link>
         </div>

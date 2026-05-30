@@ -193,7 +193,12 @@ export default async function PropertyDetailPage({
             {client ? (
               <>
                 <p className="mt-1 font-semibold text-[#0F1B2D] dark:text-white">{client.full_name}</p>
-                <p className="text-xs text-slate-500">{client.phone}</p>
+                <p className="text-xs text-slate-500">{client.phone ?? client.email}</p>
+                <AssignOwnerDialog
+                  propertyId={property.id}
+                  clients={availableClients ?? []}
+                  currentOwner={client}
+                />
               </>
             ) : (
               <div className="mt-1">
