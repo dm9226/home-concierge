@@ -60,7 +60,9 @@ export async function POST(request: NextRequest) {
 
   const bytes = await file.arrayBuffer()
   const base64 = Buffer.from(bytes).toString("base64")
-  const mediaType = (file.type || "image/jpeg") as "image/jpeg" | "image/png" | "image/gif" | "image/webp"
+  // compressImage() always outputs JPEG via canvas.toBlob, so the bytes are always JPEG
+  // regardless of the original file.type (HEIC, WEBP, etc.)
+  const mediaType = "image/jpeg" as const
 
   const message = await anthropic.messages.create({
     model: "claude-haiku-4-5-20251001",
