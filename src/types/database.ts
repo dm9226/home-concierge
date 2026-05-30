@@ -122,6 +122,24 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      property_owners: {
+        Row: {
+          property_id: string
+          user_id: string
+          created_at: string
+        }
+        Insert: {
+          property_id: string
+          user_id: string
+          created_at?: string
+        }
+        Update: {
+          property_id?: string
+          user_id?: string
+          created_at?: string
+        }
+        Relationships: Rel[]
+      }
       property_onboarding: {
         Row: {
           id: string
