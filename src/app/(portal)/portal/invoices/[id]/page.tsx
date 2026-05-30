@@ -24,11 +24,19 @@ export default async function InvoiceDetailPage({
 
   if (!invoice) notFound()
 
+  const { data: ownership } = await supabase
+    .from("property_owners")
+    .select("property_id")
+    .eq("property_id", invoice.property_id)
+    .eq("user_id", user.id)
+    .single()
+
+  if (!ownership) redirect("/portal/invoices")
+
   const { data: property } = await supabase
     .from("properties")
     .select("id, address, city, state")
     .eq("id", invoice.property_id)
-    .eq("client_id", user.id)
     .single()
 
   if (!property) redirect("/portal/invoices")

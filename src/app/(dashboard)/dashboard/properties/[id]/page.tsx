@@ -15,7 +15,7 @@ import {
   Package, FolderOpen, FileText, Clock, ArrowRight, Plus,
   CheckCircle2, AlertCircle, XCircle, Shield, MessageSquare
 } from "lucide-react"
-import { AssignOwnerDialog } from "./assign-owner-dialog"
+import { ManageOwnersPanel } from "@/components/manage-owners-panel"
 import { AddAssetDialog } from "./add-asset-dialog"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
@@ -51,11 +51,19 @@ export default async function PropertyDetailPage({
 
   if (!property) notFound()
 
-  const { data: availableClients } = await admin
-    .from("users")
-    .select("id, full_name, email")
-    .eq("role", "client")
-    .order("full_name")
+  const [{ data: propertyOwners }, { data: availableClients }] = await Promise.all([
+    admin
+      .from("property_owners")
+      .select("user:users(id, full_name, email, phone)")
+      .eq("property_id", id),
+    admin
+      .from("users")
+      .select("id, full_name, email, phone")
+      .eq("role", "client")
+      .order("full_name"),
+  ])
+
+  const owners = (propertyOwners ?? []).map((o: any) => o.user).filter(Boolean)
 
   const [
     { data: assets },
@@ -189,22 +197,11 @@ export default async function PropertyDetailPage({
             <HealthScoreGauge score={property.health_score} size="sm" showLabel />
           </div>
           <div className="flex flex-col justify-center p-4">
-            <p className="text-xs uppercase tracking-wider text-slate-400">Owner</p>
-            {client ? (
-              <>
-                <p className="mt-1 font-semibold text-[#0F1B2D] dark:text-white">{client.full_name}</p>
-                <p className="text-xs text-slate-500">{client.phone ?? client.email}</p>
-                <AssignOwnerDialog
-                  propertyId={property.id}
-                  clients={availableClients ?? []}
-                  currentOwner={client}
-                />
-              </>
-            ) : (
-              <div className="mt-1">
-                <AssignOwnerDialog propertyId={property.id} clients={availableClients ?? []} />
-              </div>
-            )}
+            <ManageOwnersPanel
+              propertyId={property.id}
+              owners={owners}
+              allClients={availableClients ?? []}
+            />
           </div>
         </div>
       </div>

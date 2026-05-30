@@ -9,10 +9,18 @@ export default async function MaintenancePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
+  const { data: ownerships } = await supabase
+    .from("property_owners")
+    .select("property_id")
+    .eq("user_id", user.id)
+
+  const propertyIds = ownerships?.map(o => o.property_id) ?? []
+  if (propertyIds.length === 0) redirect("/portal")
+
   const { data: properties } = await supabase
     .from("properties")
     .select("id")
-    .eq("client_id", user.id)
+    .in("id", propertyIds)
     .eq("status", "active")
     .limit(1)
 

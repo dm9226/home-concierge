@@ -9,13 +9,10 @@ export default async function NewServicePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: properties } = await supabase
-    .from("properties")
-    .select("id, address")
-    .eq("client_id", user.id)
-    .eq("status", "active")
-    .limit(1)
-
+  const { data: ownerships } = await supabase.from("property_owners").select("property_id").eq("user_id", user.id)
+  const ids = ownerships?.map((o: any) => o.property_id) ?? []
+  if (!ids.length) redirect("/portal")
+  const { data: properties } = await supabase.from("properties").select("id, address").in("id", ids).eq("status", "active").limit(1)
   if (!properties || properties.length === 0) redirect("/portal")
 
   const propertyId = properties[0].id

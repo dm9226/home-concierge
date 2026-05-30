@@ -31,12 +31,21 @@ export default async function PortalHomePage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: properties } = await supabase
-    .from("properties")
-    .select("*")
-    .eq("client_id", user.id)
-    .eq("status", "active")
-    .order("created_at", { ascending: true })
+  const { data: ownerships } = await supabase
+    .from("property_owners")
+    .select("property_id")
+    .eq("user_id", user.id)
+
+  const propertyIds = ownerships?.map(o => o.property_id) ?? []
+
+  const { data: properties } = propertyIds.length
+    ? await supabase
+        .from("properties")
+        .select("*")
+        .in("id", propertyIds)
+        .eq("status", "active")
+        .order("created_at", { ascending: true })
+    : { data: [] }
 
   if (!properties || properties.length === 0) {
     return (

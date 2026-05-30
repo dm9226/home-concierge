@@ -11,12 +11,11 @@ export default async function MessagesPage() {
   const { data: profile } = await supabase.from("users").select("*").eq("id", user.id).single()
   if (!profile) redirect("/login")
 
-  const { data: properties } = await supabase
-    .from("properties")
-    .select("id, address")
-    .eq("client_id", user.id)
-    .eq("status", "active")
-    .limit(1)
+  const { data: ownerships } = await supabase.from("property_owners").select("property_id").eq("user_id", user.id)
+  const ids = ownerships?.map((o: any) => o.property_id) ?? []
+  const { data: properties } = ids.length
+    ? await supabase.from("properties").select("id, address").in("id", ids).eq("status", "active").limit(1)
+    : { data: [] }
 
   if (!properties || properties.length === 0) {
     return (

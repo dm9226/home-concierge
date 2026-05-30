@@ -22,10 +22,18 @@ export default async function PortalPropertyPage({
 
   const { id: requestedId } = await searchParams
 
+  const { data: ownerships } = await supabase
+    .from("property_owners")
+    .select("property_id")
+    .eq("user_id", user.id)
+
+  const propertyIds = ownerships?.map(o => o.property_id) ?? []
+  if (propertyIds.length === 0) redirect("/portal")
+
   const { data: properties } = await supabase
     .from("properties")
     .select("*")
-    .eq("client_id", user.id)
+    .in("id", propertyIds)
     .eq("status", "active")
     .order("created_at", { ascending: true })
 

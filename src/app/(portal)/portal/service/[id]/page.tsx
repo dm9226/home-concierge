@@ -25,14 +25,20 @@ export default async function ServiceDetailPage({
   if (!workOrder) notFound()
 
   // Verify client owns the property
+  const { data: ownership } = await supabase
+    .from("property_owners")
+    .select("property_id")
+    .eq("property_id", workOrder.property_id)
+    .eq("user_id", user.id)
+    .single()
+
+  if (!ownership) redirect("/portal/service")
+
   const { data: property } = await supabase
     .from("properties")
     .select("id, address, city, state")
     .eq("id", workOrder.property_id)
-    .eq("client_id", user.id)
     .single()
-
-  if (!property) redirect("/portal/service")
 
   const photos: any[] = []
   const updates: any[] = []

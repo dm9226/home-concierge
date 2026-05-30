@@ -21,12 +21,11 @@ export default async function InvoicesPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: properties } = await supabase
-    .from("properties")
-    .select("id")
-    .eq("client_id", user.id)
-    .eq("status", "active")
-    .limit(1)
+  const { data: ownerships } = await supabase.from("property_owners").select("property_id").eq("user_id", user.id)
+  const ids = ownerships?.map((o: any) => o.property_id) ?? []
+  const { data: properties } = ids.length
+    ? await supabase.from("properties").select("id").in("id", ids).eq("status", "active").limit(1)
+    : { data: [] }
 
   if (!properties || properties.length === 0) redirect("/portal")
 
