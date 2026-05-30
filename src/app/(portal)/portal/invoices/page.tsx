@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
+import { getUserPropertyIds } from "@/lib/get-user-properties"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { FileText, ChevronRight, AlertTriangle } from "lucide-react"
@@ -21,18 +22,23 @@ export default async function InvoicesPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: ownerships } = await supabase.from("property_owners").select("property_id").eq("user_id", user.id)
-  const ids = ownerships?.map((o: any) => o.property_id) ?? []
-  const { data: properties } = ids.length
-    ? await supabase.from("properties").select("id").in("id", ids).eq("status", "active").limit(1)
-    : { data: [] }
+  const ids = await getUserPropertyIds(supabase, user.id)
+  if (!ids.length) redirect("/portal")
+
+  const { data: properties } = await supabase
+    .from("properties")
+    .select("id, address")
+    .in("id", ids)
+    .eq("status", "active")
 
   if (!properties || properties.length === 0) redirect("/portal")
+
+  const propertyMap = Object.fromEntries(properties.map(p => [p.id, p.address]))
 
   const { data: invoices } = await supabase
     .from("invoices")
     .select("*")
-    .eq("property_id", properties[0].id)
+    .in("property_id", properties.map(p => p.id))
     .order("created_at", { ascending: false })
 
   const unpaid = invoices?.filter(inv => ["sent", "overdue"].includes(inv.status)) ?? []
@@ -63,7 +69,7 @@ export default async function InvoicesPage() {
           <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Awaiting Payment</h2>
           <div className="space-y-2">
             {unpaid.map(inv => (
-              <InvoiceRow key={inv.id} invoice={inv} />
+              <InvoiceRow key={inv.id} invoice={inv} propertyAddress={properties.length > 1 ? propertyMap[inv.property_id] : undefined} />
             ))}
           </div>
         </section>
@@ -74,7 +80,7 @@ export default async function InvoicesPage() {
           <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Paid</h2>
           <div className="space-y-2">
             {paid.map(inv => (
-              <InvoiceRow key={inv.id} invoice={inv} />
+              <InvoiceRow key={inv.id} invoice={inv} propertyAddress={properties.length > 1 ? propertyMap[inv.property_id] : undefined} />
             ))}
           </div>
         </section>
@@ -91,7 +97,7 @@ export default async function InvoicesPage() {
   )
 }
 
-function InvoiceRow({ invoice }: { invoice: any }) {
+function InvoiceRow({ invoice, propertyAddress }: { invoice: any; propertyAddress?: string }) {
   return (
     <Link href={`/portal/invoices/${invoice.id}`}>
       <Card className="hover:shadow-md transition-all">
@@ -102,6 +108,7 @@ function InvoiceRow({ invoice }: { invoice: any }) {
                 {invoice.invoice_number ?? "Invoice"}
               </p>
               <p className="text-sm text-slate-500 mt-0.5">
+                {propertyAddress && <span className="text-slate-400">{propertyAddress} &middot; </span>}
                 {invoice.due_date ? `Due ${formatDateShort(invoice.due_date)}` : formatDateShort(invoice.created_at)}
               </p>
             </div>

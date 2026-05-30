@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server"
 import { StatusBadge } from "@/components/status-badge"
 import { Button } from "@/components/ui/button"
 import { formatDateShort } from "@/lib/utils"
+import { getUserPropertyIds } from "@/lib/get-user-properties"
 import { Wrench, Plus, AlertTriangle, Clock, CheckCircle } from "lucide-react"
 
 export default async function ServicePage() {
@@ -11,8 +12,7 @@ export default async function ServicePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: ownerships } = await supabase.from("property_owners").select("property_id").eq("user_id", user.id)
-  const ids = ownerships?.map((o: any) => o.property_id) ?? []
+  const ids = await getUserPropertyIds(supabase, user.id)
   if (!ids.length) redirect("/portal")
   const { data: properties } = await supabase.from("properties").select("id").in("id", ids).eq("status", "active").limit(1)
   if (!properties || properties.length === 0) redirect("/portal")

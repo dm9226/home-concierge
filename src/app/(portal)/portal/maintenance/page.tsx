@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { getDaysUntil } from "@/lib/utils"
+import { getUserPropertyIds } from "@/lib/get-user-properties"
 import { AlertTriangle, CheckCircle, Clock } from "lucide-react"
 import { MaintenanceItemCard } from "@/components/maintenance-item-card"
 
@@ -9,18 +10,13 @@ export default async function MaintenancePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: ownerships } = await supabase
-    .from("property_owners")
-    .select("property_id")
-    .eq("user_id", user.id)
-
-  const propertyIds = ownerships?.map(o => o.property_id) ?? []
-  if (propertyIds.length === 0) redirect("/portal")
+  const ids = await getUserPropertyIds(supabase, user.id)
+  if (!ids.length) redirect("/portal")
 
   const { data: properties } = await supabase
     .from("properties")
     .select("id")
-    .in("id", propertyIds)
+    .in("id", ids)
     .eq("status", "active")
     .limit(1)
 

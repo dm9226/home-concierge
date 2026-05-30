@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+import { getUserPropertyIds } from "@/lib/get-user-properties"
 import { MessageThread } from "./message-thread"
 import { MessageSquare } from "lucide-react"
 
@@ -11,8 +12,7 @@ export default async function MessagesPage() {
   const { data: profile } = await supabase.from("users").select("*").eq("id", user.id).single()
   if (!profile) redirect("/login")
 
-  const { data: ownerships } = await supabase.from("property_owners").select("property_id").eq("user_id", user.id)
-  const ids = ownerships?.map((o: any) => o.property_id) ?? []
+  const ids = await getUserPropertyIds(supabase, user.id)
   const { data: properties } = ids.length
     ? await supabase.from("properties").select("id, address").in("id", ids).eq("status", "active").limit(1)
     : { data: [] }
