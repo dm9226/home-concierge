@@ -40,26 +40,30 @@ export async function PATCH(
   }
 
   const body = await request.json()
-  const updates: Record<string, any> = {}
+
+  let last_completed: string | undefined
+  let next_due: string | undefined
+  let estimated_cost: number | null | undefined
 
   if (body.completed_date) {
-    updates.last_completed = body.completed_date
-
-    // Calculate next_due based on frequency
+    last_completed = body.completed_date as string
     const d = new Date(body.completed_date)
     const days = FREQUENCY_DAYS[item.frequency] ?? item.custom_interval_days ?? 30
     d.setDate(d.getDate() + days)
-    updates.next_due = d.toISOString().split("T")[0]
+    next_due = d.toISOString().split("T")[0]
   }
 
-  // Only staff can update cost
   if (body.estimated_cost !== undefined && profile.role !== "client") {
-    updates.estimated_cost = body.estimated_cost === "" ? null : Number(body.estimated_cost)
+    estimated_cost = body.estimated_cost === "" ? null : Number(body.estimated_cost)
   }
 
   const { data: updated, error } = await admin
     .from("maintenance_schedules")
-    .update(updates)
+    .update({
+      ...(last_completed !== undefined && { last_completed }),
+      ...(next_due !== undefined && { next_due }),
+      ...(estimated_cost !== undefined && { estimated_cost }),
+    })
     .eq("id", id)
     .select()
     .single()
