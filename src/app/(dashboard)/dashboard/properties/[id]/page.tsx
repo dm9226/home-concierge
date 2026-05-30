@@ -19,6 +19,7 @@ import { AssignOwnerDialog } from "./assign-owner-dialog"
 import { AddAssetDialog } from "./add-asset-dialog"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
+import { MarketStatsCard } from "@/components/market-stats-card"
 
 export default async function PropertyDetailPage({
   params,
@@ -272,6 +273,13 @@ export default async function PropertyDetailPage({
                 </div>
               </CardContent>
             </Card>
+
+            {property.market_data && (
+              <MarketStatsCard
+                marketData={property.market_data as Record<string, any>}
+                zipCode={property.zip}
+              />
+            )}
 
             {/* Work order summary */}
             <Card>

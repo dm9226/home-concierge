@@ -62,6 +62,7 @@ export type Database = {
           billing_period: "monthly" | "quarterly" | "annually"
           latitude: number | null
           longitude: number | null
+          market_data: Json | null
           contract_start_date: string | null
           status: "active" | "paused" | "cancelled"
           cover_photo_url: string | null
@@ -86,6 +87,7 @@ export type Database = {
           billing_period?: "monthly" | "quarterly" | "annually"
           latitude?: number | null
           longitude?: number | null
+          market_data?: Json | null
           contract_start_date?: string | null
           status?: "active" | "paused" | "cancelled"
           cover_photo_url?: string | null
@@ -110,6 +112,7 @@ export type Database = {
           billing_period?: "monthly" | "quarterly" | "annually"
           latitude?: number | null
           longitude?: number | null
+          market_data?: Json | null
           contract_start_date?: string | null
           status?: "active" | "paused" | "cancelled"
           cover_photo_url?: string | null

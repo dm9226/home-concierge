@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
       notes:            body.notes          ?? null,
       latitude:         body.latitude       ?? null,
       longitude:        body.longitude      ?? null,
+      market_data:      body.market_data    ?? null,
       status:           "active",
       onboarding_status: "not_started",
     })

@@ -83,11 +83,12 @@ export async function GET(request: NextRequest) {
   const address = `${street}, ${city}, ${state} ${zip}`
   const encodedAddress = encodeURIComponent(address)
 
-  // Fire all three Rentcast calls in parallel -- AVM calls are best-effort
-  const [propResult, avmValueResult, avmRentResult] = await Promise.allSettled([
+  // Fire all calls in parallel -- AVM and market calls are best-effort
+  const [propResult, avmValueResult, avmRentResult, marketResult] = await Promise.allSettled([
     fetchJson(`https://api.rentcast.io/v1/properties?address=${encodedAddress}&limit=1`),
     fetchJson(`https://api.rentcast.io/v1/avm/value?address=${encodedAddress}`),
     fetchJson(`https://api.rentcast.io/v1/avm/rent?address=${encodedAddress}`),
+    fetchJson(`https://api.rentcast.io/v1/markets?zipCode=${encodeURIComponent(zip)}&dataType=Sale&historyRange=3`),
   ])
 
   if (propResult.status === "rejected") {
@@ -100,8 +101,9 @@ export async function GET(request: NextRequest) {
 
   const newCount = await incrementUsage(admin)
 
-  const avm   = avmValueResult.status === "fulfilled" ? avmValueResult.value : null
-  const rent  = avmRentResult.status  === "fulfilled" ? avmRentResult.value  : null
+  const avm    = avmValueResult.status === "fulfilled" ? avmValueResult.value : null
+  const rent   = avmRentResult.status  === "fulfilled" ? avmRentResult.value  : null
+  const market = marketResult.status   === "fulfilled" ? marketResult.value   : null
 
   const typeMap: Record<string, "single_family" | "townhome" | "condo"> = {
     "Single Family":  "single_family",
@@ -206,6 +208,9 @@ export async function GET(request: NextRequest) {
 
     // Pre-formatted notes lines
     notes_lines:      noteLines,
+
+    // Market stats for the zip code (raw -- stored as JSONB)
+    market_data: market ?? null,
 
     // Usage
     usage_count:      newCount,

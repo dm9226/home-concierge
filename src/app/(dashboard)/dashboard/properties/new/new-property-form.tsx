@@ -38,6 +38,7 @@ export function NewPropertyForm() {
     notes: "",
   })
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null)
+  const [marketData, setMarketData] = useState<any>(null)
 
   const [placesReady, setPlacesReady] = useState(false)
   const [looking, setLooking] = useState(false)
@@ -118,6 +119,7 @@ export function NewPropertyForm() {
 
     if (data.usage_count != null) setUsageCount(data.usage_count)
     if (data.latitude && data.longitude) setCoords({ lat: data.latitude, lon: data.longitude })
+    if (data.market_data) setMarketData(data.market_data)
 
     const notesContent = data.notes_lines?.join("\n") ?? ""
 
@@ -162,6 +164,7 @@ export function NewPropertyForm() {
         notes:          form.notes     || null,
         latitude:       coords?.lat    ?? null,
         longitude:      coords?.lon    ?? null,
+        market_data:    marketData     ?? null,
       }),
     })
 
