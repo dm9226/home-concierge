@@ -67,6 +67,7 @@ export type Database = {
           status: "active" | "paused" | "cancelled"
           plan_tier: "proactive" | "proactive_plus"
           cover_photo_url: string | null
+          paint_colors: string | null
           health_score: number
           onboarding_status: "not_started" | "in_progress" | "complete"
           created_at: string
@@ -93,6 +94,7 @@ export type Database = {
           status?: "active" | "paused" | "cancelled"
           plan_tier?: "proactive" | "proactive_plus"
           cover_photo_url?: string | null
+          paint_colors?: string | null
           health_score?: number
           onboarding_status?: "not_started" | "in_progress" | "complete"
           created_at?: string
@@ -119,6 +121,7 @@ export type Database = {
           status?: "active" | "paused" | "cancelled"
           plan_tier?: "proactive" | "proactive_plus"
           cover_photo_url?: string | null
+          paint_colors?: string | null
           health_score?: number
           onboarding_status?: "not_started" | "in_progress" | "complete"
           created_at?: string
@@ -223,6 +226,7 @@ export type Database = {
           warranty_expiration: string | null
           expected_lifespan_years: number | null
           location_in_home: string | null
+          filter_size: string | null
           notes: string | null
           manual_url: string | null
           photo_urls: string[] | null
@@ -243,6 +247,7 @@ export type Database = {
           warranty_expiration?: string | null
           expected_lifespan_years?: number | null
           location_in_home?: string | null
+          filter_size?: string | null
           notes?: string | null
           manual_url?: string | null
           photo_urls?: string[] | null
@@ -263,6 +268,7 @@ export type Database = {
           warranty_expiration?: string | null
           expected_lifespan_years?: number | null
           location_in_home?: string | null
+          filter_size?: string | null
           notes?: string | null
           manual_url?: string | null
           photo_urls?: string[] | null
@@ -364,6 +370,7 @@ export type Database = {
           priority: "emergency" | "high" | "normal" | "low"
           status: "submitted" | "approved" | "scheduled" | "in_progress" | "completed" | "cancelled"
           is_emergency: boolean
+          is_on_demand: boolean
           scheduled_date: string | null
           completed_date: string | null
           cost_estimate: number | null
@@ -389,6 +396,7 @@ export type Database = {
           priority?: "emergency" | "high" | "normal" | "low"
           status?: "submitted" | "approved" | "scheduled" | "in_progress" | "completed" | "cancelled"
           is_emergency?: boolean
+          is_on_demand?: boolean
           scheduled_date?: string | null
           completed_date?: string | null
           cost_estimate?: number | null
@@ -414,6 +422,7 @@ export type Database = {
           priority?: "emergency" | "high" | "normal" | "low"
           status?: "submitted" | "approved" | "scheduled" | "in_progress" | "completed" | "cancelled"
           is_emergency?: boolean
+          is_on_demand?: boolean
           scheduled_date?: string | null
           completed_date?: string | null
           cost_estimate?: number | null

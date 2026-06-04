@@ -34,7 +34,7 @@ const EMPTY = {
   name: "", brand: "", model: "", serial_number: "",
   category: "", manufacture_date: "", install_date: "",
   warranty_expiration: "", expected_lifespan_years: "",
-  location_in_home: "", notes: "",
+  location_in_home: "", filter_size: "", notes: "",
 }
 
 export function AddAssetDialog({ propertyId }: Props) {
@@ -138,6 +138,7 @@ export function AddAssetDialog({ propertyId }: Props) {
       warranty_expiration: form.warranty_expiration || null,
       expected_lifespan_years: form.expected_lifespan_years ? parseInt(form.expected_lifespan_years) : null,
       location_in_home: form.location_in_home || null,
+      filter_size: form.filter_size || null,
       notes: form.notes || null,
       status: "active",
     })
@@ -348,6 +349,12 @@ export function AddAssetDialog({ propertyId }: Props) {
                 <Label htmlFor="location">Location in Home</Label>
                 <Input id="location" value={form.location_in_home} onChange={e => set("location_in_home", e.target.value)} placeholder="e.g. Basement" />
               </div>
+              {form.category === "hvac" && (
+                <div className="space-y-1.5">
+                  <Label htmlFor="filter_size">Filter Size</Label>
+                  <Input id="filter_size" value={form.filter_size} onChange={e => set("filter_size", e.target.value)} placeholder="e.g. 20x25x1" />
+                </div>
+              )}
               <div className="space-y-1.5">
                 <Label htmlFor="manufacture_date">Manufacture Date</Label>
                 <Input id="manufacture_date" type="date" value={form.manufacture_date} onChange={e => set("manufacture_date", e.target.value)} />

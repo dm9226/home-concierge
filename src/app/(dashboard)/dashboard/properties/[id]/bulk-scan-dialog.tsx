@@ -48,6 +48,7 @@ interface ScannedItem {
   warranty_estimated: boolean
   expected_lifespan_years: string
   location_in_home: string
+  filter_size: string
   notes: string
 }
 
@@ -88,7 +89,7 @@ function emptyItem(file: File): ScannedItem {
     name: "", brand: "", model: "", serial_number: "",
     category: "", manufacture_date: "", install_date: "",
     warranty_expiration: "", warranty_estimated: false,
-    expected_lifespan_years: "", location_in_home: "", notes: "",
+    expected_lifespan_years: "", location_in_home: "", filter_size: "", notes: "",
   }
 }
 
@@ -212,6 +213,7 @@ export function BulkScanDialog({ propertyId }: Props) {
       warranty_expiration: item.warranty_expiration || null,
       expected_lifespan_years: item.expected_lifespan_years ? parseInt(item.expected_lifespan_years) : null,
       location_in_home: item.location_in_home || null,
+      filter_size: item.filter_size || null,
       notes: item.notes || null,
       status: "active" as const,
     }))
@@ -506,6 +508,12 @@ export function BulkScanDialog({ propertyId }: Props) {
                             <Label className="text-xs">Location in Home</Label>
                             <Input value={item.location_in_home} onChange={e => setField(item.id, "location_in_home", e.target.value)} placeholder="e.g. Basement" className="h-8 text-sm" />
                           </div>
+                          {item.category === "hvac" && (
+                            <div className="space-y-1">
+                              <Label className="text-xs">Filter Size</Label>
+                              <Input value={item.filter_size} onChange={e => setField(item.id, "filter_size", e.target.value)} placeholder="e.g. 20x25x1" className="h-8 text-sm" />
+                            </div>
+                          )}
 
                           <div className="space-y-1">
                             <Label className="text-xs">Manufacture Date</Label>

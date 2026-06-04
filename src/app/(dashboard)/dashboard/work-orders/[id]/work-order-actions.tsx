@@ -31,6 +31,14 @@ export function WorkOrderActions({ workOrder }: { workOrder: any }) {
   const [loading, setLoading] = useState<string | null>(null)
   const [scheduledDate, setScheduledDate] = useState<string>(workOrder.scheduled_date?.split("T")[0] ?? "")
   const [actualCost, setActualCost] = useState<string>(workOrder.actual_cost?.toString() ?? "")
+  const [isOnDemand, setIsOnDemand] = useState<boolean>(!!workOrder.is_on_demand)
+
+  async function toggleOnDemand(val: boolean) {
+    setIsOnDemand(val)
+    const supabase = createClient()
+    await supabase.from("work_orders").update({ is_on_demand: val }).eq("id", workOrder.id)
+    router.refresh()
+  }
 
   const transitions = TRANSITIONS[workOrder.status] ?? []
 
@@ -117,6 +125,20 @@ export function WorkOrderActions({ workOrder }: { workOrder: any }) {
         {workOrder.status === "completed" && (
           <p className="text-sm text-emerald-600 font-medium text-center">Work order completed</p>
         )}
+
+        {/* On-demand flag -- affects call counter for Proactive+ clients */}
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+          <label className="flex items-center gap-2.5 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={isOnDemand}
+              onChange={e => toggleOnDemand(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 accent-[#C9A96E]"
+            />
+            <span className="text-sm text-slate-600 dark:text-slate-400">On-Demand Service Call</span>
+          </label>
+          <p className="mt-1 text-xs text-slate-400 ml-6">Counts against included on-demand calls for Proactive+ clients</p>
+        </div>
       </CardContent>
     </Card>
   )

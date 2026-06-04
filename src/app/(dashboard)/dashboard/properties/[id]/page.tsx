@@ -18,6 +18,7 @@ import {
 import { ManageOwnersPanel } from "@/components/manage-owners-panel"
 import { AddAssetDialog } from "./add-asset-dialog"
 import { BulkScanDialog } from "./bulk-scan-dialog"
+import { PaintColorsEditor } from "./paint-colors-editor"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
@@ -122,6 +123,16 @@ export default async function PropertyDetailPage({
   ])
 
   const client = (property as any).client
+
+  // On-demand call count for current calendar year (Proactive+ plan tracking)
+  const currentYear = new Date().getFullYear()
+  const { count: onDemandCount } = await admin
+    .from("work_orders")
+    .select("*", { count: "exact", head: true })
+    .eq("property_id", id)
+    .eq("is_on_demand", true)
+    .gte("created_at", `${currentYear}-01-01`)
+    .lt("created_at", `${currentYear + 1}-01-01`)
 
   const overdueMaintenanceCount =
     maintenance?.filter(
@@ -312,6 +323,15 @@ export default async function PropertyDetailPage({
                     {formatCurrency(property.fee_amount)}/{property.billing_period === "annually" ? "yr" : property.billing_period === "quarterly" ? "qtr" : "mo"}
                   </span>
                 </div>
+                {/* Paint colors -- spans full width, inline editable */}
+                <div className="pt-1 border-t border-slate-100 dark:border-slate-800">
+                  <div className="grid grid-cols-2">
+                    <PaintColorsEditor
+                      propertyId={property.id}
+                      initialValue={(property as any).paint_colors ?? null}
+                    />
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -330,6 +350,16 @@ export default async function PropertyDetailPage({
                     </div>
                   )
                 })}
+                {(property as any).plan_tier === "proactive_plus" && (
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-500">On-Demand ({currentYear})</span>
+                      <span className={`font-semibold ${(onDemandCount ?? 0) >= 4 ? "text-red-500" : (onDemandCount ?? 0) >= 3 ? "text-amber-500" : "text-[#0F1B2D] dark:text-white"}`}>
+                        {onDemandCount ?? 0} / 4 included
+                      </span>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -470,6 +500,12 @@ export default async function PropertyDetailPage({
                                 <span className="text-slate-600 dark:text-slate-400">{asset.location_in_home}</span>
                               </div>
                             )}
+                            {(asset as any).filter_size && (
+                              <div className="flex justify-between">
+                                <span className="text-slate-400">Filter Size</span>
+                                <span className="text-slate-600 dark:text-slate-400 font-medium">{(asset as any).filter_size}</span>
+                              </div>
+                            )}
                             {(asset as any).manufacture_date && (
                               <div className="flex justify-between">
                                 <span className="text-slate-400">Manufactured</span>
@@ -542,6 +578,7 @@ export default async function PropertyDetailPage({
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-medium text-[#0F1B2D] dark:text-white">{wo.title}</p>
                       {wo.is_emergency && <Badge variant="emergency">Emergency</Badge>}
+                      {(wo as any).is_on_demand && <Badge variant="warning">On-Demand</Badge>}
                     </div>
                     <div className="mt-1 flex items-center gap-3 text-xs text-slate-500">
                       <StatusBadge status={wo.status} />
