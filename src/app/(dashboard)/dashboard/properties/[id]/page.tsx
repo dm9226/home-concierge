@@ -19,6 +19,7 @@ import { ManageOwnersPanel } from "@/components/manage-owners-panel"
 import { AddAssetDialog } from "./add-asset-dialog"
 import { BulkScanDialog } from "./bulk-scan-dialog"
 import { PaintColorsEditor } from "./paint-colors-editor"
+import { InspectionTab } from "./inspection-tab"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
@@ -244,6 +245,7 @@ export default async function PropertyDetailPage({
       <Tabs defaultValue={tab ?? "overview"}>
         <TabsList className="w-full overflow-x-auto scrollbar-hide">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="inspection">Inspection</TabsTrigger>
           <TabsTrigger value="inventory">
             Inventory {assets && assets.length > 0 && <span className="ml-1.5 text-xs text-slate-400">({assets.length})</span>}
           </TabsTrigger>
@@ -393,6 +395,11 @@ export default async function PropertyDetailPage({
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* INSPECTION TAB */}
+        <TabsContent value="inspection">
+          <InspectionTab propertyId={property.id} userId={user.id} />
         </TabsContent>
 
         {/* INVENTORY TAB */}

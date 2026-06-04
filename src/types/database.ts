@@ -128,6 +128,81 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      property_inspections: {
+        Row: {
+          id: string
+          property_id: string
+          inspector_id: string | null
+          inspection_date: string
+          type: "initial" | "quarterly"
+          status: "in_progress" | "complete"
+          overall_notes: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          inspector_id?: string | null
+          inspection_date?: string
+          type?: "initial" | "quarterly"
+          status?: "in_progress" | "complete"
+          overall_notes?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          inspector_id?: string | null
+          inspection_date?: string
+          type?: "initial" | "quarterly"
+          status?: "in_progress" | "complete"
+          overall_notes?: string | null
+          created_at?: string
+        }
+        Relationships: Rel[]
+      }
+      inspection_findings: {
+        Row: {
+          id: string
+          inspection_id: string
+          section: string
+          item_key: string
+          item_label: string
+          condition: "good" | "fair" | "poor" | "na" | null
+          value: string | null
+          notes: string | null
+          flagged: boolean
+          ai_assessed: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          inspection_id: string
+          section: string
+          item_key: string
+          item_label: string
+          condition?: "good" | "fair" | "poor" | "na" | null
+          value?: string | null
+          notes?: string | null
+          flagged?: boolean
+          ai_assessed?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          inspection_id?: string
+          section?: string
+          item_key?: string
+          item_label?: string
+          condition?: "good" | "fair" | "poor" | "na" | null
+          value?: string | null
+          notes?: string | null
+          flagged?: boolean
+          ai_assessed?: boolean
+          created_at?: string
+        }
+        Relationships: Rel[]
+      }
       property_owners: {
         Row: {
           property_id: string
