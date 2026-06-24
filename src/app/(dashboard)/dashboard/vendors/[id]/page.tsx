@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency, formatDateShort } from "@/lib/utils"
 import { ArrowLeft, Phone, Mail, Star } from "lucide-react"
+import { VendorActions } from "./vendor-actions"
 
 const STATUS_COLORS: Record<string, string> = {
   preferred: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -65,6 +66,7 @@ export default async function VendorDetailPage({
           </div>
           {vendor.contact_name && <p className="text-sm text-slate-500">{vendor.contact_name}</p>}
         </div>
+        <VendorActions vendor={vendor} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
