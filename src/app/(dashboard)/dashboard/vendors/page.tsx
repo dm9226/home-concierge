@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, Phone, Mail, Building2 } from "lucide-react"
+import { AddVendorDialog } from "./add-vendor-dialog"
 
 const STATUS_COLORS: Record<string, string> = {
   preferred: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -59,7 +60,10 @@ export default async function VendorsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Vendors</h1>
-        <span className="text-sm text-slate-500">{vendors?.length ?? 0} vendors</span>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-slate-500">{vendors?.length ?? 0} vendors</span>
+          <AddVendorDialog />
+        </div>
       </div>
 
       {categoriesSorted.map(category => (
@@ -115,7 +119,8 @@ export default async function VendorsPage() {
       {!vendors?.length && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Building2 className="h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No vendors yet</h2>
+          <h2 className="font-display text-xl font-semibold text-[#0F1B2D] mb-4">No vendors yet</h2>
+          <AddVendorDialog />
         </div>
       )}
     </div>
