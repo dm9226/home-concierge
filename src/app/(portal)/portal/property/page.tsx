@@ -9,6 +9,7 @@ import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import {
   Home, Calendar, MapPin, CheckCircle2, AlertCircle,
   XCircle, Shield, Wrench, Package, FolderOpen, Clock,
+  Activity, ClipboardCheck,
 } from "lucide-react"
 
 export default async function PortalPropertyPage({
@@ -47,6 +48,7 @@ export default async function PortalPropertyPage({
     { data: projects },
     { data: completedWork },
     { data: maintenance },
+    { data: inspectionRows },
   ] = await Promise.all([
     supabase
       .from("assets")
@@ -76,7 +78,56 @@ export default async function PortalPropertyPage({
       .eq("is_active", true)
       .order("next_due", { ascending: true })
       .limit(5),
+
+    supabase
+      .from("property_inspections")
+      .select("id, type, inspection_date, status")
+      .eq("property_id", propertyId)
+      .eq("status", "complete")
+      .order("inspection_date", { ascending: false })
+      .limit(1),
   ])
+
+  // --- Home Health: latest completed inspection rollup ---
+  const latestInspection = inspectionRows?.[0] ?? null
+  let inspectionFindings: {
+    section: string; item_label: string
+    condition: string | null; notes: string | null; flagged: boolean
+  }[] = []
+  if (latestInspection) {
+    const { data } = await supabase
+      .from("inspection_findings")
+      .select("section, item_label, condition, notes, flagged")
+      .eq("inspection_id", latestInspection.id)
+    inspectionFindings = data ?? []
+  }
+
+  const conditionRank: Record<string, number> = { poor: 3, fair: 2, good: 1, na: 0 }
+
+  // Worst condition per section (na ignored)
+  const sectionHealth = Object.values(
+    inspectionFindings.reduce((acc, f) => {
+      if (!f.condition || f.condition === "na") return acc
+      const rank = conditionRank[f.condition] ?? 0
+      const existing = acc[f.section]
+      if (!existing || rank > existing.rank) {
+        acc[f.section] = { section: f.section, condition: f.condition, rank }
+      }
+      return acc
+    }, {} as Record<string, { section: string; condition: string; rank: number }>)
+  ).sort((a, b) => sectionSortRank(a.section) - sectionSortRank(b.section))
+
+  // Prioritized recommendations: flagged or poor items, worst first
+  const recommendations = inspectionFindings
+    .filter(f => f.flagged || f.condition === "poor")
+    .sort((a, b) => (conditionRank[b.condition ?? ""] ?? 0) - (conditionRank[a.condition ?? ""] ?? 0))
+
+  const poorCount = inspectionFindings.filter(f => f.condition === "poor").length
+  const fairCount = inspectionFindings.filter(f => f.condition === "fair").length
+  const healthHeadline =
+    poorCount > 0 ? { label: "Needs Attention", color: "text-red-600", dot: "bg-red-500" } :
+    fairCount > 0 ? { label: "Good", color: "text-amber-600", dot: "bg-amber-500" } :
+    { label: "Excellent", color: "text-emerald-600", dot: "bg-emerald-500" }
 
   const assetsByCategory = (assets ?? []).reduce((acc, a) => {
     if (!acc[a.category]) acc[a.category] = []
@@ -123,6 +174,14 @@ export default async function PortalPropertyPage({
             {expiringWarranties.length > 0 && (
               <span className="ml-1.5 h-4 min-w-4 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
                 {expiringWarranties.length}
+              </span>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="health">
+            Home Health
+            {recommendations.length > 0 && (
+              <span className="ml-1.5 h-4 min-w-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
+                {recommendations.length}
               </span>
             )}
           </TabsTrigger>
@@ -337,6 +396,120 @@ export default async function PortalPropertyPage({
           ))}
         </TabsContent>
 
+        {/* ── HOME HEALTH ─────────────────────────────────────────────── */}
+        <TabsContent value="health" className="space-y-4">
+          {!latestInspection ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <ClipboardCheck className="h-12 w-12 text-slate-300 mb-3" />
+              <p className="font-medium text-slate-500">No inspection completed yet</p>
+              <p className="text-sm text-slate-400 mt-1">After your first home walkthrough, your complete health report will appear here.</p>
+            </div>
+          ) : (
+            <>
+              {/* Headline */}
+              <Card>
+                <CardContent className="pt-5 pb-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Overall Home Health</p>
+                      <div className="flex items-center gap-2">
+                        <span className={`h-2.5 w-2.5 rounded-full ${healthHeadline.dot}`} />
+                        <span className={`font-display text-xl font-semibold ${healthHeadline.color}`}>{healthHeadline.label}</span>
+                      </div>
+                    </div>
+                    <div className="text-right text-xs text-slate-400">
+                      <p className="capitalize">{latestInspection.type} inspection</p>
+                      <p>{formatDateShort(latestInspection.inspection_date)}</p>
+                    </div>
+                  </div>
+                  {(poorCount > 0 || fairCount > 0) && (
+                    <div className="flex gap-4 mt-4 text-sm">
+                      {poorCount > 0 && (
+                        <span className="flex items-center gap-1.5 text-red-600">
+                          <XCircle className="h-4 w-4" /> {poorCount} need{poorCount === 1 ? "s" : ""} attention
+                        </span>
+                      )}
+                      {fairCount > 0 && (
+                        <span className="flex items-center gap-1.5 text-amber-600">
+                          <AlertCircle className="h-4 w-4" /> {fairCount} to monitor
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Systems at a glance */}
+              {sectionHealth.length > 0 && (
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Activity className="h-4 w-4 text-[#C9A96E]" />
+                      Systems at a Glance
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {sectionHealth.map(s => {
+                        const disp = CONDITION_DISPLAY[s.condition]
+                        return (
+                          <div key={s.section} className="flex items-center justify-between rounded-lg border border-slate-200/70 dark:border-slate-800 px-3 py-2">
+                            <span className="text-sm text-[#0F1B2D] dark:text-white truncate">{humanizeSection(s.section)}</span>
+                            <span className="flex items-center gap-1.5 shrink-0">
+                              <span className={`h-2 w-2 rounded-full ${disp.dot}`} />
+                              <span className={`text-xs font-medium ${disp.text}`}>{disp.label}</span>
+                            </span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Recommendations */}
+              {recommendations.length > 0 && (
+                <div>
+                  <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+                    <ClipboardCheck className="h-4 w-4 text-[#C9A96E]" />
+                    Recommendations ({recommendations.length})
+                  </h2>
+                  <div className="space-y-2.5">
+                    {recommendations.map((f, i) => {
+                      const isPoor = f.condition === "poor"
+                      return (
+                        <Card key={i} className={isPoor ? "border-red-200" : "border-amber-200"}>
+                          <CardContent className="pt-4 pb-4">
+                            <div className="flex items-start gap-2.5">
+                              {isPoor
+                                ? <XCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
+                                : <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />}
+                              <div className="min-w-0">
+                                <p className="font-medium text-[#0F1B2D] dark:text-white text-sm">{f.item_label}</p>
+                                <p className="text-xs text-slate-400 mt-0.5">{humanizeSection(f.section)}</p>
+                                {f.notes && (
+                                  <p className="text-sm text-slate-600 dark:text-slate-300 mt-1.5">{f.notes}</p>
+                                )}
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {recommendations.length === 0 && (
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-900/40 dark:bg-emerald-950/20 p-4 flex items-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+                  <p className="text-sm text-emerald-800 dark:text-emerald-200">Everything looks good. No issues flagged in your most recent inspection.</p>
+                </div>
+              )}
+            </>
+          )}
+        </TabsContent>
+
         {/* ── PROJECTS ────────────────────────────────────────────────── */}
         <TabsContent value="projects" className="space-y-4">
           {(!projects || projects.length === 0) ? (
@@ -480,4 +653,40 @@ function Row({ label, value }: { label: string; value: string }) {
       <span className="font-medium text-[#0F1B2D] dark:text-white capitalize">{value}</span>
     </div>
   )
+}
+
+// --- Inspection section helpers (used by the Home Health tab) ---
+
+const SECTION_LABELS: Record<string, string> = {
+  exterior: "Exterior", interior: "Interior", appliances: "Kitchen Appliances",
+  hvac: "HVAC", plumbing: "Plumbing", electrical: "Electrical",
+  attic: "Attic", crawl_space: "Crawl Space", pool: "Pool / Spa",
+  fencing: "Fencing & Gates", guest_house: "Guest House",
+}
+
+function humanizeSection(key: string): string {
+  if (SECTION_LABELS[key]) return SECTION_LABELS[key]
+  // bedroom_1 -> "Bedroom 1", bathroom_2 -> "Bathroom 2"
+  const m = key.match(/^(bedroom|bathroom)_(\d+)$/)
+  if (m) return `${m[1][0].toUpperCase()}${m[1].slice(1)} ${m[2]}`
+  return key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+}
+
+function sectionSortRank(key: string): number {
+  const order = [
+    "exterior", "interior", "bedroom", "bathroom", "appliances",
+    "hvac", "plumbing", "electrical", "attic", "crawl_space",
+    "pool", "fencing", "guest_house",
+  ]
+  const base = key.replace(/_\d+$/, "")
+  const idx = order.indexOf(base)
+  const primary = idx === -1 ? 99 : idx
+  const num = parseInt(key.match(/_(\d+)$/)?.[1] ?? "0", 10)
+  return primary * 100 + num
+}
+
+const CONDITION_DISPLAY: Record<string, { label: string; dot: string; text: string }> = {
+  good: { label: "Good", dot: "bg-emerald-500", text: "text-emerald-600" },
+  fair: { label: "Monitor", dot: "bg-amber-500", text: "text-amber-600" },
+  poor: { label: "Attention", dot: "bg-red-500", text: "text-red-600" },
 }
