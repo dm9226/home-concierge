@@ -31,6 +31,7 @@ interface Vendor {
   contact_name: string | null
   phone: string | null
   email: string | null
+  website: string | null
   specialty_categories: string[] | null
   license_number: string | null
   insurance_expiration: string | null
@@ -52,6 +53,7 @@ export function VendorActions({ vendor }: { vendor: Vendor }) {
     contact_name: vendor.contact_name ?? "",
     phone: vendor.phone ?? "",
     email: vendor.email ?? "",
+    website: vendor.website ?? "",
     license_number: vendor.license_number ?? "",
     insurance_expiration: vendor.insurance_expiration ?? "",
     rating: vendor.rating != null ? String(vendor.rating) : "",
@@ -88,6 +90,7 @@ export function VendorActions({ vendor }: { vendor: Vendor }) {
       contact_name: form.contact_name || null,
       phone: form.phone || null,
       email: form.email || null,
+      website: form.website || null,
       specialty_categories: specialties.length ? specialties : null,
       license_number: form.license_number || null,
       insurance_expiration: form.insurance_expiration || null,
@@ -157,6 +160,10 @@ export function VendorActions({ vendor }: { vendor: Vendor }) {
               <div className="space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" value={form.email} onChange={e => set("email", e.target.value)} />
+              </div>
+              <div className="col-span-2 space-y-1.5">
+                <Label htmlFor="website">Website</Label>
+                <Input id="website" type="url" value={form.website} onChange={e => set("website", e.target.value)} placeholder="e.g. https://desertair.com" />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="license_number">License #</Label>

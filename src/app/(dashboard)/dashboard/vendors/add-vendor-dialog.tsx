@@ -26,7 +26,7 @@ const STATUSES = [
 ]
 
 const EMPTY = {
-  company_name: "", contact_name: "", phone: "", email: "",
+  company_name: "", contact_name: "", phone: "", email: "", website: "",
   license_number: "", insurance_expiration: "", status: "approved", notes: "",
 }
 
@@ -61,6 +61,7 @@ export function AddVendorDialog() {
       contact_name: form.contact_name || null,
       phone: form.phone || null,
       email: form.email || null,
+      website: form.website || null,
       specialty_categories: specialties.length ? specialties : null,
       license_number: form.license_number || null,
       insurance_expiration: form.insurance_expiration || null,
@@ -124,6 +125,10 @@ export function AddVendorDialog() {
             <div className="space-y-1.5">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" value={form.email} onChange={e => set("email", e.target.value)} placeholder="e.g. dispatch@desertair.com" />
+            </div>
+            <div className="col-span-2 space-y-1.5">
+              <Label htmlFor="website">Website</Label>
+              <Input id="website" type="url" value={form.website} onChange={e => set("website", e.target.value)} placeholder="e.g. https://desertair.com" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="license_number">License #</Label>

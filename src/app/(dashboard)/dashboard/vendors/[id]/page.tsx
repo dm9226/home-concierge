@@ -5,7 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency, formatDateShort } from "@/lib/utils"
-import { ArrowLeft, Phone, Mail, Star } from "lucide-react"
+import { ArrowLeft, Phone, Mail, Globe, Star } from "lucide-react"
 import { VendorActions } from "./vendor-actions"
 
 const STATUS_COLORS: Record<string, string> = {
@@ -86,6 +86,17 @@ export default async function VendorDetailPage({
               <a href={`mailto:${vendor.email}`} className="flex items-center gap-3 text-sm hover:text-[#C9A96E] transition-colors">
                 <Mail className="h-4 w-4 text-slate-400" />
                 {vendor.email}
+              </a>
+            )}
+            {vendor.website && (
+              <a
+                href={/^https?:\/\//i.test(vendor.website) ? vendor.website : `https://${vendor.website}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-sm hover:text-[#C9A96E] transition-colors break-all"
+              >
+                <Globe className="h-4 w-4 text-slate-400 shrink-0" />
+                {vendor.website.replace(/^https?:\/\//i, "")}
               </a>
             )}
             {vendor.license_number && (

@@ -360,6 +360,7 @@ export type Database = {
           contact_name: string | null
           phone: string | null
           email: string | null
+          website: string | null
           specialty_categories: string[] | null
           license_number: string | null
           insurance_expiration: string | null
@@ -374,6 +375,7 @@ export type Database = {
           contact_name?: string | null
           phone?: string | null
           email?: string | null
+          website?: string | null
           specialty_categories?: string[] | null
           license_number?: string | null
           insurance_expiration?: string | null
@@ -388,6 +390,7 @@ export type Database = {
           contact_name?: string | null
           phone?: string | null
           email?: string | null
+          website?: string | null
           specialty_categories?: string[] | null
           license_number?: string | null
           insurance_expiration?: string | null
