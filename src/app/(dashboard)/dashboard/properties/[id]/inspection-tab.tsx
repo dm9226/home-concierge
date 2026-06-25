@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import {
   Camera, ChevronDown, ChevronUp, Flag, Loader2, CheckCircle2,
   AlertTriangle, ClipboardList, Plus, Zap, Droplets, Wind,
-  Home, UtensilsCrossed, TriangleRight, Info, Layers, Waves
+  Home, UtensilsCrossed, TriangleRight, Layers, Waves
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -33,110 +33,204 @@ interface Section {
   items: SectionItem[]
 }
 
-const SECTIONS: Section[] = [
-  {
-    key: "exterior", label: "Exterior", icon: <Home className="h-4 w-4" />,
-    items: [
-      { key: "roof",        label: "Roof Condition",           type: "condition" },
-      { key: "gutters",     label: "Gutters & Downspouts",     type: "condition" },
-      { key: "siding",      label: "Siding / Exterior Walls",  type: "condition" },
-      { key: "windows_ext", label: "Windows & Frames",         type: "condition" },
-      { key: "doors_ext",   label: "Doors & Locks",            type: "condition" },
-      { key: "driveway",    label: "Driveway / Walkways",      type: "condition" },
-      { key: "deck_patio",  label: "Deck / Patio",             type: "condition" },
-      { key: "garage_door", label: "Garage Door",              type: "condition" },
-      { key: "drainage",    label: "Drainage",                 type: "condition" },
-      { key: "foundation",  label: "Foundation (Visible)",     type: "condition" },
-    ],
-  },
-  {
-    key: "interior", label: "Interior", icon: <Layers className="h-4 w-4" />,
-    items: [
-      { key: "floors",         label: "Floors",                 type: "condition" },
-      { key: "walls_ceilings", label: "Walls & Ceilings",       type: "condition" },
-      { key: "doors_int",      label: "Interior Doors",         type: "condition" },
-      { key: "windows_int",    label: "Windows (Interior)",     type: "condition" },
-      { key: "stairs",         label: "Stairs & Railings",      type: "condition" },
-      { key: "smoke_det",      label: "Smoke Detectors",        type: "condition" },
-      { key: "co_det",         label: "CO Detectors",           type: "condition" },
-    ],
-  },
-  {
-    key: "appliances", label: "Kitchen Appliances", icon: <UtensilsCrossed className="h-4 w-4" />,
-    items: [
-      { key: "refrigerator", label: "Refrigerator",          type: "equipment", assetCategory: "appliance" },
-      { key: "oven_range",   label: "Oven / Range",          type: "equipment", assetCategory: "appliance" },
-      { key: "dishwasher",   label: "Dishwasher",            type: "equipment", assetCategory: "appliance" },
-      { key: "microwave",    label: "Microwave",             type: "equipment", assetCategory: "appliance" },
-      { key: "disposal",     label: "Garbage Disposal",      type: "equipment", assetCategory: "appliance" },
-      { key: "range_hood",   label: "Range Hood / Vent",     type: "equipment", assetCategory: "appliance" },
-      { key: "water_filter", label: "Water Filter System",   type: "equipment", assetCategory: "plumbing" },
-    ],
-  },
-  {
-    key: "hvac", label: "HVAC", icon: <Wind className="h-4 w-4" />,
-    items: [
-      { key: "air_handler",    label: "Air Handler / Furnace",     type: "equipment", assetCategory: "hvac" },
-      { key: "condenser",      label: "AC Condenser (Outdoor)",    type: "equipment", assetCategory: "hvac" },
-      { key: "thermostat",     label: "Thermostat",                type: "condition" },
-      { key: "ductwork",       label: "Ductwork (Visible)",        type: "condition" },
-      { key: "filter_loc",     label: "Filter Location",           type: "data", placeholder: "e.g. Return vent in hallway" },
-      { key: "filter_size",    label: "Filter Size",               type: "data", placeholder: "e.g. 20x25x1" },
-      { key: "hvac_location",  label: "System Location",           type: "data", placeholder: "e.g. Attic / Basement / Closet" },
-      { key: "fuel_type",      label: "Fuel Type",                 type: "data", placeholder: "e.g. Gas / Electric / Heat Pump" },
-    ],
-  },
-  {
-    key: "plumbing", label: "Plumbing", icon: <Droplets className="h-4 w-4" />,
-    items: [
-      { key: "water_heater",   label: "Water Heater",              type: "equipment", assetCategory: "plumbing" },
-      { key: "sump_pump",      label: "Sump Pump",                 type: "condition" },
-      { key: "water_pressure", label: "Water Pressure",            type: "condition" },
-      { key: "supply_lines",   label: "Supply Lines (Visible)",    type: "condition" },
-      { key: "drain_pipes",    label: "Drain / Waste (Visible)",   type: "condition" },
-      { key: "faucets",        label: "Faucets & Fixtures",        type: "condition" },
-      { key: "shutoff_loc",    label: "Main Water Shutoff",        type: "data", placeholder: "e.g. Left side of house, near meter" },
-      { key: "cleanout_loc",   label: "Cleanout Location",         type: "data", placeholder: "e.g. Basement floor near utility sink" },
-      { key: "pipe_material",  label: "Pipe Material",             type: "data", placeholder: "e.g. PEX, Copper, CPVC" },
-      { key: "wh_type",        label: "Tank or Tankless",          type: "data", placeholder: "e.g. Tank 50 gal / Tankless" },
-    ],
-  },
-  {
-    key: "electrical", label: "Electrical", icon: <Zap className="h-4 w-4" />,
-    items: [
-      { key: "main_panel",       label: "Main Electrical Panel",    type: "equipment", assetCategory: "electrical" },
-      { key: "subpanel",         label: "Subpanel (if present)",    type: "condition" },
-      { key: "gfci",             label: "GFCI Outlets",             type: "condition" },
-      { key: "wiring_condition", label: "Visible Wiring Condition", type: "condition" },
-      { key: "panel_location",   label: "Panel Location",           type: "data", placeholder: "e.g. Garage, side wall" },
-      { key: "panel_amperage",   label: "Panel Amperage",           type: "data", placeholder: "e.g. 200A" },
-      { key: "disconnect_loc",   label: "Main Disconnect Location", type: "data", placeholder: "e.g. Outside next to meter" },
-      { key: "wiring_type",      label: "Wiring Type (Visible)",    type: "data", placeholder: "e.g. Romex, Conduit, Knob-and-tube" },
-    ],
-  },
-  {
-    key: "attic", label: "Attic", icon: <TriangleRight className="h-4 w-4" />,
-    items: [
-      { key: "attic_access",      label: "Attic Access Location",  type: "data",      placeholder: "e.g. Hallway ceiling hatch" },
-      { key: "attic_insulation",  label: "Insulation",             type: "condition" },
-      { key: "attic_ventilation", label: "Ventilation",            type: "condition" },
-      { key: "attic_moisture",    label: "Moisture / Water Signs", type: "condition" },
-      { key: "attic_framing",     label: "Structural Framing",     type: "condition" },
-      { key: "attic_pests",       label: "Pest Evidence",          type: "condition" },
-    ],
-  },
-  {
-    key: "crawl_space", label: "Crawl Space", icon: <Layers className="h-4 w-4" />,
-    items: [
-      { key: "crawl_access",      label: "Access Location",            type: "data",      placeholder: "e.g. East side of house exterior" },
-      { key: "crawl_insulation",  label: "Insulation / Encapsulation", type: "condition" },
-      { key: "crawl_ventilation", label: "Ventilation",                type: "condition" },
-      { key: "crawl_moisture",    label: "Moisture Signs",             type: "condition" },
-      { key: "crawl_framing",     label: "Structural Framing",         type: "condition" },
-      { key: "crawl_pests",       label: "Pest Evidence",              type: "condition" },
-    ],
-  },
+// --- Inspection layout config (room counts + feature flags) ---
+interface InspectionConfig {
+  bedrooms?: number
+  bathrooms?: number
+  pool?: boolean
+  fencing?: boolean
+  guest_house?: boolean
+}
+
+const DEFAULT_CONFIG: Required<InspectionConfig> = {
+  bedrooms: 3, bathrooms: 2, pool: false, fencing: false, guest_house: false,
+}
+
+// Per-room item templates (repeated for each bedroom / bathroom instance)
+const BEDROOM_ITEMS: SectionItem[] = [
+  { key: "floors",         label: "Floors",                 type: "condition" },
+  { key: "walls_ceilings", label: "Walls & Ceilings",       type: "condition" },
+  { key: "doors",          label: "Interior Doors",         type: "condition" },
+  { key: "windows",        label: "Windows",                type: "condition" },
+  { key: "outlets",        label: "Switches & Receptacles", type: "condition" },
+  { key: "lights",         label: "Lights",                 type: "condition" },
 ]
+
+const BATHROOM_ITEMS: SectionItem[] = [
+  { key: "sink",       label: "Sink",                   type: "condition" },
+  { key: "toilet",     label: "Toilet",                 type: "condition" },
+  { key: "tub_shower", label: "Tub / Shower",           type: "condition" },
+  { key: "vent_fan",   label: "Vent Fan",               type: "condition" },
+  { key: "caulking",   label: "Caulking / Seals",       type: "condition" },
+  { key: "outlets",    label: "Switches & Receptacles", type: "condition" },
+  { key: "lights",     label: "Lights",                 type: "condition" },
+]
+
+// Fixed sections, declared once and assembled in walkthrough order below
+const SEC_EXTERIOR: Section = {
+  key: "exterior", label: "Exterior", icon: <Home className="h-4 w-4" />,
+  items: [
+    { key: "roof",        label: "Roof Condition",           type: "condition" },
+    { key: "gutters",     label: "Gutters & Downspouts",     type: "condition" },
+    { key: "siding",      label: "Siding / Exterior Walls",  type: "condition" },
+    { key: "windows_ext", label: "Windows & Frames",         type: "condition" },
+    { key: "doors_ext",   label: "Doors & Locks",            type: "condition" },
+    { key: "driveway",    label: "Driveway / Walkways",      type: "condition" },
+    { key: "deck_patio",  label: "Deck / Patio",             type: "condition" },
+    { key: "garage_door", label: "Garage Door",              type: "condition" },
+    { key: "drainage",    label: "Drainage",                 type: "condition" },
+    { key: "foundation",  label: "Foundation (Visible)",     type: "condition" },
+  ],
+}
+const SEC_INTERIOR: Section = {
+  key: "interior", label: "Interior (Common Areas)", icon: <Layers className="h-4 w-4" />,
+  items: [
+    { key: "floors",         label: "Floors",                 type: "condition" },
+    { key: "walls_ceilings", label: "Walls & Ceilings",       type: "condition" },
+    { key: "doors_int",      label: "Interior Doors",         type: "condition" },
+    { key: "windows_int",    label: "Windows (Interior)",     type: "condition" },
+    { key: "stairs",         label: "Stairs & Railings",      type: "condition" },
+    { key: "smoke_det",      label: "Smoke Detectors",        type: "condition" },
+    { key: "co_det",         label: "CO Detectors",           type: "condition" },
+  ],
+}
+const SEC_APPLIANCES: Section = {
+  key: "appliances", label: "Kitchen Appliances", icon: <UtensilsCrossed className="h-4 w-4" />,
+  items: [
+    { key: "refrigerator", label: "Refrigerator",          type: "equipment", assetCategory: "appliance" },
+    { key: "oven_range",   label: "Oven / Range",          type: "equipment", assetCategory: "appliance" },
+    { key: "dishwasher",   label: "Dishwasher",            type: "equipment", assetCategory: "appliance" },
+    { key: "microwave",    label: "Microwave",             type: "equipment", assetCategory: "appliance" },
+    { key: "disposal",     label: "Garbage Disposal",      type: "equipment", assetCategory: "appliance" },
+    { key: "range_hood",   label: "Range Hood / Vent",     type: "equipment", assetCategory: "appliance" },
+    { key: "water_filter", label: "Water Filter System",   type: "equipment", assetCategory: "plumbing" },
+  ],
+}
+const SEC_HVAC: Section = {
+  key: "hvac", label: "HVAC", icon: <Wind className="h-4 w-4" />,
+  items: [
+    { key: "air_handler",    label: "Air Handler / Furnace",     type: "equipment", assetCategory: "hvac" },
+    { key: "condenser",      label: "AC Condenser (Outdoor)",    type: "equipment", assetCategory: "hvac" },
+    { key: "thermostat",     label: "Thermostat",                type: "condition" },
+    { key: "ductwork",       label: "Ductwork (Visible)",        type: "condition" },
+    { key: "filter_loc",     label: "Filter Location",           type: "data", placeholder: "e.g. Return vent in hallway" },
+    { key: "filter_size",    label: "Filter Size",               type: "data", placeholder: "e.g. 20x25x1" },
+    { key: "hvac_location",  label: "System Location",           type: "data", placeholder: "e.g. Attic / Basement / Closet" },
+    { key: "fuel_type",      label: "Fuel Type",                 type: "data", placeholder: "e.g. Gas / Electric / Heat Pump" },
+  ],
+}
+const SEC_PLUMBING: Section = {
+  key: "plumbing", label: "Plumbing", icon: <Droplets className="h-4 w-4" />,
+  items: [
+    { key: "water_heater",   label: "Water Heater",              type: "equipment", assetCategory: "plumbing" },
+    { key: "sump_pump",      label: "Sump Pump",                 type: "condition" },
+    { key: "water_pressure", label: "Water Pressure",            type: "condition" },
+    { key: "supply_lines",   label: "Supply Lines (Visible)",    type: "condition" },
+    { key: "drain_pipes",    label: "Drain / Waste (Visible)",   type: "condition" },
+    { key: "faucets",        label: "Faucets & Fixtures",        type: "condition" },
+    { key: "shutoff_loc",    label: "Main Water Shutoff",        type: "data", placeholder: "e.g. Left side of house, near meter" },
+    { key: "cleanout_loc",   label: "Cleanout Location",         type: "data", placeholder: "e.g. Basement floor near utility sink" },
+    { key: "pipe_material",  label: "Pipe Material",             type: "data", placeholder: "e.g. PEX, Copper, CPVC" },
+    { key: "wh_type",        label: "Tank or Tankless",          type: "data", placeholder: "e.g. Tank 50 gal / Tankless" },
+  ],
+}
+const SEC_ELECTRICAL: Section = {
+  key: "electrical", label: "Electrical", icon: <Zap className="h-4 w-4" />,
+  items: [
+    { key: "main_panel",       label: "Main Electrical Panel",    type: "equipment", assetCategory: "electrical" },
+    { key: "subpanel",         label: "Subpanel (if present)",    type: "condition" },
+    { key: "gfci",             label: "GFCI Outlets",             type: "condition" },
+    { key: "wiring_condition", label: "Visible Wiring Condition", type: "condition" },
+    { key: "panel_location",   label: "Panel Location",           type: "data", placeholder: "e.g. Garage, side wall" },
+    { key: "panel_amperage",   label: "Panel Amperage",           type: "data", placeholder: "e.g. 200A" },
+    { key: "disconnect_loc",   label: "Main Disconnect Location", type: "data", placeholder: "e.g. Outside next to meter" },
+    { key: "wiring_type",      label: "Wiring Type (Visible)",    type: "data", placeholder: "e.g. Romex, Conduit, Knob-and-tube" },
+  ],
+}
+const SEC_ATTIC: Section = {
+  key: "attic", label: "Attic", icon: <TriangleRight className="h-4 w-4" />,
+  items: [
+    { key: "attic_access",      label: "Attic Access Location",  type: "data",      placeholder: "e.g. Hallway ceiling hatch" },
+    { key: "attic_insulation",  label: "Insulation",             type: "condition" },
+    { key: "attic_ventilation", label: "Ventilation",            type: "condition" },
+    { key: "attic_moisture",    label: "Moisture / Water Signs", type: "condition" },
+    { key: "attic_framing",     label: "Structural Framing",     type: "condition" },
+    { key: "attic_pests",       label: "Pest Evidence",          type: "condition" },
+  ],
+}
+const SEC_CRAWL: Section = {
+  key: "crawl_space", label: "Crawl Space", icon: <Layers className="h-4 w-4" />,
+  items: [
+    { key: "crawl_access",      label: "Access Location",            type: "data",      placeholder: "e.g. East side of house exterior" },
+    { key: "crawl_insulation",  label: "Insulation / Encapsulation", type: "condition" },
+    { key: "crawl_ventilation", label: "Ventilation",                type: "condition" },
+    { key: "crawl_moisture",    label: "Moisture Signs",             type: "condition" },
+    { key: "crawl_framing",     label: "Structural Framing",         type: "condition" },
+    { key: "crawl_pests",       label: "Pest Evidence",              type: "condition" },
+  ],
+}
+const SEC_POOL: Section = {
+  key: "pool", label: "Pool / Spa", icon: <Waves className="h-4 w-4" />,
+  items: [
+    { key: "pool_surface",  label: "Pool Surface / Finish",   type: "condition" },
+    { key: "pool_deck",     label: "Deck / Coping",           type: "condition" },
+    { key: "pool_pump",     label: "Pump & Filter",           type: "equipment", assetCategory: "pool" },
+    { key: "pool_heater",   label: "Heater",                  type: "equipment", assetCategory: "pool" },
+    { key: "pool_safety",   label: "Safety Barrier / Gate",   type: "condition" },
+    { key: "pool_water",    label: "Water Clarity",           type: "condition" },
+  ],
+}
+const SEC_FENCING: Section = {
+  key: "fencing", label: "Fencing & Gates", icon: <Home className="h-4 w-4" />,
+  items: [
+    { key: "fence_condition", label: "Fence Condition", type: "condition" },
+    { key: "fence_gates",     label: "Gates & Latches", type: "condition" },
+    { key: "fence_material",  label: "Material",        type: "data", placeholder: "e.g. Wood, Block, Wrought iron" },
+  ],
+}
+const SEC_GUEST_HOUSE: Section = {
+  key: "guest_house", label: "Guest House / Casita", icon: <Home className="h-4 w-4" />,
+  items: [
+    { key: "gh_exterior",  label: "Exterior Condition",      type: "condition" },
+    { key: "gh_interior",  label: "Interior Condition",      type: "condition" },
+    { key: "gh_kitchen",   label: "Kitchenette / Appliances", type: "condition" },
+    { key: "gh_bath",      label: "Bathroom",                type: "condition" },
+    { key: "gh_hvac",      label: "HVAC / Mechanical",       type: "condition" },
+  ],
+}
+
+// Build the ordered section list for a given property config. Walkthrough order:
+// outside -> common interior -> bedrooms -> bathrooms -> kitchen -> mechanicals
+// -> attic/crawl -> outdoor extras.
+function buildSections(config: InspectionConfig): Section[] {
+  const cfg = { ...DEFAULT_CONFIG, ...config }
+  const sections: Section[] = [SEC_EXTERIOR, SEC_INTERIOR]
+
+  for (let i = 1; i <= cfg.bedrooms; i++) {
+    sections.push({
+      key: `bedroom_${i}`,
+      label: cfg.bedrooms === 1 ? "Bedroom" : `Bedroom ${i}`,
+      icon: <Home className="h-4 w-4" />,
+      items: BEDROOM_ITEMS,
+    })
+  }
+  for (let i = 1; i <= cfg.bathrooms; i++) {
+    sections.push({
+      key: `bathroom_${i}`,
+      label: cfg.bathrooms === 1 ? "Bathroom" : `Bathroom ${i}`,
+      icon: <Droplets className="h-4 w-4" />,
+      items: BATHROOM_ITEMS,
+    })
+  }
+
+  sections.push(SEC_APPLIANCES, SEC_HVAC, SEC_PLUMBING, SEC_ELECTRICAL, SEC_ATTIC, SEC_CRAWL)
+
+  if (cfg.pool) sections.push(SEC_POOL)
+  if (cfg.fencing) sections.push(SEC_FENCING)
+  if (cfg.guest_house) sections.push(SEC_GUEST_HOUSE)
+
+  return sections
+}
 
 const CONDITION_LABELS: Record<Condition, string> = {
   good: "Good", fair: "Fair", poor: "Poor", na: "N/A"
@@ -168,6 +262,7 @@ interface Inspection {
   type: string
   status: string
   inspection_date: string
+  config: InspectionConfig
 }
 
 // ---------------------------------------------------------------------------
@@ -255,6 +350,16 @@ export function InspectionTab({ propertyId, userId }: Props) {
   const [starting, setStarting] = useState(false)
   const [completing, setCompleting] = useState(false)
 
+  // Setup step (shown before a new inspection is created)
+  const [setupFor, setSetupFor] = useState<"initial" | "quarterly" | null>(null)
+  const [setupConfig, setSetupConfig] = useState<Required<InspectionConfig>>(DEFAULT_CONFIG)
+  const [lastConfig, setLastConfig] = useState<InspectionConfig | null>(null)
+
+  const sections = useMemo(
+    () => buildSections(inspection?.config ?? {}),
+    [inspection]
+  )
+
   const fileInputRef = useRef<HTMLInputElement>(null)
   const activeScanRef = useRef<{ section: string; item: SectionItem } | null>(null)
   const saveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
@@ -290,25 +395,36 @@ export function InspectionTab({ propertyId, userId }: Props) {
         }
       }
 
-      setInspection(insp)
+      const cfg = (insp.config ?? {}) as InspectionConfig
+      setInspection({ ...insp, config: cfg })
+      setLastConfig(cfg)
       setFindings(map)
       setLoading(false)
     }
     load()
   }, [propertyId])
 
-  // --- Start inspection ---
-  async function startInspection(type: "initial" | "quarterly") {
+  // --- Open the setup step for a new inspection ---
+  function openSetup(type: "initial" | "quarterly") {
+    setSetupConfig({ ...DEFAULT_CONFIG, ...(lastConfig ?? {}) })
+    setSetupFor(type)
+  }
+
+  // --- Start inspection (after setup is confirmed) ---
+  async function startInspection() {
+    if (!setupFor) return
     setStarting(true)
     const { data, error } = await supabase
       .from("property_inspections")
-      .insert({ property_id: propertyId, inspector_id: userId, type })
+      .insert({ property_id: propertyId, inspector_id: userId, type: setupFor, config: setupConfig })
       .select()
       .single()
     setStarting(false)
     if (error || !data) return
-    setInspection(data)
+    setInspection({ ...data, config: (data.config ?? {}) as InspectionConfig })
+    setLastConfig(setupConfig)
     setFindings({})
+    setSetupFor(null)
     setOpenSections(new Set(["exterior"]))
   }
 
@@ -323,7 +439,7 @@ export function InspectionTab({ propertyId, userId }: Props) {
     if (!inspection) return
     const [section, ...rest] = key.split(".")
     const itemKey = rest.join(".")
-    const section_obj = SECTIONS.find(s => s.key === section)
+    const section_obj = sections.find(s => s.key === section)
     const item = section_obj?.items.find(i => i.key === itemKey)
     if (!item) return
 
@@ -475,8 +591,8 @@ export function InspectionTab({ propertyId, userId }: Props) {
   }
 
   // --- Progress summary ---
-  const totalAssessed = SECTIONS.reduce((sum, s) => sum + sectionProgress(s, findings).assessed, 0)
-  const totalItems = SECTIONS.reduce((sum, s) => sum + s.items.length, 0)
+  const totalAssessed = sections.reduce((sum, s) => sum + sectionProgress(s, findings).assessed, 0)
+  const totalItems = sections.reduce((sum, s) => sum + s.items.length, 0)
   const flaggedCount = Object.values(findings).filter(f => f.flagged).length
 
   // --- Loading state ---
@@ -484,6 +600,99 @@ export function InspectionTab({ propertyId, userId }: Props) {
     return (
       <div className="flex items-center justify-center py-16">
         <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+      </div>
+    )
+  }
+
+  // --- Setup step (configure the walkthrough before it's created) ---
+  if (setupFor) {
+    const previewCount = buildSections(setupConfig).reduce((n, s) => n + s.items.length, 0)
+    return (
+      <div className="max-w-md mx-auto py-8 space-y-6">
+        <div className="text-center">
+          <p className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white capitalize">
+            Set up {setupFor} inspection
+          </p>
+          <p className="mt-1 text-sm text-slate-500">
+            Tell us about the home so the walkthrough only shows what's actually there.
+          </p>
+        </div>
+
+        {/* Room counters */}
+        <div className="space-y-3">
+          {([
+            { key: "bedrooms", label: "Bedrooms" },
+            { key: "bathrooms", label: "Bathrooms" },
+          ] as const).map(({ key, label }) => (
+            <div key={key} className="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-800 p-3">
+              <span className="text-sm font-medium text-[#0F1B2D] dark:text-white">{label}</span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSetupConfig(c => ({ ...c, [key]: Math.max(0, c[key] - 1) }))}
+                  className="h-8 w-8 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40"
+                  disabled={setupConfig[key] <= 0}
+                >
+                  -
+                </button>
+                <span className="w-6 text-center text-sm font-semibold tabular-nums">{setupConfig[key]}</span>
+                <button
+                  type="button"
+                  onClick={() => setSetupConfig(c => ({ ...c, [key]: Math.min(12, c[key] + 1) }))}
+                  className="h-8 w-8 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-50"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Feature toggles */}
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">This property also has</p>
+          {([
+            { key: "pool", label: "Pool / Spa" },
+            { key: "fencing", label: "Fencing & Gates" },
+            { key: "guest_house", label: "Guest House / Casita" },
+          ] as const).map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setSetupConfig(c => ({ ...c, [key]: !c[key] }))}
+              className={cn(
+                "flex w-full items-center justify-between rounded-xl border p-3 text-sm font-medium transition-colors",
+                setupConfig[key]
+                  ? "border-[#C9A96E] bg-amber-50 text-[#0F1B2D]"
+                  : "border-slate-200 text-slate-600 hover:border-slate-300"
+              )}
+            >
+              {label}
+              <span className={cn(
+                "flex h-5 w-5 items-center justify-center rounded-full border",
+                setupConfig[key] ? "border-[#C9A96E] bg-[#C9A96E] text-white" : "border-slate-300"
+              )}>
+                {setupConfig[key] && <CheckCircle2 className="h-3.5 w-3.5" />}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <p className="text-center text-xs text-slate-400">{previewCount} items in this walkthrough</p>
+
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setSetupFor(null)} className="flex-1">
+            Cancel
+          </Button>
+          <Button
+            onClick={startInspection}
+            disabled={starting}
+            className="flex-1 bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2"
+          >
+            {starting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ClipboardList className="h-4 w-4" />}
+            Begin Walkthrough
+          </Button>
+        </div>
       </div>
     )
   }
@@ -500,11 +709,10 @@ export function InspectionTab({ propertyId, userId }: Props) {
           <p className="mt-1 text-sm text-slate-500 max-w-sm">Start the initial walkthrough to document every system, appliance, and condition in the home.</p>
         </div>
         <Button
-          onClick={() => startInspection("initial")}
-          disabled={starting}
+          onClick={() => openSetup("initial")}
           className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2"
         >
-          {starting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+          <Plus className="h-4 w-4" />
           Start Initial Inspection
         </Button>
       </div>
@@ -570,7 +778,7 @@ export function InspectionTab({ propertyId, userId }: Props) {
       </div>
 
       {/* Sections */}
-      {SECTIONS.map(section => {
+      {sections.map(section => {
         const { assessed, total } = sectionProgress(section, findings)
         const isOpen = openSections.has(section.key)
         const sectionFlags = section.items.filter(i => findings[findingKey(section.key, i.key)]?.flagged).length
@@ -722,8 +930,7 @@ export function InspectionTab({ propertyId, userId }: Props) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => startInspection("quarterly")}
-          disabled={starting}
+          onClick={() => openSetup("quarterly")}
           className="w-full gap-2"
         >
           <Plus className="h-4 w-4" /> Start Quarterly Inspection

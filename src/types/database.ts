@@ -137,6 +137,7 @@ export type Database = {
           type: "initial" | "quarterly"
           status: "in_progress" | "complete"
           overall_notes: string | null
+          config: Record<string, unknown>
           created_at: string
         }
         Insert: {
@@ -147,6 +148,7 @@ export type Database = {
           type?: "initial" | "quarterly"
           status?: "in_progress" | "complete"
           overall_notes?: string | null
+          config?: Record<string, unknown>
           created_at?: string
         }
         Update: {
@@ -157,6 +159,7 @@ export type Database = {
           type?: "initial" | "quarterly"
           status?: "in_progress" | "complete"
           overall_notes?: string | null
+          config?: Record<string, unknown>
           created_at?: string
         }
         Relationships: Rel[]
