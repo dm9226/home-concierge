@@ -20,6 +20,7 @@ import { AddAssetDialog } from "./add-asset-dialog"
 import { BulkScanDialog } from "./bulk-scan-dialog"
 import { PaintColorsEditor } from "./paint-colors-editor"
 import { InspectionTab } from "./inspection-tab"
+import { RecurringServices } from "./recurring-services"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
@@ -263,6 +264,7 @@ export default async function PropertyDetailPage({
               </Badge>
             )}
           </TabsTrigger>
+          <TabsTrigger value="services">Services</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
@@ -400,6 +402,11 @@ export default async function PropertyDetailPage({
         {/* INSPECTION TAB */}
         <TabsContent value="inspection">
           <InspectionTab propertyId={property.id} userId={user.id} />
+        </TabsContent>
+
+        {/* SERVICES TAB */}
+        <TabsContent value="services">
+          <RecurringServices propertyId={property.id} />
         </TabsContent>
 
         {/* INVENTORY TAB */}

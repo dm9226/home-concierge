@@ -164,6 +164,54 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      recurring_services: {
+        Row: {
+          id: string
+          property_id: string
+          vendor_id: string | null
+          service_type: string
+          company_name: string | null
+          frequency: string | null
+          access_needed: string | null
+          schedule: string | null
+          phone: string | null
+          notes: string | null
+          is_active: boolean
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          vendor_id?: string | null
+          service_type: string
+          company_name?: string | null
+          frequency?: string | null
+          access_needed?: string | null
+          schedule?: string | null
+          phone?: string | null
+          notes?: string | null
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          vendor_id?: string | null
+          service_type?: string
+          company_name?: string | null
+          frequency?: string | null
+          access_needed?: string | null
+          schedule?: string | null
+          phone?: string | null
+          notes?: string | null
+          is_active?: boolean
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: Rel[]
+      }
       inspection_findings: {
         Row: {
           id: string

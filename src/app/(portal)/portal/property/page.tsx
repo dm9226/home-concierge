@@ -9,7 +9,7 @@ import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import {
   Home, Calendar, MapPin, CheckCircle2, AlertCircle,
   XCircle, Shield, Wrench, Package, FolderOpen, Clock,
-  Activity, ClipboardCheck,
+  Activity, ClipboardCheck, RotateCw,
 } from "lucide-react"
 
 export default async function PortalPropertyPage({
@@ -49,6 +49,7 @@ export default async function PortalPropertyPage({
     { data: completedWork },
     { data: maintenance },
     { data: inspectionRows },
+    { data: recurringServices },
   ] = await Promise.all([
     supabase
       .from("assets")
@@ -86,6 +87,13 @@ export default async function PortalPropertyPage({
       .eq("status", "complete")
       .order("inspection_date", { ascending: false })
       .limit(1),
+
+    supabase
+      .from("recurring_services")
+      .select("id, service_type, company_name, frequency, schedule, phone")
+      .eq("property_id", propertyId)
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true }),
   ])
 
   // --- Home Health: latest completed inspection rollup ---
@@ -249,6 +257,35 @@ export default async function PortalPropertyPage({
                     </div>
                   )
                 })}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Recurring services */}
+          {recurringServices && recurringServices.length > 0 && (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <RotateCw className="h-4 w-4 text-[#C9A96E]" />
+                  Who Takes Care of Your Home
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {recurringServices.map(s => (
+                  <div key={s.id} className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-[#0F1B2D] dark:text-white">{s.service_type}</p>
+                      {(s.company_name || s.schedule) && (
+                        <p className="text-xs text-slate-500">
+                          {s.company_name}{s.company_name && s.schedule ? " · " : ""}{s.schedule}
+                        </p>
+                      )}
+                    </div>
+                    {s.frequency && (
+                      <span className="shrink-0 text-xs font-medium text-slate-400">{s.frequency}</span>
+                    )}
+                  </div>
+                ))}
               </CardContent>
             </Card>
           )}
