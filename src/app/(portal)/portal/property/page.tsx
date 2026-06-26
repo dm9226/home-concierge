@@ -9,7 +9,7 @@ import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import {
   Home, Calendar, MapPin, CheckCircle2, AlertCircle,
   XCircle, Shield, Wrench, Package, FolderOpen, Clock,
-  Activity, ClipboardCheck, RotateCw,
+  Activity, ClipboardCheck, RotateCw, FileText, Download,
 } from "lucide-react"
 
 export default async function PortalPropertyPage({
@@ -51,6 +51,7 @@ export default async function PortalPropertyPage({
     { data: inspectionRows },
     { data: recurringServices },
     { data: onboarding },
+    { data: propertyFiles },
   ] = await Promise.all([
     supabase
       .from("assets")
@@ -102,6 +103,12 @@ export default async function PortalPropertyPage({
       .select("utility_providers, hoa_name, hoa_contact_phone, hoa_contact_email, emergency_contacts")
       .eq("property_id", propertyId)
       .maybeSingle(),
+
+    supabase
+      .from("property_files")
+      .select("id, kind, category, name, file_url, file_size, created_at")
+      .eq("property_id", propertyId)
+      .order("created_at", { ascending: false }),
   ])
 
   // --- Home Health: latest completed inspection rollup ---
@@ -153,6 +160,10 @@ export default async function PortalPropertyPage({
     ? (onboarding!.emergency_contacts as { name?: string; relationship?: string; phone?: string }[])
     : []
   const hasHomeDetails = utilities.length > 0 || emergencyContacts.length > 0 || !!onboarding?.hoa_name
+
+  const clientDocuments = (propertyFiles ?? []).filter(f => f.kind === "document")
+  const clientPhotos = (propertyFiles ?? []).filter(f => f.kind === "photo")
+  const hasFiles = clientDocuments.length > 0 || clientPhotos.length > 0
 
   const assetsByCategory = (assets ?? []).reduce((acc, a) => {
     if (!acc[a.category]) acc[a.category] = []
@@ -210,6 +221,7 @@ export default async function PortalPropertyPage({
               </span>
             )}
           </TabsTrigger>
+          {hasFiles && <TabsTrigger value="documents">Documents</TabsTrigger>}
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
@@ -614,6 +626,57 @@ export default async function PortalPropertyPage({
             </>
           )}
         </TabsContent>
+
+        {/* ── DOCUMENTS ───────────────────────────────────────────────── */}
+        {hasFiles && (
+          <TabsContent value="documents" className="space-y-6">
+            {clientDocuments.length > 0 && (
+              <div>
+                <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-[#C9A96E]" />
+                  Documents
+                </h2>
+                <div className="space-y-2">
+                  {clientDocuments.map(f => (
+                    <a
+                      key={f.id}
+                      href={f.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 hover:shadow-md transition-all"
+                    >
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 shrink-0">
+                        <FileText className="h-5 w-5 text-slate-500" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm text-[#0F1B2D] dark:text-white truncate">{f.name}</p>
+                        <p className="text-xs text-slate-400">{f.category}{f.category ? " · " : ""}{formatDateShort(f.created_at)}</p>
+                      </div>
+                      <Download className="h-4 w-4 text-slate-400 shrink-0" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {clientPhotos.length > 0 && (
+              <div>
+                <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+                  <Package className="h-4 w-4 text-[#C9A96E]" />
+                  Photos
+                </h2>
+                <div className="grid grid-cols-3 gap-2">
+                  {clientPhotos.map(f => (
+                    <a key={f.id} href={f.file_url} target="_blank" rel="noopener noreferrer" className="aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={f.file_url} alt={f.name} className="h-full w-full object-cover" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </TabsContent>
+        )}
 
         {/* ── PROJECTS ────────────────────────────────────────────────── */}
         <TabsContent value="projects" className="space-y-4">

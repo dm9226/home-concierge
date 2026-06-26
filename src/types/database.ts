@@ -170,6 +170,45 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      property_files: {
+        Row: {
+          id: string
+          property_id: string
+          uploaded_by: string | null
+          kind: "document" | "photo"
+          category: string | null
+          name: string
+          file_url: string
+          file_type: string | null
+          file_size: number | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          uploaded_by?: string | null
+          kind?: "document" | "photo"
+          category?: string | null
+          name: string
+          file_url: string
+          file_type?: string | null
+          file_size?: number | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          uploaded_by?: string | null
+          kind?: "document" | "photo"
+          category?: string | null
+          name?: string
+          file_url?: string
+          file_type?: string | null
+          file_size?: number | null
+          created_at?: string
+        }
+        Relationships: Rel[]
+      }
       recurring_services: {
         Row: {
           id: string

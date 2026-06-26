@@ -22,6 +22,7 @@ import { PaintColorsEditor } from "./paint-colors-editor"
 import { InspectionTab } from "./inspection-tab"
 import { RecurringServices } from "./recurring-services"
 import { PropertyInfo } from "./property-info"
+import { PropertyFiles } from "./property-files"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
@@ -266,6 +267,7 @@ export default async function PropertyDetailPage({
             )}
           </TabsTrigger>
           <TabsTrigger value="services">Services</TabsTrigger>
+          <TabsTrigger value="files">Files</TabsTrigger>
           <TabsTrigger value="info">Info</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
@@ -414,6 +416,11 @@ export default async function PropertyDetailPage({
         {/* SERVICES TAB */}
         <TabsContent value="services">
           <RecurringServices propertyId={property.id} />
+        </TabsContent>
+
+        {/* FILES TAB */}
+        <TabsContent value="files">
+          <PropertyFiles propertyId={property.id} userId={user.id} />
         </TabsContent>
 
         {/* PROPERTY INFO TAB */}

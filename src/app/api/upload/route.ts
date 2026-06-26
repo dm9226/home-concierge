@@ -3,8 +3,19 @@ import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 
 const ALLOWED_TYPES = [
-  "image/jpeg", "image/png", "image/webp", "image/heic", "image/heif",
+  // Images
+  "image/jpeg", "image/png", "image/webp", "image/heic", "image/heif", "image/gif",
+  // Video
   "video/mp4", "video/quicktime", "video/webm",
+  // Documents
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "text/plain", "text/csv",
 ]
 const MAX_SIZE = 100 * 1024 * 1024 // 100 MB
 
