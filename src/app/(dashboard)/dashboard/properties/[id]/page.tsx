@@ -302,11 +302,18 @@ export default async function PropertyDetailPage({
       <Tabs defaultValue={tab ?? "overview"}>
         <TabsList className="w-full overflow-x-auto scrollbar-hide">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          {/* Setup / onboarding group */}
           <TabsTrigger value="inspection">Inspection</TabsTrigger>
           <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
           <TabsTrigger value="inventory">
             Inventory {assets && assets.length > 0 && <span className="ml-1.5 text-xs text-slate-400">({assets.length})</span>}
           </TabsTrigger>
+          <TabsTrigger value="services">Services</TabsTrigger>
+          <TabsTrigger value="files">Files</TabsTrigger>
+          <TabsTrigger value="info">Info</TabsTrigger>
+          {/* Group divider */}
+          <span aria-hidden className="mx-1 my-1 w-px self-stretch bg-slate-200 dark:bg-slate-700" />
+          {/* Operations group */}
           <TabsTrigger value="work-orders">
             Work Orders {openWorkOrderCount > 0 && (
               <Badge variant="warning" className="ml-1.5 text-xs px-1.5 py-0">
@@ -321,12 +328,9 @@ export default async function PropertyDetailPage({
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="services">Services</TabsTrigger>
-          <TabsTrigger value="files">Files</TabsTrigger>
-          <TabsTrigger value="info">Info</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
-          <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
+          <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="messages" className="gap-1.5">
             Messages
             {unreadMessageCount > 0 && (
