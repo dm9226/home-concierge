@@ -107,6 +107,10 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
           <p className="text-xs text-slate-400 pt-1">This header is merged from live property data and shown to the client above the terms.</p>
         </div>
 
+        {error && (
+          <p className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>
+        )}
+
         {!agreement ? (
           <div className="text-center py-4">
             <p className="text-sm text-slate-500 mb-3">No agreement prepared yet. Create one from the standard template, edit if needed, then send it to the client to accept.</p>
@@ -136,8 +140,6 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
               <Label htmlFor="ag_body">Terms</Label>
               <Textarea id="ag_body" value={body} onChange={e => { setBody(e.target.value); setSaved(false) }} rows={14} className="font-mono text-xs leading-relaxed" />
             </div>
-
-            {error && <p className="text-sm text-red-600">{error}</p>}
 
             <div className="flex items-center justify-between gap-2 flex-wrap">
               <div className="flex items-center gap-2">
