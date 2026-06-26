@@ -10,7 +10,7 @@ CREATE TABLE service_agreements (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   property_id UUID NOT NULL UNIQUE REFERENCES properties(id) ON DELETE CASCADE,
   status agreement_status NOT NULL DEFAULT 'draft',
-  title TEXT NOT NULL DEFAULT 'Service Agreement',
+  title TEXT NOT NULL DEFAULT 'Membership Agreement',
   body TEXT NOT NULL,
   -- Acceptance audit trail
   accepted_by UUID REFERENCES users(id),

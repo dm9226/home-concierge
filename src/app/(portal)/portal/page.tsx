@@ -322,7 +322,7 @@ export default async function PortalHomePage({
                 <div className="flex items-center gap-3">
                   <CheckCircle2 className="h-5 w-5 text-[#C9A96E] shrink-0" />
                   <div>
-                    <p className="font-semibold text-[#0F1B2D] dark:text-white">Action needed: sign your service agreement</p>
+                    <p className="font-semibold text-[#0F1B2D] dark:text-white">Action needed: sign your membership agreement</p>
                     <p className="text-sm text-slate-500">Review the terms and accept to get started.</p>
                   </div>
                 </div>

@@ -36,7 +36,7 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
   const [agreement, setAgreement] = useState<Agreement | null>(null)
-  const [title, setTitle] = useState("Service Agreement")
+  const [title, setTitle] = useState("Membership Agreement")
   const [body, setBody] = useState(DEFAULT_AGREEMENT_BODY)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -96,7 +96,7 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2"><FileSignature className="h-4 w-4 text-[#C9A96E]" /> Service Agreement</CardTitle>
+        <CardTitle className="text-base flex items-center gap-2"><FileSignature className="h-4 w-4 text-[#C9A96E]" /> Membership Agreement</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Merged header preview */}

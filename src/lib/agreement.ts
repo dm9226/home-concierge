@@ -1,4 +1,4 @@
-// Default service agreement terms. Staff can edit the body per property before
+// Default membership agreement terms. Staff can edit the body per property before
 // sending. This is a sensible starting template, not legal advice -- have your
 // own counsel review and replace the language before relying on it.
 

@@ -46,7 +46,7 @@ export function PortalOnboardingTracker({
           href={`/portal/property?id=${propertyId}&tab=agreement`}
           className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#C9A96E] px-4 py-2.5 text-sm font-semibold text-[#0F1B2D] hover:bg-[#b8954f] transition-colors"
         >
-          Review &amp; sign your service agreement <ArrowRight className="h-4 w-4" />
+          Review &amp; sign your membership agreement <ArrowRight className="h-4 w-4" />
         </Link>
       )}
     </div>
