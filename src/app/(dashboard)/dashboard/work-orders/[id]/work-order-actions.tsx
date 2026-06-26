@@ -32,11 +32,20 @@ export function WorkOrderActions({ workOrder }: { workOrder: any }) {
   const [scheduledDate, setScheduledDate] = useState<string>(workOrder.scheduled_date?.split("T")[0] ?? "")
   const [actualCost, setActualCost] = useState<string>(workOrder.actual_cost?.toString() ?? "")
   const [isOnDemand, setIsOnDemand] = useState<boolean>(!!workOrder.is_on_demand)
+  const [isHandyman, setIsHandyman] = useState<boolean>(!!workOrder.is_handyman)
 
   async function toggleOnDemand(val: boolean) {
     setIsOnDemand(val)
     const supabase = createClient()
-    await supabase.from("work_orders").update({ is_on_demand: val }).eq("id", workOrder.id)
+    await supabase.from("work_orders").update({ is_on_demand: val, ...(val ? {} : { is_handyman: false }) }).eq("id", workOrder.id)
+    if (!val) setIsHandyman(false)
+    router.refresh()
+  }
+
+  async function toggleHandyman(val: boolean) {
+    setIsHandyman(val)
+    const supabase = createClient()
+    await supabase.from("work_orders").update({ is_handyman: val }).eq("id", workOrder.id)
     router.refresh()
   }
 
@@ -138,6 +147,21 @@ export function WorkOrderActions({ workOrder }: { workOrder: any }) {
             <span className="text-sm text-slate-600 dark:text-slate-400">On-Demand Service Call</span>
           </label>
           <p className="mt-1 text-xs text-slate-400 ml-6">Counts against included on-demand calls for Proactive+ clients</p>
+
+          {isOnDemand && (
+            <div className="mt-3 ml-6">
+              <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={isHandyman}
+                  onChange={e => toggleHandyman(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 accent-[#C9A96E]"
+                />
+                <span className="text-sm text-slate-600 dark:text-slate-400">Handyman request</span>
+              </label>
+              <p className="mt-1 text-xs text-slate-400 ml-6">Overage rate once 4 included calls are used: handyman $100, other $200</p>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

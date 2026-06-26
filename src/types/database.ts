@@ -605,6 +605,7 @@ export type Database = {
           status: "submitted" | "approved" | "scheduled" | "in_progress" | "completed" | "cancelled"
           is_emergency: boolean
           is_on_demand: boolean
+          is_handyman: boolean
           scheduled_date: string | null
           completed_date: string | null
           cost_estimate: number | null
@@ -631,6 +632,7 @@ export type Database = {
           status?: "submitted" | "approved" | "scheduled" | "in_progress" | "completed" | "cancelled"
           is_emergency?: boolean
           is_on_demand?: boolean
+          is_handyman?: boolean
           scheduled_date?: string | null
           completed_date?: string | null
           cost_estimate?: number | null
@@ -657,6 +659,7 @@ export type Database = {
           status?: "submitted" | "approved" | "scheduled" | "in_progress" | "completed" | "cancelled"
           is_emergency?: boolean
           is_on_demand?: boolean
+          is_handyman?: boolean
           scheduled_date?: string | null
           completed_date?: string | null
           cost_estimate?: number | null

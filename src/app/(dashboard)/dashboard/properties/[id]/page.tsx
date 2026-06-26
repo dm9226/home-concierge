@@ -129,15 +129,22 @@ export default async function PropertyDetailPage({
 
   const client = (property as any).client
 
-  // On-demand call count for current calendar year (Proactive+ plan tracking)
+  // On-demand calls for current calendar year (plan tracking + overage billing)
   const currentYear = new Date().getFullYear()
-  const { count: onDemandCount } = await admin
+  const { data: onDemandRows } = await admin
     .from("work_orders")
-    .select("*", { count: "exact", head: true })
+    .select("id, is_handyman, created_at")
     .eq("property_id", id)
     .eq("is_on_demand", true)
     .gte("created_at", `${currentYear}-01-01`)
     .lt("created_at", `${currentYear + 1}-01-01`)
+    .order("created_at", { ascending: true })
+
+  const onDemandCount = onDemandRows?.length ?? 0
+  const includedCalls = (property as any).plan_tier === "proactive_plus" ? 4 : 0
+  // Calls beyond the included allotment are billable at handyman $100 / other $200.
+  const billableCalls = (onDemandRows ?? []).slice(includedCalls)
+  const overageTotal = billableCalls.reduce((sum, wo) => sum + (wo.is_handyman ? 100 : 200), 0)
 
   const overdueMaintenanceCount =
     maintenance?.filter(
@@ -360,14 +367,28 @@ export default async function PropertyDetailPage({
                     </div>
                   )
                 })}
-                {(property as any).plan_tier === "proactive_plus" && (
+                {(property as any).plan_tier === "proactive_plus" ? (
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-500">On-Demand ({currentYear})</span>
+                      <span className={`font-semibold ${onDemandCount >= 4 ? "text-red-500" : onDemandCount >= 3 ? "text-amber-500" : "text-[#0F1B2D] dark:text-white"}`}>
+                        {onDemandCount} / 4 included
+                      </span>
+                    </div>
+                    {billableCalls.length > 0 && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-500">Overage ({billableCalls.length} billable)</span>
+                        <span className="font-semibold text-red-500">{formatCurrency(overageTotal)}</span>
+                      </div>
+                    )}
+                  </div>
+                ) : (
                   <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                     <div className="flex justify-between items-center">
                       <span className="text-slate-500">On-Demand ({currentYear})</span>
-                      <span className={`font-semibold ${(onDemandCount ?? 0) >= 4 ? "text-red-500" : (onDemandCount ?? 0) >= 3 ? "text-amber-500" : "text-[#0F1B2D] dark:text-white"}`}>
-                        {onDemandCount ?? 0} / 4 included
-                      </span>
+                      <span className="font-semibold text-[#0F1B2D] dark:text-white">{onDemandCount} {onDemandCount === 1 ? "call" : "calls"}</span>
                     </div>
+                    <p className="text-xs text-slate-400 mt-1">Proactive plan: each on-demand call is billable (per-call rate).</p>
                   </div>
                 )}
               </CardContent>
