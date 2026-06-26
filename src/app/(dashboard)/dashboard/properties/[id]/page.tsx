@@ -83,7 +83,6 @@ export default async function PropertyDetailPage({
     { data: assets },
     { data: workOrders },
     { data: maintenance },
-    { data: projects },
     { data: invoices },
     { data: activityLogs },
     { data: messages },
@@ -106,11 +105,6 @@ export default async function PropertyDetailPage({
       .eq("property_id", id)
       .eq("is_active", true)
       .order("next_due", { ascending: true }),
-    admin
-      .from("projects")
-      .select("*, project_tasks(*)")
-      .eq("property_id", id)
-      .order("created_at", { ascending: false }),
     admin
       .from("invoices")
       .select("*")
@@ -327,9 +321,7 @@ export default async function PropertyDetailPage({
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
-          <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="messages" className="gap-1.5">
             Messages
             {unreadMessageCount > 0 && (
@@ -521,6 +513,39 @@ export default async function PropertyDetailPage({
               </CardContent>
             </Card>
           </div>
+
+          {/* Recent activity (folded in from the former Timeline tab) */}
+          {activityLogs && activityLogs.length > 0 && (
+            <Card className="mt-4">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="relative">
+                  <div className="absolute left-2 top-1 bottom-1 w-px bg-slate-200 dark:bg-slate-800" />
+                  <div className="space-y-3 pl-7">
+                    {activityLogs.slice(0, 6).map((log) => (
+                      <div key={log.id} className="relative">
+                        <div className="absolute -left-[1.35rem] top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-[#C9A96E] bg-white dark:bg-slate-900">
+                          <div className="h-1 w-1 rounded-full bg-[#C9A96E]" />
+                        </div>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">{log.description}</p>
+                        <div className="mt-0.5 flex items-center gap-2 text-xs text-slate-400">
+                          <span>{formatDate(log.created_at)}</span>
+                          {(log as any).user?.full_name && (
+                            <>
+                              <span>&bull;</span>
+                              <span>{(log as any).user.full_name}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         {/* INSPECTION TAB */}
@@ -797,101 +822,6 @@ export default async function PropertyDetailPage({
                   <p className="text-sm text-slate-400">Use "Load standard schedule" above to populate 26 recommended tasks automatically.</p>
                 </div>
               )}
-            </div>
-          </div>
-        </TabsContent>
-
-        {/* PROJECTS TAB */}
-        <TabsContent value="projects">
-          <div className="space-y-4">
-            <div className="flex justify-between">
-              <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Projects</h3>
-              <Button size="sm">
-                <Plus className="h-4 w-4" /> New Project
-              </Button>
-            </div>
-            <div className="space-y-4">
-              {projects?.map((project) => {
-                const tasks = (project as any).project_tasks ?? []
-                const completedTasks = tasks.filter((t: any) => t.status === "completed").length
-                const progress = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0
-
-                return (
-                  <Card key={project.id}>
-                    <CardContent className="pt-5">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
-                              {project.title}
-                            </h4>
-                            <StatusBadge status={project.status} />
-                          </div>
-                          {project.description && (
-                            <p className="mt-1 text-sm text-slate-500">{project.description}</p>
-                          )}
-                        </div>
-                        {project.budget && (
-                          <div className="ml-4 text-right">
-                            <p className="text-sm text-slate-400">Budget</p>
-                            <p className="font-semibold">{formatCurrency(project.budget)}</p>
-                          </div>
-                        )}
-                      </div>
-
-                      {tasks.length > 0 && (
-                        <div className="mt-4">
-                          <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
-                            <span>Progress</span>
-                            <span>{completedTasks}/{tasks.length} tasks</span>
-                          </div>
-                          <div className="h-1.5 rounded-full bg-slate-100">
-                            <div
-                              className="h-full rounded-full bg-[#C9A96E] transition-all"
-                              style={{ width: `${progress}%` }}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                )
-              })}
-              {(!projects || projects.length === 0) && (
-                <div className="py-12 text-center text-slate-500">No projects yet</div>
-              )}
-            </div>
-          </div>
-        </TabsContent>
-
-        {/* TIMELINE TAB */}
-        <TabsContent value="timeline">
-          <div className="space-y-4">
-            <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
-              Property Timeline
-            </h3>
-            <div className="relative">
-              <div className="absolute left-4 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-800" />
-              <div className="space-y-4 pl-12">
-                {activityLogs?.map((log) => (
-                  <div key={log.id} className="relative">
-                    <div className="absolute -left-8 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#C9A96E] bg-white dark:bg-slate-900">
-                      <div className="h-1.5 w-1.5 rounded-full bg-[#C9A96E]" />
-                    </div>
-                    <div className="rounded-lg border border-slate-200/80 bg-white p-3 dark:border-slate-800 dark:bg-slate-900">
-                      <p className="text-sm text-slate-700 dark:text-slate-300">{log.description}</p>
-                      <div className="mt-1 flex items-center gap-2 text-xs text-slate-400">
-                        <span>{formatDate(log.created_at)}</span>
-                        <span>&bull;</span>
-                        <span>{(log as any).user?.full_name}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {(!activityLogs || activityLogs.length === 0) && (
-                  <div className="py-12 text-center text-slate-500">No activity yet</div>
-                )}
-              </div>
             </div>
           </div>
         </TabsContent>
