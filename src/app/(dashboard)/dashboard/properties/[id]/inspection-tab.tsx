@@ -336,9 +336,11 @@ function ConditionButtons({ value, onChange }: { value?: Condition; onChange: (c
 interface Props {
   propertyId: string
   userId: string
+  defaultBedrooms?: number | null
+  defaultBathrooms?: number | null
 }
 
-export function InspectionTab({ propertyId, userId }: Props) {
+export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBathrooms }: Props) {
   const router = useRouter()
   const supabase = createClient()
 
@@ -405,8 +407,13 @@ export function InspectionTab({ propertyId, userId }: Props) {
   }, [propertyId])
 
   // --- Open the setup step for a new inspection ---
+  // Precedence: prior walkthrough config (human-verified on-site) > property
+  // record counts > defaults.
   function openSetup(type: "initial" | "quarterly") {
-    setSetupConfig({ ...DEFAULT_CONFIG, ...(lastConfig ?? {}) })
+    const fromProperty: InspectionConfig = {}
+    if (typeof defaultBedrooms === "number") fromProperty.bedrooms = defaultBedrooms
+    if (typeof defaultBathrooms === "number") fromProperty.bathrooms = defaultBathrooms
+    setSetupConfig({ ...DEFAULT_CONFIG, ...fromProperty, ...(lastConfig ?? {}) })
     setSetupFor(type)
   }
 

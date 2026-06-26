@@ -55,6 +55,8 @@ export type Database = {
           year_built: number | null
           square_footage: number | null
           lot_size: string | null
+          bedroom_count: number | null
+          bathroom_count: number | null
           property_type: "single_family" | "townhome" | "condo"
           notes: string | null
           primary_concierge_id: string | null
@@ -82,6 +84,8 @@ export type Database = {
           year_built?: number | null
           square_footage?: number | null
           lot_size?: string | null
+          bedroom_count?: number | null
+          bathroom_count?: number | null
           property_type?: "single_family" | "townhome" | "condo"
           notes?: string | null
           primary_concierge_id?: string | null
@@ -109,6 +113,8 @@ export type Database = {
           year_built?: number | null
           square_footage?: number | null
           lot_size?: string | null
+          bedroom_count?: number | null
+          bathroom_count?: number | null
           property_type?: "single_family" | "townhome" | "condo"
           notes?: string | null
           primary_concierge_id?: string | null

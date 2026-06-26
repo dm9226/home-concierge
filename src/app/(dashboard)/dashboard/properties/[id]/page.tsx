@@ -403,7 +403,12 @@ export default async function PropertyDetailPage({
 
         {/* INSPECTION TAB */}
         <TabsContent value="inspection">
-          <InspectionTab propertyId={property.id} userId={user.id} />
+          <InspectionTab
+            propertyId={property.id}
+            userId={user.id}
+            defaultBedrooms={property.bedroom_count}
+            defaultBathrooms={property.bathroom_count}
+          />
         </TabsContent>
 
         {/* SERVICES TAB */}
@@ -413,7 +418,11 @@ export default async function PropertyDetailPage({
 
         {/* PROPERTY INFO TAB */}
         <TabsContent value="info">
-          <PropertyInfo propertyId={property.id} />
+          <PropertyInfo
+            propertyId={property.id}
+            initialBedrooms={property.bedroom_count}
+            initialBathrooms={property.bathroom_count}
+          />
         </TabsContent>
 
         {/* INVENTORY TAB */}

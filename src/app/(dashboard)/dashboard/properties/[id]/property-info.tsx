@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Loader2, Plus, Trash2, Zap, Building2, KeyRound, Wifi,
-  PhoneCall, CalendarClock, CheckCircle2,
+  PhoneCall, CalendarClock, CheckCircle2, Home,
 } from "lucide-react"
 
 const UTILITY_TYPES = ["Water", "Gas", "Electric", "Power", "Internet", "Trash", "Propane", "Solar"]
@@ -54,13 +54,19 @@ function petNotes(v: unknown): string {
   return ""
 }
 
-export function PropertyInfo({ propertyId }: { propertyId: string }) {
+export function PropertyInfo({ propertyId, initialBedrooms, initialBathrooms }: {
+  propertyId: string
+  initialBedrooms?: number | null
+  initialBathrooms?: number | null
+}) {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const [bedrooms, setBedrooms] = useState(initialBedrooms != null ? String(initialBedrooms) : "")
+  const [bathrooms, setBathrooms] = useState(initialBathrooms != null ? String(initialBathrooms) : "")
   const [utilities, setUtilities] = useState<Utility[]>([])
   const [contacts, setContacts] = useState<Contact[]>([])
   const [pets, setPets] = useState("")
@@ -129,8 +135,16 @@ export function PropertyInfo({ propertyId }: { propertyId: string }) {
     }
 
     const { error } = await supabase.from("property_onboarding").upsert(payload, { onConflict: "property_id" })
+    if (error) { setSaving(false); setError(error.message); return }
+
+    // Beds/baths live on the property record (used to pre-fill inspections)
+    const { error: propErr } = await supabase.from("properties").update({
+      bedroom_count: bedrooms ? parseInt(bedrooms, 10) : null,
+      bathroom_count: bathrooms ? parseInt(bathrooms, 10) : null,
+    }).eq("id", propertyId)
+
     setSaving(false)
-    if (error) { setError(error.message); return }
+    if (propErr) { setError(propErr.message); return }
     setSaved(true)
   }
 
@@ -140,6 +154,24 @@ export function PropertyInfo({ propertyId }: { propertyId: string }) {
 
   return (
     <div className="space-y-5 max-w-3xl">
+      {/* Property basics */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2"><Home className="h-4 w-4 text-[#C9A96E]" /> Property Basics</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="bedrooms">Bedrooms</Label>
+            <Input id="bedrooms" type="number" min="0" value={bedrooms} onChange={e => { setBedrooms(e.target.value); setSaved(false) }} placeholder="e.g. 4" />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="bathrooms">Bathrooms</Label>
+            <Input id="bathrooms" type="number" min="0" value={bathrooms} onChange={e => { setBathrooms(e.target.value); setSaved(false) }} placeholder="e.g. 3" />
+          </div>
+          <p className="col-span-2 text-xs text-slate-400">Used to pre-fill the inspection walkthrough so your team doesn't re-enter room counts.</p>
+        </CardContent>
+      </Card>
+
       {/* Utilities */}
       <Card>
         <CardHeader className="pb-3">
