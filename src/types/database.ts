@@ -170,6 +170,33 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      reminder_log: {
+        Row: {
+          id: string
+          kind: string
+          ref_id: string
+          remind_for: string
+          recipients: string | null
+          sent_at: string
+        }
+        Insert: {
+          id?: string
+          kind: string
+          ref_id: string
+          remind_for: string
+          recipients?: string | null
+          sent_at?: string
+        }
+        Update: {
+          id?: string
+          kind?: string
+          ref_id?: string
+          remind_for?: string
+          recipients?: string | null
+          sent_at?: string
+        }
+        Relationships: Rel[]
+      }
       service_agreements: {
         Row: {
           id: string
