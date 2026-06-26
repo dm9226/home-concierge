@@ -23,6 +23,7 @@ import { InspectionTab } from "./inspection-tab"
 import { RecurringServices } from "./recurring-services"
 import { PropertyInfo } from "./property-info"
 import { PropertyFiles } from "./property-files"
+import { RecommendationsTab } from "./recommendations-tab"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
@@ -249,6 +250,7 @@ export default async function PropertyDetailPage({
         <TabsList className="w-full overflow-x-auto scrollbar-hide">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="inspection">Inspection</TabsTrigger>
+          <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
           <TabsTrigger value="inventory">
             Inventory {assets && assets.length > 0 && <span className="ml-1.5 text-xs text-slate-400">({assets.length})</span>}
           </TabsTrigger>
@@ -416,6 +418,11 @@ export default async function PropertyDetailPage({
         {/* SERVICES TAB */}
         <TabsContent value="services">
           <RecurringServices propertyId={property.id} />
+        </TabsContent>
+
+        {/* RECOMMENDATIONS TAB */}
+        <TabsContent value="recommendations">
+          <RecommendationsTab propertyId={property.id} userId={user.id} />
         </TabsContent>
 
         {/* FILES TAB */}

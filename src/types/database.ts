@@ -170,6 +170,60 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      recommendations: {
+        Row: {
+          id: string
+          property_id: string
+          inspection_id: string | null
+          finding_id: string | null
+          work_order_id: string | null
+          title: string
+          description: string | null
+          rec_type: "repair" | "preventative" | "monitor"
+          priority: "emergency" | "high" | "normal" | "low"
+          status: "pending" | "approved" | "deferred" | "declined" | "completed"
+          estimated_cost: number | null
+          created_by: string | null
+          client_responded_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          inspection_id?: string | null
+          finding_id?: string | null
+          work_order_id?: string | null
+          title: string
+          description?: string | null
+          rec_type?: "repair" | "preventative" | "monitor"
+          priority?: "emergency" | "high" | "normal" | "low"
+          status?: "pending" | "approved" | "deferred" | "declined" | "completed"
+          estimated_cost?: number | null
+          created_by?: string | null
+          client_responded_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          inspection_id?: string | null
+          finding_id?: string | null
+          work_order_id?: string | null
+          title?: string
+          description?: string | null
+          rec_type?: "repair" | "preventative" | "monitor"
+          priority?: "emergency" | "high" | "normal" | "low"
+          status?: "pending" | "approved" | "deferred" | "declined" | "completed"
+          estimated_cost?: number | null
+          created_by?: string | null
+          client_responded_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: Rel[]
+      }
       property_files: {
         Row: {
           id: string

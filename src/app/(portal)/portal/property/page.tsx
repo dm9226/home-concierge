@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { StatusBadge } from "@/components/status-badge"
 import { PropertyMap } from "@/components/property-map"
 import { MarketStatsCard } from "@/components/market-stats-card"
+import { RecommendationsClient } from "./recommendations-client"
 import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import {
   Home, Calendar, MapPin, CheckCircle2, AlertCircle,
@@ -52,6 +53,7 @@ export default async function PortalPropertyPage({
     { data: recurringServices },
     { data: onboarding },
     { data: propertyFiles },
+    { data: recommendationRows },
   ] = await Promise.all([
     supabase
       .from("assets")
@@ -107,6 +109,12 @@ export default async function PortalPropertyPage({
     supabase
       .from("property_files")
       .select("id, kind, category, name, created_at")
+      .eq("property_id", propertyId)
+      .order("created_at", { ascending: false }),
+
+    supabase
+      .from("recommendations")
+      .select("id, title, description, rec_type, priority, status, estimated_cost, created_at")
       .eq("property_id", propertyId)
       .order("created_at", { ascending: false }),
   ])
@@ -165,6 +173,9 @@ export default async function PortalPropertyPage({
   const clientPhotos = (propertyFiles ?? []).filter(f => f.kind === "photo")
   const hasFiles = clientDocuments.length > 0 || clientPhotos.length > 0
 
+  const recs = recommendationRows ?? []
+  const pendingRecCount = recs.filter(r => r.status === "pending" || r.status === "deferred").length
+
   const assetsByCategory = (assets ?? []).reduce((acc, a) => {
     if (!acc[a.category]) acc[a.category] = []
     acc[a.category].push(a)
@@ -218,6 +229,14 @@ export default async function PortalPropertyPage({
             {recommendations.length > 0 && (
               <span className="ml-1.5 h-4 min-w-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
                 {recommendations.length}
+              </span>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="recommendations">
+            Recommendations
+            {pendingRecCount > 0 && (
+              <span className="ml-1.5 h-4 min-w-4 rounded-full bg-[#C9A96E] text-white text-[10px] font-bold flex items-center justify-center px-1">
+                {pendingRecCount}
               </span>
             )}
           </TabsTrigger>
@@ -625,6 +644,11 @@ export default async function PortalPropertyPage({
               )}
             </>
           )}
+        </TabsContent>
+
+        {/* ── RECOMMENDATIONS ─────────────────────────────────────────── */}
+        <TabsContent value="recommendations">
+          <RecommendationsClient recommendations={recs} />
         </TabsContent>
 
         {/* ── DOCUMENTS ───────────────────────────────────────────────── */}
