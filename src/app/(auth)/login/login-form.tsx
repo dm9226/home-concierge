@@ -43,6 +43,9 @@ export function LoginForm() {
       return
     }
 
+    // Record the login (fire-and-forget; never blocks sign-in)
+    fetch("/api/auth/log-login", { method: "POST" }).catch(() => {})
+
     // Get user role to redirect appropriately
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {

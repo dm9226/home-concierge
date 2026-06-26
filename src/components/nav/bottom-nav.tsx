@@ -15,6 +15,7 @@ import {
   FileText,
   BarChart3,
   Settings,
+  ScrollText,
   X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -33,6 +34,7 @@ const moreLinks = [
   { href: "/dashboard/team", label: "Team", icon: Settings },
   { href: "/dashboard/invoices", label: "Invoices", icon: FileText },
   { href: "/dashboard/reports", label: "Reports", icon: BarChart3 },
+  { href: "/dashboard/audit", label: "Audit Log", icon: ScrollText },
 ]
 
 export function BottomNav() {

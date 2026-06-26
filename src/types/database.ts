@@ -170,6 +170,63 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      auth_events: {
+        Row: {
+          id: string
+          user_id: string | null
+          event: string
+          ip: string | null
+          user_agent: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          event?: string
+          ip?: string | null
+          user_agent?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          event?: string
+          ip?: string | null
+          user_agent?: string | null
+          created_at?: string
+        }
+        Relationships: Rel[]
+      }
+      audit_logs: {
+        Row: {
+          id: string
+          user_id: string | null
+          action: string
+          table_name: string
+          record_id: string | null
+          changes: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          action: string
+          table_name: string
+          record_id?: string | null
+          changes?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          action?: string
+          table_name?: string
+          record_id?: string | null
+          changes?: Json | null
+          created_at?: string
+        }
+        Relationships: Rel[]
+      }
       reminder_log: {
         Row: {
           id: string

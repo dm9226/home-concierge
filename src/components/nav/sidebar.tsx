@@ -14,6 +14,7 @@ import {
   MessageSquare,
   UserCheck,
   Settings,
+  ScrollText,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -28,6 +29,7 @@ const adminLinks = [
   { href: "/dashboard/invoices", label: "Invoices", icon: FileText },
   { href: "/dashboard/reports", label: "Reports", icon: BarChart3 },
   { href: "/dashboard/messages", label: "Messages", icon: MessageSquare },
+  { href: "/dashboard/audit", label: "Audit Log", icon: ScrollText },
 ]
 
 interface SidebarProps {
