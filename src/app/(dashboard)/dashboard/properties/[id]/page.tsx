@@ -129,6 +129,18 @@ export default async function PropertyDetailPage({
 
   const client = (property as any).client
 
+  // --- Snapshot data: recommendations, completed-work count, last inspection ---
+  const [{ data: snapshotRecs }, { count: completedWorkCount }, { data: lastInspection }] = await Promise.all([
+    admin.from("recommendations").select("status").eq("property_id", id),
+    admin.from("work_orders").select("*", { count: "exact", head: true }).eq("property_id", id).eq("status", "completed"),
+    admin.from("property_inspections").select("inspection_date").eq("property_id", id).eq("status", "complete").order("inspection_date", { ascending: false }).limit(1).maybeSingle(),
+  ])
+
+  const recCounts = (snapshotRecs ?? []).reduce((acc, r) => {
+    acc[r.status] = (acc[r.status] ?? 0) + 1
+    return acc
+  }, {} as Record<string, number>)
+
   // On-demand calls for current calendar year (plan tracking + overage billing)
   const currentYear = new Date().getFullYear()
   const { data: onDemandRows } = await admin
@@ -154,6 +166,14 @@ export default async function PropertyDetailPage({
   const openWorkOrderCount =
     workOrders?.filter(
       (wo) => !["completed", "cancelled"].includes(wo.status)
+    ).length ?? 0
+
+  // Maintenance / services due within 30 days (not yet overdue) -- in-tool reminders
+  const now = new Date()
+  const in30 = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
+  const upcomingMaintenanceCount =
+    maintenance?.filter(
+      (m) => m.next_due && new Date(m.next_due) >= now && new Date(m.next_due) <= in30
     ).length ?? 0
 
   const unreadMessageCount =
@@ -293,6 +313,49 @@ export default async function PropertyDetailPage({
 
         {/* OVERVIEW TAB */}
         <TabsContent value="overview">
+          {/* Property snapshot: live done vs outstanding */}
+          <Card className="mb-4">
+            <CardContent className="pt-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-[#0F1B2D] dark:text-white">Property Snapshot</h3>
+                <span className="text-xs text-slate-400">
+                  {lastInspection ? `Last inspected ${formatDateShort(lastInspection.inspection_date)}` : "Not yet inspected"}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Taken care of */}
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 mb-2">Taken Care Of</p>
+                  <div className="space-y-1.5 text-sm">
+                    <div className="flex justify-between"><span className="text-slate-500">Completed work</span><span className="font-semibold text-[#0F1B2D] dark:text-white">{completedWorkCount ?? 0}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Resolved recommendations</span><span className="font-semibold text-[#0F1B2D] dark:text-white">{recCounts.completed ?? 0}</span></div>
+                  </div>
+                </div>
+                {/* Outstanding */}
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 mb-2">Outstanding</p>
+                  <div className="space-y-1.5 text-sm">
+                    <div className="flex justify-between"><span className="text-slate-500">Open work orders</span><span className={`font-semibold ${openWorkOrderCount > 0 ? "text-amber-600" : "text-[#0F1B2D] dark:text-white"}`}>{openWorkOrderCount}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Awaiting client decision</span><span className={`font-semibold ${(recCounts.pending ?? 0) > 0 ? "text-amber-600" : "text-[#0F1B2D] dark:text-white"}`}>{recCounts.pending ?? 0}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Approved, to schedule</span><span className="font-semibold text-[#0F1B2D] dark:text-white">{recCounts.approved ?? 0}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Deferred / monitoring</span><span className="font-semibold text-[#0F1B2D] dark:text-white">{recCounts.deferred ?? 0}</span></div>
+                  </div>
+                </div>
+              </div>
+              {/* Reminders row */}
+              {(overdueMaintenanceCount > 0 || upcomingMaintenanceCount > 0) && (
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-4 text-sm">
+                  {overdueMaintenanceCount > 0 && (
+                    <span className="text-red-600 font-medium">{overdueMaintenanceCount} maintenance overdue</span>
+                  )}
+                  {upcomingMaintenanceCount > 0 && (
+                    <span className="text-slate-500">{upcomingMaintenanceCount} due in the next 30 days</span>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           <PropertyMap
             address={`${property.address}, ${property.city}, ${property.state} ${property.zip}`}
             latitude={property.latitude ? Number(property.latitude) : null}
