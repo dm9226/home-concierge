@@ -26,6 +26,8 @@ import { PropertyFiles } from "./property-files"
 import { RecommendationsTab } from "./recommendations-tab"
 import { ServiceAgreementAdmin } from "./service-agreement-admin"
 import { planLabel } from "@/lib/agreement"
+import { onboardingSteps } from "@/lib/onboarding"
+import { OnboardingTracker } from "./onboarding-tracker"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
@@ -131,17 +133,39 @@ export default async function PropertyDetailPage({
 
   const client = (property as any).client
 
-  // --- Snapshot data: recommendations, completed-work count, last inspection ---
-  const [{ data: snapshotRecs }, { count: completedWorkCount }, { data: lastInspection }] = await Promise.all([
+  // --- Snapshot + onboarding data ---
+  const [
+    { data: snapshotRecs },
+    { count: completedWorkCount },
+    { data: lastInspection },
+    { data: agreementRow },
+    { count: servicesCount },
+    { data: onboardingInfo },
+  ] = await Promise.all([
     admin.from("recommendations").select("status").eq("property_id", id),
     admin.from("work_orders").select("*", { count: "exact", head: true }).eq("property_id", id).eq("status", "completed"),
     admin.from("property_inspections").select("inspection_date").eq("property_id", id).eq("status", "complete").order("inspection_date", { ascending: false }).limit(1).maybeSingle(),
+    admin.from("service_agreements").select("status").eq("property_id", id).maybeSingle(),
+    admin.from("recurring_services").select("*", { count: "exact", head: true }).eq("property_id", id).eq("is_active", true),
+    admin.from("property_onboarding").select("utility_providers, hoa_name").eq("property_id", id).maybeSingle(),
   ])
 
   const recCounts = (snapshotRecs ?? []).reduce((acc, r) => {
     acc[r.status] = (acc[r.status] ?? 0) + 1
     return acc
   }, {} as Record<string, number>)
+
+  const onboardingFlags = {
+    agreementAccepted: agreementRow?.status === "accepted",
+    hasInspection: !!lastInspection,
+    hasInfo: property.bedroom_count != null || !!onboardingInfo?.hoa_name ||
+      (Array.isArray(onboardingInfo?.utility_providers) && (onboardingInfo!.utility_providers as unknown[]).length > 0),
+    hasInventory: (assets?.length ?? 0) > 0,
+    hasServices: (servicesCount ?? 0) > 0,
+    hasRecommendations: (snapshotRecs?.length ?? 0) > 0,
+  }
+  const obSteps = onboardingSteps(onboardingFlags)
+  const obComplete = obSteps.every(s => s.done)
 
   // On-demand calls for current calendar year (plan tracking + overage billing)
   const currentYear = new Date().getFullYear()
@@ -315,6 +339,11 @@ export default async function PropertyDetailPage({
 
         {/* OVERVIEW TAB */}
         <TabsContent value="overview">
+          {/* Status strip: onboarding tracker until complete, then the live snapshot */}
+          {!obComplete && (
+            <OnboardingTracker steps={obSteps} basePath={`/dashboard/properties/${property.id}`} />
+          )}
+
           {/* Property snapshot: live done vs outstanding */}
           <Card className="mb-4">
             <CardContent className="pt-5">
