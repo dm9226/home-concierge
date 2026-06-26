@@ -1,6 +1,9 @@
 // Presentational rendering of a membership agreement -- a clean "paper"
-// document with a titled header, parties block, and typeset clauses.
-// Used on the homeowner portal and as the admin preview. Pure display.
+// document: titled letterhead, parties block, and typeset terms. Renders a
+// markdown-lite body (## headings, - bullets, **bold**) and degrades
+// gracefully to plain paragraphs for arbitrary text. Pure display.
+
+import React from "react"
 
 interface Parties {
   ownerName: string
@@ -9,25 +12,44 @@ interface Parties {
   feeLabel: string
 }
 
-interface Clause {
-  num?: string
-  heading?: string
-  text: string
+type Block =
+  | { type: "heading"; num?: string; title: string }
+  | { type: "para"; text: string }
+  | { type: "list"; items: string[] }
+
+function parseBody(body: string): Block[] {
+  const lines = body.replace(/\r/g, "").split("\n")
+  const blocks: Block[] = []
+  let para: string[] = []
+  let list: string[] | null = null
+  const flushPara = () => { if (para.length) { blocks.push({ type: "para", text: para.join(" ") }); para = [] } }
+  const flushList = () => { if (list) { blocks.push({ type: "list", items: list }); list = null } }
+
+  for (const raw of lines) {
+    const line = raw.trim()
+    if (!line) { flushPara(); flushList(); continue }
+    const h = line.match(/^#{1,6}\s+(.+)$/)
+    if (h) {
+      flushPara(); flushList()
+      const m = h[1].match(/^(\d+(?:\.\d+)?)\.?\s+(.+)$/)
+      blocks.push(m ? { type: "heading", num: m[1], title: m[2] } : { type: "heading", title: h[1] })
+      continue
+    }
+    const b = line.match(/^[-•]\s+(.+)$/)
+    if (b) { flushPara(); if (!list) list = []; list.push(b[1]); continue }
+    flushList(); para.push(line)
+  }
+  flushPara(); flushList()
+  return blocks
 }
 
-// Split the free-text body into blocks (by blank lines). If a block looks like
-// "N. Heading. body...", pull out the number + heading for emphasis; otherwise
-// render it as a plain paragraph. Degrades gracefully for arbitrary pasted text.
-function parseClauses(body: string): Clause[] {
-  return body
-    .split(/\n\s*\n/)
-    .map(b => b.trim())
-    .filter(Boolean)
-    .map(block => {
-      const m = block.match(/^(\d+)\.\s+([^.\n]{2,60})\.\s+([\s\S]+)$/)
-      if (m) return { num: m[1], heading: m[2], text: m[3].trim() }
-      return { text: block }
-    })
+// Bold spans on **...**; React escapes text so this is XSS-safe.
+function renderInline(text: string, k: string): React.ReactNode[] {
+  return text.split(/\*\*/).map((p, i) =>
+    i % 2 === 1
+      ? <strong key={`${k}-${i}`} className="font-medium text-[#0F1B2D] dark:text-white">{p}</strong>
+      : <React.Fragment key={`${k}-${i}`}>{p}</React.Fragment>
+  )
 }
 
 export function AgreementDocument({
@@ -38,7 +60,7 @@ export function AgreementDocument({
   body: string
   effectiveLabel?: string
 }) {
-  const clauses = parseClauses(body)
+  const blocks = parseBody(body)
 
   return (
     <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -57,20 +79,34 @@ export function AgreementDocument({
           <Field label="Effective" value={effectiveLabel ?? "Upon acceptance"} />
         </dl>
 
-        {/* Clauses */}
-        <div className="mt-8 space-y-6">
-          {clauses.map((c, i) => (
-            <section key={i}>
-              {c.heading && (
-                <h2 className="font-display text-base font-semibold text-[#0F1B2D] dark:text-white">
-                  {c.num && <span className="text-[#C9A96E]">{c.num}.</span>} {c.heading}
+        {/* Terms */}
+        <div className="mt-8 space-y-4">
+          {blocks.map((block, i) => {
+            if (block.type === "heading") {
+              return (
+                <h2 key={i} className="font-display text-base font-semibold text-[#0F1B2D] dark:text-white pt-3">
+                  {block.num && <span className="text-[#C9A96E]">{block.num}.</span>} {block.title}
                 </h2>
-              )}
-              <p className="mt-1 whitespace-pre-wrap text-[15px] leading-7 text-slate-600 dark:text-slate-300">
-                {c.text}
+              )
+            }
+            if (block.type === "list") {
+              return (
+                <ul key={i} className="space-y-2 pl-1">
+                  {block.items.map((item, j) => (
+                    <li key={j} className="flex gap-2.5 text-[15px] leading-7 text-slate-600 dark:text-slate-300">
+                      <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#C9A96E]" />
+                      <span>{renderInline(item, `${i}-${j}`)}</span>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+            return (
+              <p key={i} className="text-[15px] leading-7 text-slate-600 dark:text-slate-300">
+                {renderInline(block.text, String(i))}
               </p>
-            </section>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>
