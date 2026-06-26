@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Loader2, CheckCircle2, FileSignature } from "lucide-react"
+import { AgreementDocument } from "@/components/agreement-document"
 
 interface Agreement {
   id: string
@@ -50,23 +51,14 @@ export function AgreementClient({ agreement, parties }: { agreement: Agreement; 
 
   return (
     <div className="space-y-4">
-      <Card>
-        <CardContent className="pt-5">
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D] dark:text-white">{agreement.title}</h2>
-
-          {/* Merged parties header */}
-          <div className="mt-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 text-sm space-y-0.5">
-            <p><span className="text-slate-500">Owner:</span> <span className="font-medium text-[#0F1B2D] dark:text-white">{parties.ownerName}</span></p>
-            <p><span className="text-slate-500">Property:</span> <span className="font-medium text-[#0F1B2D] dark:text-white">{parties.address}</span></p>
-            <p><span className="text-slate-500">Plan:</span> <span className="font-medium text-[#0F1B2D] dark:text-white">{parties.planLabel} &middot; {parties.feeLabel}</span></p>
-          </div>
-
-          {/* Terms */}
-          <div className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-            {agreement.body}
-          </div>
-        </CardContent>
-      </Card>
+      <AgreementDocument
+        title={agreement.title}
+        parties={parties}
+        body={agreement.body}
+        effectiveLabel={accepted && agreement.accepted_at
+          ? `Accepted ${new Date(agreement.accepted_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`
+          : undefined}
+      />
 
       {accepted ? (
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-900/40 dark:bg-emerald-950/20 p-4 flex items-center gap-3">

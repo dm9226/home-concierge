@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileSignature, Loader2, CheckCircle2, Send, Undo2 } from "lucide-react"
 import { DEFAULT_AGREEMENT_BODY } from "@/lib/agreement"
+import { AgreementDocument } from "@/components/agreement-document"
 import { formatDateShort } from "@/lib/utils"
 
 interface Agreement {
@@ -41,6 +42,7 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
+  const [preview, setPreview] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -132,14 +134,27 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
           </div>
         ) : (
           <>
-            <div className="space-y-1.5">
-              <Label htmlFor="ag_title">Title</Label>
-              <Input id="ag_title" value={title} onChange={e => { setTitle(e.target.value); setSaved(false) }} />
+            <div className="flex items-center justify-end">
+              <div className="inline-flex rounded-lg border border-slate-200 dark:border-slate-700 p-0.5 text-xs font-medium">
+                <button type="button" onClick={() => setPreview(false)} className={`rounded-md px-2.5 py-1 ${!preview ? "bg-[#0F1B2D] text-white" : "text-slate-500"}`}>Edit</button>
+                <button type="button" onClick={() => setPreview(true)} className={`rounded-md px-2.5 py-1 ${preview ? "bg-[#0F1B2D] text-white" : "text-slate-500"}`}>Preview</button>
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="ag_body">Terms</Label>
-              <Textarea id="ag_body" value={body} onChange={e => { setBody(e.target.value); setSaved(false) }} rows={14} className="font-mono text-xs leading-relaxed" />
-            </div>
+
+            {preview ? (
+              <AgreementDocument title={title} parties={parties} body={body} />
+            ) : (
+              <>
+                <div className="space-y-1.5">
+                  <Label htmlFor="ag_title">Title</Label>
+                  <Input id="ag_title" value={title} onChange={e => { setTitle(e.target.value); setSaved(false) }} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="ag_body">Terms</Label>
+                  <Textarea id="ag_body" value={body} onChange={e => { setBody(e.target.value); setSaved(false) }} rows={14} className="font-mono text-xs leading-relaxed" />
+                </div>
+              </>
+            )}
 
             <div className="flex items-center justify-between gap-2 flex-wrap">
               <div className="flex items-center gap-2">
