@@ -8,7 +8,7 @@ import { onboardingSteps } from "@/lib/onboarding"
 import {
   AlertTriangle, Wrench, ArrowRight, ChevronRight,
   Home, MessageSquare, CheckCircle2, Camera,
-  Calendar, Clock, Shield, MapPin, AlertCircle,
+  Calendar, Shield, MapPin, AlertCircle,
   TrendingUp,
 } from "lucide-react"
 
@@ -73,7 +73,6 @@ export default async function PortalHomePage({
     { data: assets },
     { data: openWorkOrders },
     { data: completedWorkOrders },
-    { data: activeProjects },
     { data: unpaidInvoices },
     { data: unreadMessages },
     { data: upcomingVisits },
@@ -112,13 +111,6 @@ export default async function PortalHomePage({
       .eq("status", "completed")
       .order("completed_date", { ascending: false })
       .limit(4),
-
-    supabase
-      .from("projects")
-      .select("id, title, status, target_completion_date, project_tasks(status)")
-      .eq("property_id", propertyId)
-      .in("status", ["planning", "in_progress"])
-      .limit(3),
 
     supabase
       .from("invoices")
@@ -707,46 +699,6 @@ export default async function PortalHomePage({
                 </div>
               </Link>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── ACTIVE PROJECTS ──────────────────────────────────────────── */}
-      {activeProjects && activeProjects.length > 0 && (
-        <div>
-          <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white mb-3">Active Projects</h2>
-          <div className="space-y-3">
-            {activeProjects.map(project => {
-              const tasks = (project as any).project_tasks ?? []
-              const completed = tasks.filter((t: any) => t.status === "completed").length
-              const progress = tasks.length ? Math.round((completed / tasks.length) * 100) : 0
-              return (
-                <div key={project.id} className="rounded-xl border border-slate-200/80 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="font-semibold text-[#0F1B2D] dark:text-white">{project.title}</p>
-                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full capitalize ${
-                      project.status === "in_progress" ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-600"
-                    }`}>
-                      {project.status.replace("_", " ")}
-                    </span>
-                  </div>
-                  {tasks.length > 0 && (
-                    <>
-                      <div className="h-1.5 rounded-full bg-slate-100">
-                        <div className="h-full rounded-full bg-[#C9A96E]" style={{ width: `${progress}%` }} />
-                      </div>
-                      <p className="mt-1.5 text-xs text-slate-400">{progress}% complete &bull; {completed}/{tasks.length} steps done</p>
-                    </>
-                  )}
-                  {project.target_completion_date && (
-                    <p className="mt-1.5 text-xs text-slate-400 flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      Target: {formatDateShort(project.target_completion_date)}
-                    </p>
-                  )}
-                </div>
-              )
-            })}
           </div>
         </div>
       )}

@@ -11,7 +11,7 @@ import { planLabel } from "@/lib/agreement"
 import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import {
   Home, Calendar, MapPin, CheckCircle2, AlertCircle,
-  XCircle, Shield, Wrench, Package, FolderOpen, Clock,
+  XCircle, Shield, Wrench, Package, Clock,
   Activity, ClipboardCheck, RotateCw, FileText, Download,
 } from "lucide-react"
 
@@ -48,7 +48,6 @@ export default async function PortalPropertyPage({
 
   const [
     { data: assets },
-    { data: projects },
     { data: completedWork },
     { data: maintenance },
     { data: inspectionRows },
@@ -65,13 +64,6 @@ export default async function PortalPropertyPage({
       .eq("property_id", propertyId)
       .eq("status", "active")
       .order("category"),
-
-    supabase
-      .from("projects")
-      .select("id, title, description, status, start_date, target_completion_date, actual_completion_date, budget, actual_spend, project_tasks(status)")
-      .eq("property_id", propertyId)
-      .neq("status", "on_hold")
-      .order("created_at", { ascending: false }),
 
     supabase
       .from("work_orders")
@@ -267,7 +259,6 @@ export default async function PortalPropertyPage({
             </TabsTrigger>
           )}
           {hasFiles && <TabsTrigger value="documents">Documents</TabsTrigger>}
-          <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
 
@@ -733,66 +724,6 @@ export default async function PortalPropertyPage({
           </TabsContent>
         )}
 
-        {/* ── PROJECTS ────────────────────────────────────────────────── */}
-        <TabsContent value="projects" className="space-y-4">
-          {(!projects || projects.length === 0) ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <FolderOpen className="h-12 w-12 text-slate-300 mb-3" />
-              <p className="font-medium text-slate-500">No projects yet</p>
-              <p className="text-sm text-slate-400 mt-1">Larger home improvement projects will appear here as they are planned and executed.</p>
-            </div>
-          ) : projects.map(project => {
-            const tasks = (project as any).project_tasks ?? []
-            const completed = tasks.filter((t: any) => t.status === "completed").length
-            const progress = tasks.length ? Math.round((completed / tasks.length) * 100) : 0
-
-            return (
-              <Card key={project.id}>
-                <CardContent className="pt-5">
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-[#0F1B2D] dark:text-white">{project.title}</p>
-                      {project.description && (
-                        <p className="text-sm text-slate-500 mt-0.5">{project.description}</p>
-                      )}
-                    </div>
-                    <StatusBadge status={project.status} />
-                  </div>
-
-                  {tasks.length > 0 && (
-                    <div className="mb-3">
-                      <div className="flex justify-between text-xs text-slate-400 mb-1">
-                        <span>Progress</span>
-                        <span>{completed}/{tasks.length} steps</span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-slate-100">
-                        <div className="h-full rounded-full bg-[#C9A96E]" style={{ width: `${progress}%` }} />
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex items-center gap-4 text-xs text-slate-500">
-                    {project.target_completion_date && (
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        Target: {formatDateShort(project.target_completion_date)}
-                      </span>
-                    )}
-                    {project.budget && (
-                      <span>Budget: {formatCurrency(project.budget)}</span>
-                    )}
-                    {project.actual_completion_date && (
-                      <span className="flex items-center gap-1 text-emerald-600">
-                        <CheckCircle2 className="h-3 w-3" />
-                        Completed {formatDateShort(project.actual_completion_date)}
-                      </span>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </TabsContent>
 
         {/* ── HISTORY ─────────────────────────────────────────────────── */}
         <TabsContent value="history" className="space-y-4">
