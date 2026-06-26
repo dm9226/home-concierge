@@ -308,9 +308,8 @@ export default async function PropertyDetailPage({
           <TabsTrigger value="inventory">
             Inventory {assets && assets.length > 0 && <span className="ml-1.5 text-xs text-slate-400">({assets.length})</span>}
           </TabsTrigger>
-          <TabsTrigger value="services">Services</TabsTrigger>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="files">Files</TabsTrigger>
-          <TabsTrigger value="info">Info</TabsTrigger>
           {/* Group divider */}
           <span aria-hidden className="mx-1 my-1 w-px self-stretch bg-slate-200 dark:bg-slate-700" />
           {/* Operations group */}
@@ -534,11 +533,6 @@ export default async function PropertyDetailPage({
           />
         </TabsContent>
 
-        {/* SERVICES TAB */}
-        <TabsContent value="services">
-          <RecurringServices propertyId={property.id} />
-        </TabsContent>
-
         {/* RECOMMENDATIONS TAB */}
         <TabsContent value="recommendations">
           <RecommendationsTab propertyId={property.id} userId={user.id} />
@@ -549,8 +543,8 @@ export default async function PropertyDetailPage({
           <PropertyFiles propertyId={property.id} userId={user.id} />
         </TabsContent>
 
-        {/* PROPERTY INFO TAB */}
-        <TabsContent value="info">
+        {/* PROFILE TAB (agreement + property info + recurring services) */}
+        <TabsContent value="profile">
           <div className="space-y-5">
             <ServiceAgreementAdmin
               propertyId={property.id}
@@ -567,6 +561,9 @@ export default async function PropertyDetailPage({
               initialBedrooms={property.bedroom_count}
               initialBathrooms={property.bathroom_count}
             />
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-5">
+              <RecurringServices propertyId={property.id} />
+            </div>
           </div>
         </TabsContent>
 

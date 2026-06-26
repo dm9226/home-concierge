@@ -22,11 +22,11 @@ export interface OnboardingStep {
 
 export function onboardingSteps(f: OnboardingFlags): OnboardingStep[] {
   return [
-    { key: "agreement",       label: "Service agreement signed",     clientLabel: "Sign your service agreement", done: f.agreementAccepted,    tab: "info",            clientAction: true },
+    { key: "agreement",       label: "Service agreement signed",     clientLabel: "Sign your service agreement", done: f.agreementAccepted,    tab: "profile",         clientAction: true },
     { key: "walkthrough",     label: "Initial walkthrough completed", clientLabel: "Home walkthrough",           done: f.hasInspection,       tab: "inspection",      clientAction: false },
-    { key: "profile",         label: "Property info captured",        clientLabel: "Home profile",               done: f.hasInfo,             tab: "info",            clientAction: false },
+    { key: "profile",         label: "Property info captured",        clientLabel: "Home profile",               done: f.hasInfo,             tab: "profile",         clientAction: false },
     { key: "inventory",       label: "Home inventory added",          clientLabel: "Appliances & systems logged", done: f.hasInventory,       tab: "inventory",       clientAction: false },
-    { key: "services",        label: "Recurring services logged",     clientLabel: "Recurring services",         done: f.hasServices,         tab: "services",        clientAction: false },
+    { key: "services",        label: "Recurring services logged",     clientLabel: "Recurring services",         done: f.hasServices,         tab: "profile",         clientAction: false },
     { key: "recommendations", label: "Recommendation report prepared", clientLabel: "Recommendations ready",     done: f.hasRecommendations,  tab: "recommendations", clientAction: false },
   ]
 }
