@@ -50,6 +50,7 @@ export default async function PortalPropertyPage({
     { data: maintenance },
     { data: inspectionRows },
     { data: recurringServices },
+    { data: onboarding },
   ] = await Promise.all([
     supabase
       .from("assets")
@@ -94,6 +95,13 @@ export default async function PortalPropertyPage({
       .eq("property_id", propertyId)
       .eq("is_active", true)
       .order("sort_order", { ascending: true }),
+
+    // Only non-sensitive onboarding fields (no access codes / passwords)
+    supabase
+      .from("property_onboarding")
+      .select("utility_providers, hoa_name, hoa_contact_phone, hoa_contact_email, emergency_contacts")
+      .eq("property_id", propertyId)
+      .maybeSingle(),
   ])
 
   // --- Home Health: latest completed inspection rollup ---
@@ -136,6 +144,15 @@ export default async function PortalPropertyPage({
     poorCount > 0 ? { label: "Needs Attention", color: "text-red-600", dot: "bg-red-500" } :
     fairCount > 0 ? { label: "Good", color: "text-amber-600", dot: "bg-amber-500" } :
     { label: "Excellent", color: "text-emerald-600", dot: "bg-emerald-500" }
+
+  // --- Home details (non-sensitive onboarding info) ---
+  const utilities = Array.isArray(onboarding?.utility_providers)
+    ? (onboarding!.utility_providers as { type?: string; company?: string }[])
+    : []
+  const emergencyContacts = Array.isArray(onboarding?.emergency_contacts)
+    ? (onboarding!.emergency_contacts as { name?: string; relationship?: string; phone?: string }[])
+    : []
+  const hasHomeDetails = utilities.length > 0 || emergencyContacts.length > 0 || !!onboarding?.hoa_name
 
   const assetsByCategory = (assets ?? []).reduce((acc, a) => {
     if (!acc[a.category]) acc[a.category] = []
@@ -286,6 +303,57 @@ export default async function PortalPropertyPage({
                     )}
                   </div>
                 ))}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Home details (utilities, HOA, emergency contacts) */}
+          {hasHomeDetails && (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-[#C9A96E]" />
+                  Home Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 text-sm">
+                {utilities.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Utilities</p>
+                    <div className="space-y-1">
+                      {utilities.filter(u => u.company).map((u, i) => (
+                        <div key={i} className="flex justify-between">
+                          <span className="text-slate-500">{u.type}</span>
+                          <span className="font-medium text-[#0F1B2D] dark:text-white">{u.company}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {onboarding?.hoa_name && (
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">HOA</p>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">{onboarding.hoa_name}</span>
+                      {onboarding.hoa_contact_phone && (
+                        <span className="font-medium text-[#0F1B2D] dark:text-white">{onboarding.hoa_contact_phone}</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {emergencyContacts.filter(c => c.name).length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Emergency Contacts</p>
+                    <div className="space-y-1">
+                      {emergencyContacts.filter(c => c.name).map((c, i) => (
+                        <div key={i} className="flex justify-between">
+                          <span className="text-slate-500">{c.name}{c.relationship ? ` (${c.relationship})` : ""}</span>
+                          {c.phone && <span className="font-medium text-[#0F1B2D] dark:text-white">{c.phone}</span>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
