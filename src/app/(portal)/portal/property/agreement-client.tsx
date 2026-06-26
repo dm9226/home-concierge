@@ -53,7 +53,11 @@ export function AgreementClient({ agreement, parties }: { agreement: Agreement; 
     <div className="space-y-4">
       <AgreementDocument
         title={agreement.title}
-        parties={parties}
+        fields={[
+          { label: "Member", value: parties.ownerName },
+          { label: "Property", value: parties.address },
+          { label: "Plan", value: `${parties.planLabel} · ${parties.feeLabel}` },
+        ]}
         body={agreement.body}
         effectiveLabel={accepted && agreement.accepted_at
           ? `Accepted ${new Date(agreement.accepted_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`

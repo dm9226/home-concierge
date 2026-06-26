@@ -5,11 +5,9 @@
 
 import React from "react"
 
-interface Parties {
-  ownerName: string
-  address: string
-  planLabel: string
-  feeLabel: string
+interface PartyField {
+  label: string
+  value: string
 }
 
 type Block =
@@ -53,14 +51,15 @@ function renderInline(text: string, k: string): React.ReactNode[] {
 }
 
 export function AgreementDocument({
-  title, parties, body, effectiveLabel,
+  title, fields, body, effectiveLabel,
 }: {
   title: string
-  parties: Parties
+  fields: PartyField[]
   body: string
   effectiveLabel?: string
 }) {
   const blocks = parseBody(body)
+  const allFields = [...fields, { label: "Effective", value: effectiveLabel ?? "Upon acceptance" }]
 
   return (
     <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -73,10 +72,7 @@ export function AgreementDocument({
       <div className="px-6 py-8 sm:px-10 sm:py-10">
         {/* Parties */}
         <dl className="grid grid-cols-1 gap-x-6 gap-y-3 rounded-xl border border-slate-200/80 bg-slate-50 p-4 sm:grid-cols-2 dark:border-slate-800 dark:bg-slate-800/40">
-          <Field label="Member" value={parties.ownerName || "--"} />
-          <Field label="Property" value={parties.address} />
-          <Field label="Plan" value={`${parties.planLabel} · ${parties.feeLabel}`} />
-          <Field label="Effective" value={effectiveLabel ?? "Upon acceptance"} />
+          {allFields.map((f, i) => <Field key={i} label={f.label} value={f.value || "--"} />)}
         </dl>
 
         {/* Terms */}

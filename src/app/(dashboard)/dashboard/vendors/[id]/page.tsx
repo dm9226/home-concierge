@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { formatCurrency, formatDateShort } from "@/lib/utils"
 import { ArrowLeft, Phone, Mail, Globe, Star } from "lucide-react"
 import { VendorActions } from "./vendor-actions"
+import { VendorAgreementAdmin } from "./vendor-agreement-admin"
 
 const STATUS_COLORS: Record<string, string> = {
   preferred: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -173,6 +174,12 @@ export default async function VendorDetailPage({
           </CardContent>
         </Card>
       </div>
+
+      <VendorAgreementAdmin
+        vendorId={vendor.id}
+        userId={user.id}
+        vendor={{ company_name: vendor.company_name, specialties: vendor.specialty_categories ?? [] }}
+      />
 
       {vendor.notes && (
         <Card>

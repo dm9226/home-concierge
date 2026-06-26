@@ -31,7 +31,11 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   const publicRoutes = ["/", "/login", "/signup"]
-  const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith("/auth/")
+  const isPublicRoute =
+    publicRoutes.includes(pathname) ||
+    pathname.startsWith("/auth/") ||
+    pathname.startsWith("/sign/") ||                       // public vendor agreement signing
+    pathname.startsWith("/api/vendor-agreements/")          // its accept endpoint
 
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone()
