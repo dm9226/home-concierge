@@ -6,6 +6,8 @@ import { StatusBadge } from "@/components/status-badge"
 import { PropertyMap } from "@/components/property-map"
 import { MarketStatsCard } from "@/components/market-stats-card"
 import { RecommendationsClient } from "./recommendations-client"
+import { AgreementClient } from "./agreement-client"
+import { planLabel } from "@/lib/agreement"
 import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import {
   Home, Calendar, MapPin, CheckCircle2, AlertCircle,
@@ -54,6 +56,8 @@ export default async function PortalPropertyPage({
     { data: onboarding },
     { data: propertyFiles },
     { data: recommendationRows },
+    { data: agreement },
+    { data: ownerProfile },
   ] = await Promise.all([
     supabase
       .from("assets")
@@ -117,6 +121,18 @@ export default async function PortalPropertyPage({
       .select("id, title, description, rec_type, priority, status, estimated_cost, created_at")
       .eq("property_id", propertyId)
       .order("created_at", { ascending: false }),
+
+    supabase
+      .from("service_agreements")
+      .select("id, status, title, body, signer_name, accepted_at")
+      .eq("property_id", propertyId)
+      .maybeSingle(),
+
+    supabase
+      .from("users")
+      .select("full_name")
+      .eq("id", user.id)
+      .maybeSingle(),
   ])
 
   // --- Home Health: latest completed inspection rollup ---
@@ -175,6 +191,16 @@ export default async function PortalPropertyPage({
 
   const recs = recommendationRows ?? []
   const pendingRecCount = recs.filter(r => r.status === "pending" || r.status === "deferred").length
+
+  // Service agreement: only surfaced to the client once sent (or accepted)
+  const showAgreement = !!agreement && (agreement.status === "sent" || agreement.status === "accepted")
+  const agreementPending = !!agreement && agreement.status === "sent"
+  const agreementParties = {
+    ownerName: ownerProfile?.full_name ?? "",
+    address: `${property.address}, ${property.city}, ${property.state} ${property.zip}`,
+    planLabel: planLabel((property as any).plan_tier),
+    feeLabel: `${formatCurrency(property.fee_amount)}/${property.billing_period === "annually" ? "yr" : property.billing_period === "quarterly" ? "qtr" : "mo"}`,
+  }
 
   const assetsByCategory = (assets ?? []).reduce((acc, a) => {
     if (!acc[a.category]) acc[a.category] = []
@@ -240,6 +266,14 @@ export default async function PortalPropertyPage({
               </span>
             )}
           </TabsTrigger>
+          {showAgreement && (
+            <TabsTrigger value="agreement">
+              Agreement
+              {agreementPending && (
+                <span className="ml-1.5 h-4 min-w-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">1</span>
+              )}
+            </TabsTrigger>
+          )}
           {hasFiles && <TabsTrigger value="documents">Documents</TabsTrigger>}
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
@@ -645,6 +679,13 @@ export default async function PortalPropertyPage({
             </>
           )}
         </TabsContent>
+
+        {/* ── AGREEMENT ───────────────────────────────────────────────── */}
+        {showAgreement && agreement && (
+          <TabsContent value="agreement">
+            <AgreementClient agreement={agreement} parties={agreementParties} />
+          </TabsContent>
+        )}
 
         {/* ── RECOMMENDATIONS ─────────────────────────────────────────── */}
         <TabsContent value="recommendations">

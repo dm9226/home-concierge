@@ -170,6 +170,54 @@ export type Database = {
         }
         Relationships: Rel[]
       }
+      service_agreements: {
+        Row: {
+          id: string
+          property_id: string
+          status: "draft" | "sent" | "accepted" | "void"
+          title: string
+          body: string
+          accepted_by: string | null
+          signer_name: string | null
+          accepted_at: string | null
+          accepted_ip: string | null
+          accepted_snapshot: string | null
+          created_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          status?: "draft" | "sent" | "accepted" | "void"
+          title?: string
+          body: string
+          accepted_by?: string | null
+          signer_name?: string | null
+          accepted_at?: string | null
+          accepted_ip?: string | null
+          accepted_snapshot?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          status?: "draft" | "sent" | "accepted" | "void"
+          title?: string
+          body?: string
+          accepted_by?: string | null
+          signer_name?: string | null
+          accepted_at?: string | null
+          accepted_ip?: string | null
+          accepted_snapshot?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: Rel[]
+      }
       recommendations: {
         Row: {
           id: string

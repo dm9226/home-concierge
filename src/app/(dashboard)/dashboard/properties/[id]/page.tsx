@@ -24,6 +24,8 @@ import { RecurringServices } from "./recurring-services"
 import { PropertyInfo } from "./property-info"
 import { PropertyFiles } from "./property-files"
 import { RecommendationsTab } from "./recommendations-tab"
+import { ServiceAgreementAdmin } from "./service-agreement-admin"
+import { planLabel } from "@/lib/agreement"
 import { MessageThread } from "@/app/(portal)/portal/messages/message-thread"
 import { PropertyMap } from "@/components/property-map"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
@@ -516,11 +518,23 @@ export default async function PropertyDetailPage({
 
         {/* PROPERTY INFO TAB */}
         <TabsContent value="info">
-          <PropertyInfo
-            propertyId={property.id}
-            initialBedrooms={property.bedroom_count}
-            initialBathrooms={property.bathroom_count}
-          />
+          <div className="space-y-5">
+            <ServiceAgreementAdmin
+              propertyId={property.id}
+              userId={user.id}
+              parties={{
+                ownerName: client?.full_name ?? owners[0]?.full_name ?? "",
+                address: `${property.address}, ${property.city}, ${property.state} ${property.zip}`,
+                planLabel: planLabel((property as any).plan_tier),
+                feeLabel: `${formatCurrency(property.fee_amount)}/${property.billing_period === "annually" ? "yr" : property.billing_period === "quarterly" ? "qtr" : "mo"}`,
+              }}
+            />
+            <PropertyInfo
+              propertyId={property.id}
+              initialBedrooms={property.bedroom_count}
+              initialBathrooms={property.bathroom_count}
+            />
+          </div>
         </TabsContent>
 
         {/* INVENTORY TAB */}
