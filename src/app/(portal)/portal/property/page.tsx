@@ -18,13 +18,13 @@ import {
 export default async function PortalPropertyPage({
   searchParams,
 }: {
-  searchParams: Promise<{ id?: string }>
+  searchParams: Promise<{ id?: string; tab?: string }>
 }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { id: requestedId } = await searchParams
+  const { id: requestedId, tab: requestedTab } = await searchParams
 
   const { data: ownerships } = await supabase
     .from("property_owners")
@@ -239,7 +239,7 @@ export default async function PortalPropertyPage({
         </p>
       </div>
 
-      <Tabs defaultValue="overview">
+      <Tabs defaultValue={requestedTab ?? "overview"}>
         <TabsList className="w-full mb-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="systems">

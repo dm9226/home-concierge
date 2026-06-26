@@ -3,6 +3,8 @@ import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import { CoverPhotoEditor } from "@/components/cover-photo-editor"
+import { PortalOnboardingTracker } from "./onboarding-tracker"
+import { onboardingSteps } from "@/lib/onboarding"
 import {
   AlertTriangle, Wrench, ArrowRight, ChevronRight,
   Home, MessageSquare, CheckCircle2, Camera,
@@ -75,6 +77,11 @@ export default async function PortalHomePage({
     { data: unpaidInvoices },
     { data: unreadMessages },
     { data: upcomingVisits },
+    { data: agreementRow },
+    { data: recRows },
+    { data: inspectionRows },
+    { data: servicesRows },
+    { data: onboardingInfo },
   ] = await Promise.all([
     supabase
       .from("maintenance_schedules")
@@ -138,6 +145,12 @@ export default async function PortalHomePage({
       .gte("scheduled_date", now.toISOString())
       .order("scheduled_date", { ascending: true })
       .limit(2),
+
+    supabase.from("service_agreements").select("status").eq("property_id", propertyId).maybeSingle(),
+    supabase.from("recommendations").select("status").eq("property_id", propertyId),
+    supabase.from("property_inspections").select("id").eq("property_id", propertyId).eq("status", "complete").limit(1),
+    supabase.from("recurring_services").select("id").eq("property_id", propertyId).eq("is_active", true).limit(1),
+    supabase.from("property_onboarding").select("utility_providers, hoa_name").eq("property_id", propertyId).maybeSingle(),
   ])
 
   // Derived
@@ -166,6 +179,20 @@ export default async function PortalHomePage({
 
   const latestUnread = unreadMessages?.[0] ?? null
   const seasonalTip = getSeasonalTip(now.getMonth(), assetCategories, property.year_built)
+
+  // Onboarding tracker + homeowner action items
+  const obSteps = onboardingSteps({
+    agreementAccepted: agreementRow?.status === "accepted",
+    hasInspection: (inspectionRows?.length ?? 0) > 0,
+    hasInfo: property.bedroom_count != null || !!onboardingInfo?.hoa_name ||
+      (Array.isArray(onboardingInfo?.utility_providers) && (onboardingInfo!.utility_providers as unknown[]).length > 0),
+    hasInventory: (assets?.length ?? 0) > 0,
+    hasServices: (servicesRows?.length ?? 0) > 0,
+    hasRecommendations: (recRows?.length ?? 0) > 0,
+  })
+  const obComplete = obSteps.every(s => s.done)
+  const agreementActionable = agreementRow?.status === "sent"
+  const pendingRecCount = (recRows ?? []).filter(r => r.status === "pending").length
 
   const healthScore = property.health_score ?? 0
   const healthColor = healthScore >= 80 ? "text-emerald-400" : healthScore >= 60 ? "text-amber-400" : "text-red-400"
@@ -276,6 +303,11 @@ export default async function PortalHomePage({
         </div>
       </div>
 
+      {/* ── ONBOARDING TRACKER (until setup complete) ────────────────── */}
+      {!obComplete && (
+        <PortalOnboardingTracker steps={obSteps} propertyId={propertyId} agreementActionable={agreementActionable} />
+      )}
+
       {/* ── COVER PHOTO PROMPT ───────────────────────────────────────── */}
       {!property.cover_photo_url && !process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY && (
         <div className="flex items-center gap-4 rounded-xl border border-dashed border-slate-300 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
@@ -290,8 +322,40 @@ export default async function PortalHomePage({
       )}
 
       {/* ── ALERTS ────────────────────────────────────────────────────── */}
-      {(latestUnread || overdueItems.length > 0 || (unpaidInvoices?.length ?? 0) > 0 || (upcomingVisits?.length ?? 0) > 0 || expiringWarranties.length > 0) && (
+      {(agreementActionable || pendingRecCount > 0 || latestUnread || overdueItems.length > 0 || (unpaidInvoices?.length ?? 0) > 0 || (upcomingVisits?.length ?? 0) > 0 || expiringWarranties.length > 0) && (
         <div className="space-y-2">
+          {agreementActionable && (
+            <Link href={`/portal/property?id=${propertyId}&tab=agreement`}>
+              <div className="flex items-center justify-between rounded-xl border border-[#C9A96E]/50 bg-[#C9A96E]/10 p-4 hover:border-[#C9A96E] transition-colors">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-[#C9A96E] shrink-0" />
+                  <div>
+                    <p className="font-semibold text-[#0F1B2D] dark:text-white">Action needed: sign your service agreement</p>
+                    <p className="text-sm text-slate-500">Review the terms and accept to get started.</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-slate-400 shrink-0" />
+              </div>
+            </Link>
+          )}
+
+          {pendingRecCount > 0 && (
+            <Link href={`/portal/property?id=${propertyId}&tab=recommendations`}>
+              <div className="flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50 p-4 hover:border-amber-300 transition-colors dark:border-amber-900/40 dark:bg-amber-950/20">
+                <div className="flex items-center gap-3">
+                  <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-amber-800 dark:text-amber-300">
+                      {pendingRecCount} recommendation{pendingRecCount > 1 ? "s" : ""} awaiting your decision
+                    </p>
+                    <p className="text-sm text-amber-600 dark:text-amber-400">Approve, defer, or decline recommended work.</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-amber-400 shrink-0" />
+              </div>
+            </Link>
+          )}
+
           {latestUnread && (
             <Link href="/portal/messages">
               <div className="flex items-start gap-3 rounded-xl border border-[#C9A96E]/40 bg-[#C9A96E]/8 p-4 hover:border-[#C9A96E]/70 transition-colors">
