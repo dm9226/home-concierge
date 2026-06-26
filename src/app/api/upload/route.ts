@@ -51,5 +51,7 @@ export async function POST(request: NextRequest) {
 
   const { data: { publicUrl } } = admin.storage.from(bucket).getPublicUrl(filePath)
 
-  return NextResponse.json({ url: publicUrl })
+  // url is only meaningful for public buckets; private callers use path + bucket
+  // and serve via /api/files/[id] with signed URLs.
+  return NextResponse.json({ url: publicUrl, path: filePath, bucket })
 }

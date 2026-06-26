@@ -178,7 +178,9 @@ export type Database = {
           kind: "document" | "photo"
           category: string | null
           name: string
-          file_url: string
+          file_url: string | null
+          storage_bucket: string | null
+          storage_path: string | null
           file_type: string | null
           file_size: number | null
           created_at: string
@@ -190,7 +192,9 @@ export type Database = {
           kind?: "document" | "photo"
           category?: string | null
           name: string
-          file_url: string
+          file_url?: string | null
+          storage_bucket?: string | null
+          storage_path?: string | null
           file_type?: string | null
           file_size?: number | null
           created_at?: string
@@ -202,7 +206,9 @@ export type Database = {
           kind?: "document" | "photo"
           category?: string | null
           name?: string
-          file_url?: string
+          file_url?: string | null
+          storage_bucket?: string | null
+          storage_path?: string | null
           file_type?: string | null
           file_size?: number | null
           created_at?: string

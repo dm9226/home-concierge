@@ -106,7 +106,7 @@ export default async function PortalPropertyPage({
 
     supabase
       .from("property_files")
-      .select("id, kind, category, name, file_url, file_size, created_at")
+      .select("id, kind, category, name, created_at")
       .eq("property_id", propertyId)
       .order("created_at", { ascending: false }),
   ])
@@ -640,7 +640,7 @@ export default async function PortalPropertyPage({
                   {clientDocuments.map(f => (
                     <a
                       key={f.id}
-                      href={f.file_url}
+                      href={`/api/files/${f.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 hover:shadow-md transition-all"
@@ -667,9 +667,9 @@ export default async function PortalPropertyPage({
                 </h2>
                 <div className="grid grid-cols-3 gap-2">
                   {clientPhotos.map(f => (
-                    <a key={f.id} href={f.file_url} target="_blank" rel="noopener noreferrer" className="aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                    <a key={f.id} href={`/api/files/${f.id}`} target="_blank" rel="noopener noreferrer" className="aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={f.file_url} alt={f.name} className="h-full w-full object-cover" />
+                      <img src={`/api/files/${f.id}`} alt={f.name} className="h-full w-full object-cover" />
                     </a>
                   ))}
                 </div>

@@ -23,7 +23,6 @@ interface FileRow {
   kind: "document" | "photo"
   category: string | null
   name: string
-  file_url: string
   file_type: string | null
   file_size: number | null
   created_at: string
@@ -52,7 +51,7 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
       setLoading(true)
       const { data } = await supabase
         .from("property_files")
-        .select("id, kind, category, name, file_url, file_type, file_size, created_at")
+        .select("id, kind, category, name, file_type, file_size, created_at")
         .eq("property_id", propertyId)
         .order("created_at", { ascending: false })
       setFiles(data ?? [])
@@ -69,7 +68,7 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
     for (const file of Array.from(fileList)) {
       const fd = new FormData()
       fd.append("file", file)
-      fd.append("bucket", "property-media")
+      fd.append("bucket", "property-files")
       fd.append("path", `${propertyId}/${kind === "photo" ? "photos" : "documents"}`)
 
       const res = await fetch("/api/upload", { method: "POST", body: fd })
@@ -85,7 +84,8 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
         kind,
         category: kind === "document" ? docCategory : null,
         name: file.name,
-        file_url: result.url as string,
+        storage_bucket: result.bucket as string,
+        storage_path: result.path as string,
         file_type: file.type || null,
         file_size: file.size || null,
       }
@@ -169,7 +169,7 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
                       {f.category}{f.category ? " · " : ""}{formatBytes(f.file_size)}{f.file_size ? " · " : ""}{formatDateShort(f.created_at)}
                     </p>
                   </div>
-                  <a href={f.file_url} target="_blank" rel="noopener noreferrer" className="rounded p-1.5 text-slate-400 hover:text-[#C9A96E] hover:bg-slate-100 dark:hover:bg-slate-800" title="Open / download">
+                  <a href={`/api/files/${f.id}`} target="_blank" rel="noopener noreferrer" className="rounded p-1.5 text-slate-400 hover:text-[#C9A96E] hover:bg-slate-100 dark:hover:bg-slate-800" title="Open / download">
                     <Download className="h-4 w-4" />
                   </a>
                   <button onClick={() => remove(f.id)} className="rounded p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50" title="Delete">
@@ -198,9 +198,9 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {photos.map(f => (
                 <div key={f.id} className="group relative aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                  <a href={f.file_url} target="_blank" rel="noopener noreferrer">
+                  <a href={`/api/files/${f.id}`} target="_blank" rel="noopener noreferrer">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={f.file_url} alt={f.name} className="h-full w-full object-cover" />
+                    <img src={`/api/files/${f.id}`} alt={f.name} className="h-full w-full object-cover" />
                   </a>
                   <button
                     onClick={() => remove(f.id)}
