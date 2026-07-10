@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Home } from "lucide-react"
+import { Logo } from "@/components/logo"
 import Link from "next/link"
 
 export default function ResetPasswordPage() {
@@ -47,11 +47,8 @@ export default function ResetPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#F5F0E8] px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <Link href="/" className="mb-6 inline-flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#1A2320]">
-              <Home className="h-4 w-4 text-[#0E7C67]" />
-            </div>
-            <span className="font-display text-lg font-semibold text-[#1A2320]">Carefree Casa</span>
+          <Link href="/" className="mb-6 inline-flex">
+            <Logo />
           </Link>
           <h1 className="font-display text-3xl font-semibold text-[#1A2320]">Set new password</h1>
           <p className="mt-2 text-sm text-slate-500">Enter a new password for your account</p>

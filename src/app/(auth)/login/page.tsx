@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { LoginForm } from "./login-form"
-import { Home } from "lucide-react"
+import { Logo } from "@/components/logo"
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -12,11 +12,8 @@ export default function LoginPage() {
     <div className="flex min-h-screen">
       {/* Left panel */}
       <div className="hidden w-1/2 flex-col justify-between navy-gradient p-12 lg:flex">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#0E7C67]">
-            <Home className="h-5 w-5 text-[#1A2320]" />
-          </div>
-          <span className="font-display text-xl font-semibold text-white">Carefree Casa</span>
+        <Link href="/">
+          <Logo size="lg" onDark />
         </Link>
         <div>
           <blockquote className="mb-8">
@@ -38,11 +35,8 @@ export default function LoginPage() {
       <div className="flex flex-1 flex-col items-center justify-center bg-[#F5F0E8] px-6">
         <div className="w-full max-w-sm">
           <div className="mb-8 text-center">
-            <Link href="/" className="mb-6 flex items-center justify-center gap-2 lg:hidden">
-              <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#1A2320]">
-                <Home className="h-4 w-4 text-[#0E7C67]" />
-              </div>
-              <span className="font-display text-lg font-semibold text-[#1A2320]">Carefree Casa</span>
+            <Link href="/" className="mb-6 flex justify-center lg:hidden">
+              <Logo />
             </Link>
             <h1 className="font-display text-3xl font-semibold text-[#1A2320]">Welcome back</h1>
             <p className="mt-2 text-sm text-slate-500">Sign in to your Carefree Casa account</p>

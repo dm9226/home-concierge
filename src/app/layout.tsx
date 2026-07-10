@@ -32,10 +32,6 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "Carefree Casa",
   },
-  icons: {
-    icon: "/icons/icon-192.png",
-    apple: "/icons/icon-192.png",
-  },
 }
 
 export const viewport: Viewport = {

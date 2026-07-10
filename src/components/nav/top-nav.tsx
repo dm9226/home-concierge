@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { createClient } from "@/lib/supabase/client"
 import { getInitials, cn } from "@/lib/utils"
+import { Logo } from "@/components/logo"
 import type { Tables } from "@/types/database"
 
 const navLinks = [
@@ -92,13 +93,8 @@ export function TopNav({ user }: TopNavProps) {
           </button>
 
           {/* Logo */}
-          <Link href={dashboardPath} className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#1A2320]">
-              <Home className="h-4 w-4 text-[#0E7C67]" />
-            </div>
-            <span className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">
-              Carefree Casa
-            </span>
+          <Link href={dashboardPath}>
+            <Logo />
           </Link>
 
           {/* Right side */}
