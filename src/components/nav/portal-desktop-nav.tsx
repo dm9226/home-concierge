@@ -29,11 +29,11 @@ export function PortalDesktopNav() {
               className={cn(
                 "flex items-center gap-2 px-3 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
                 isActive
-                  ? "border-[#C9A96E] text-[#0F1B2D] dark:text-white"
+                  ? "border-[#0E7C67] text-[#0F1B2D] dark:text-white"
                   : "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
               )}
             >
-              <item.icon className={cn("h-4 w-4", isActive && "text-[#C9A96E]")} />
+              <item.icon className={cn("h-4 w-4", isActive && "text-[#0E7C67]")} />
               {item.label}
             </Link>
           )

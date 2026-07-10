@@ -65,7 +65,7 @@ export function ManageOwnersPanel({ propertyId, owners, allClients }: Props) {
         {available.length > 0 && (
           <Dialog open={open} onOpenChange={v => { setOpen(v); if (!v) { setSelectedId(""); setError(null) } }}>
             <DialogTrigger asChild>
-              <button className="flex items-center gap-1 text-xs text-[#C9A96E] hover:underline">
+              <button className="flex items-center gap-1 text-xs text-[#0E7C67] hover:underline">
                 <UserPlus className="h-3 w-3" />
                 Add owner
               </button>
@@ -94,7 +94,7 @@ export function ManageOwnersPanel({ propertyId, owners, allClients }: Props) {
                   <Button
                     onClick={handleAdd}
                     disabled={!selectedId || adding}
-                    className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2"
+                    className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-2"
                   >
                     {adding && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                     Add Owner
@@ -110,7 +110,7 @@ export function ManageOwnersPanel({ propertyId, owners, allClients }: Props) {
         <div className="mt-1">
           <Dialog open={open} onOpenChange={v => { setOpen(v); if (!v) { setSelectedId(""); setError(null) } }}>
             <DialogTrigger asChild>
-              <Button className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2 h-8 text-sm">
+              <Button className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-2 h-8 text-sm">
                 <UserPlus className="h-3.5 w-3.5" />
                 Assign Owner
               </Button>
@@ -139,7 +139,7 @@ export function ManageOwnersPanel({ propertyId, owners, allClients }: Props) {
                   <Button
                     onClick={handleAdd}
                     disabled={!selectedId || adding}
-                    className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2"
+                    className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-2"
                   >
                     {adding && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                     Assign

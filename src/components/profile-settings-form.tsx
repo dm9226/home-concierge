@@ -103,7 +103,7 @@ export function ProfileSettingsForm({ user }: { user: Tables<"users"> }) {
             <Button
               type="submit"
               disabled={profileLoading}
-              className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]"
+              className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]"
             >
               {profileLoading ? "Saving..." : "Save Changes"}
             </Button>
@@ -150,7 +150,7 @@ export function ProfileSettingsForm({ user }: { user: Tables<"users"> }) {
             <Button
               type="submit"
               disabled={passwordLoading}
-              className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]"
+              className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]"
             >
               {passwordLoading ? "Updating..." : "Update Password"}
             </Button>

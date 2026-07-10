@@ -10,14 +10,14 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-[#0F1B2D] text-white hover:bg-[#1a2f4e] focus-visible:ring-[#0F1B2D]",
-        gold: "bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] focus-visible:ring-[#C9A96E] font-semibold",
+        gold: "bg-[#0E7C67] text-white hover:bg-[#0A5F4E] focus-visible:ring-[#0E7C67] font-semibold",
         destructive:
           "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600",
         outline:
           "border border-[#0F1B2D]/20 bg-transparent text-[#0F1B2D] hover:bg-[#0F1B2D]/5 focus-visible:ring-[#0F1B2D] dark:border-white/20 dark:text-white dark:hover:bg-white/5",
         ghost:
           "text-[#0F1B2D] hover:bg-[#0F1B2D]/5 focus-visible:ring-[#0F1B2D] dark:text-white dark:hover:bg-white/10",
-        link: "text-[#C9A96E] underline-offset-4 hover:underline focus-visible:ring-[#C9A96E]",
+        link: "text-[#0E7C67] underline-offset-4 hover:underline focus-visible:ring-[#0E7C67]",
         emergency:
           "bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/30 font-semibold",
       },

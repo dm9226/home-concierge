@@ -245,7 +245,7 @@ export default async function PortalPropertyPage({
           <TabsTrigger value="recommendations">
             Recommendations
             {pendingRecCount > 0 && (
-              <span className="ml-1.5 h-4 min-w-4 rounded-full bg-[#C9A96E] text-white text-[10px] font-bold flex items-center justify-center px-1">
+              <span className="ml-1.5 h-4 min-w-4 rounded-full bg-[#0E7C67] text-white text-[10px] font-bold flex items-center justify-center px-1">
                 {pendingRecCount}
               </span>
             )}
@@ -275,7 +275,7 @@ export default async function PortalPropertyPage({
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
-                <Home className="h-4 w-4 text-[#C9A96E]" />
+                <Home className="h-4 w-4 text-[#0E7C67]" />
                 Your Home
               </CardTitle>
             </CardHeader>
@@ -305,7 +305,7 @@ export default async function PortalPropertyPage({
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-[#C9A96E]" />
+                  <Calendar className="h-4 w-4 text-[#0E7C67]" />
                   Upcoming Maintenance
                 </CardTitle>
               </CardHeader>
@@ -331,7 +331,7 @@ export default async function PortalPropertyPage({
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <RotateCw className="h-4 w-4 text-[#C9A96E]" />
+                  <RotateCw className="h-4 w-4 text-[#0E7C67]" />
                   Who Takes Care of Your Home
                 </CardTitle>
               </CardHeader>
@@ -360,7 +360,7 @@ export default async function PortalPropertyPage({
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-[#C9A96E]" />
+                  <Shield className="h-4 w-4 text-[#0E7C67]" />
                   Home Details
                 </CardTitle>
               </CardHeader>
@@ -411,7 +411,7 @@ export default async function PortalPropertyPage({
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <Wrench className="h-4 w-4 text-[#C9A96E]" />
+                  <Wrench className="h-4 w-4 text-[#0E7C67]" />
                   Active Service ({openWork.length})
                 </CardTitle>
               </CardHeader>
@@ -470,7 +470,7 @@ export default async function PortalPropertyPage({
                 <Card>
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm flex items-center gap-2">
-                      <Activity className="h-4 w-4 text-[#C9A96E]" />
+                      <Activity className="h-4 w-4 text-[#0E7C67]" />
                       Systems at a Glance
                     </CardTitle>
                   </CardHeader>
@@ -497,7 +497,7 @@ export default async function PortalPropertyPage({
               {recommendations.length > 0 && (
                 <div>
                   <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
-                    <ClipboardCheck className="h-4 w-4 text-[#C9A96E]" />
+                    <ClipboardCheck className="h-4 w-4 text-[#0E7C67]" />
                     Flagged During Inspection ({recommendations.length})
                   </h2>
                   <div className="space-y-2.5">
@@ -563,7 +563,7 @@ export default async function PortalPropertyPage({
 
           {Object.keys(assetsByCategory).length > 0 && (
             <h2 className="font-semibold text-[#0F1B2D] dark:text-white pt-2 flex items-center gap-2">
-              <Package className="h-4 w-4 text-[#C9A96E]" />
+              <Package className="h-4 w-4 text-[#0E7C67]" />
               Your Home Systems &amp; Equipment
             </h2>
           )}
@@ -571,7 +571,7 @@ export default async function PortalPropertyPage({
           {Object.entries(assetsByCategory).map(([category, items]) => (
             <div key={category}>
               <h3 className="font-semibold text-sm text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
-                <Shield className="h-4 w-4 text-[#C9A96E]" />
+                <Shield className="h-4 w-4 text-[#0E7C67]" />
                 {categoryLabels[category] ?? category}
               </h3>
               <div className="space-y-3">
@@ -679,7 +679,7 @@ export default async function PortalPropertyPage({
             {clientDocuments.length > 0 && (
               <div>
                 <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-[#C9A96E]" />
+                  <FileText className="h-4 w-4 text-[#0E7C67]" />
                   Documents
                 </h2>
                 <div className="space-y-2">
@@ -708,7 +708,7 @@ export default async function PortalPropertyPage({
             {clientPhotos.length > 0 && (
               <div>
                 <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
-                  <Package className="h-4 w-4 text-[#C9A96E]" />
+                  <Package className="h-4 w-4 text-[#0E7C67]" />
                   Photos
                 </h2>
                 <div className="grid grid-cols-3 gap-2">
@@ -766,8 +766,8 @@ export default async function PortalPropertyPage({
                     <div className="space-y-3 pl-10">
                       {doneWork.map(wo => (
                         <div key={wo.id} className="relative">
-                          <div className="absolute -left-6 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#C9A96E] bg-white dark:bg-slate-900">
-                            <div className="h-1.5 w-1.5 rounded-full bg-[#C9A96E]" />
+                          <div className="absolute -left-6 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#0E7C67] bg-white dark:bg-slate-900">
+                            <div className="h-1.5 w-1.5 rounded-full bg-[#0E7C67]" />
                           </div>
                           <div className="rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 px-4 py-3">
                             <div className="flex items-start justify-between gap-2">

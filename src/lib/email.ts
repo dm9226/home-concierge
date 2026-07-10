@@ -38,7 +38,7 @@ export function emailLayout(heading: string, lines: string[]): string {
   return `
   <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 520px; margin: 0 auto; color: #0F1B2D;">
     <div style="background:#0F1B2D; padding:20px 24px; border-radius:12px 12px 0 0;">
-      <span style="color:#C9A96E; font-weight:600; font-size:18px;">Care Free Casa</span>
+      <span style="color:#0E7C67; font-weight:600; font-size:18px;">Care Free Casa</span>
     </div>
     <div style="border:1px solid #e2e8f0; border-top:none; padding:24px; border-radius:0 0 12px 12px;">
       <h2 style="margin:0 0 12px; font-size:18px;">${heading}</h2>

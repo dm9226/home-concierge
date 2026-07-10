@@ -123,7 +123,7 @@ export function EditUserDialog({ open, onOpenChange, user }: EditUserDialogProps
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]"
+                className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]"
               >
                 {loading ? "Saving..." : "Save Changes"}
               </Button>

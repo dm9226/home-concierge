@@ -62,7 +62,7 @@ export default async function WorkOrderDetailPage({
           <CardContent className="space-y-3">
             <DetailRow icon={<MapPin className="h-4 w-4" />} label="Property">
               {property && (
-                <Link href={`/dashboard/properties/${property.id}`} className="text-[#C9A96E] hover:underline">
+                <Link href={`/dashboard/properties/${property.id}`} className="text-[#0E7C67] hover:underline">
                   {property.address}, {property.city}
                 </Link>
               )}
@@ -125,7 +125,7 @@ export default async function WorkOrderDetailPage({
               {updates.map((update: any, i: number) => (
                 <div key={update.id} className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <div className="h-2.5 w-2.5 rounded-full bg-[#C9A96E] mt-1 shrink-0" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-[#0E7C67] mt-1 shrink-0" />
                     {i < updates.length - 1 && <div className="w-px flex-1 bg-slate-200 mt-1" />}
                   </div>
                   <div className="pb-4">

@@ -61,7 +61,7 @@ export function MarketStatsCard({ marketData, zipCode }: MarketStatsCardProps) {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
-          <BarChart3 className="h-4 w-4 text-[#C9A96E]" />
+          <BarChart3 className="h-4 w-4 text-[#0E7C67]" />
           {zipCode} Market
         </CardTitle>
       </CardHeader>

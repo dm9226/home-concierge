@@ -157,7 +157,7 @@ export function PropertyInfo({ propertyId, initialBedrooms, initialBathrooms }: 
       {/* Property basics */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><Home className="h-4 w-4 text-[#C9A96E]" /> Property Basics</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><Home className="h-4 w-4 text-[#0E7C67]" /> Property Basics</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
@@ -175,7 +175,7 @@ export function PropertyInfo({ propertyId, initialBedrooms, initialBathrooms }: 
       {/* Utilities */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><Zap className="h-4 w-4 text-[#C9A96E]" /> Utility Providers</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><Zap className="h-4 w-4 text-[#0E7C67]" /> Utility Providers</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {utilities.map((u, i) => (
@@ -205,7 +205,7 @@ export function PropertyInfo({ propertyId, initialBedrooms, initialBathrooms }: 
       {/* HOA */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><Building2 className="h-4 w-4 text-[#C9A96E]" /> HOA</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><Building2 className="h-4 w-4 text-[#0E7C67]" /> HOA</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5"><Label>HOA Name</Label><Input value={text.hoa_name} onChange={e => setField("hoa_name", e.target.value)} /></div>
@@ -218,7 +218,7 @@ export function PropertyInfo({ propertyId, initialBedrooms, initialBathrooms }: 
       {/* Access & Security */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><KeyRound className="h-4 w-4 text-[#C9A96E]" /> Access &amp; Security</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><KeyRound className="h-4 w-4 text-[#0E7C67]" /> Access &amp; Security</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5"><Label>Alarm Company</Label><Input value={text.alarm_company} onChange={e => setField("alarm_company", e.target.value)} /></div>
@@ -234,7 +234,7 @@ export function PropertyInfo({ propertyId, initialBedrooms, initialBathrooms }: 
       {/* Emergency contacts */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><PhoneCall className="h-4 w-4 text-[#C9A96E]" /> Emergency Contacts</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><PhoneCall className="h-4 w-4 text-[#0E7C67]" /> Emergency Contacts</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {contacts.map((c, i) => (
@@ -256,7 +256,7 @@ export function PropertyInfo({ propertyId, initialBedrooms, initialBathrooms }: 
       {/* Preferences */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><CalendarClock className="h-4 w-4 text-[#C9A96E]" /> Preferences &amp; Notes</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><CalendarClock className="h-4 w-4 text-[#0E7C67]" /> Preferences &amp; Notes</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="space-y-1.5"><Label>Pets</Label><Input value={pets} onChange={e => { setPets(e.target.value); setSaved(false) }} placeholder="e.g. Two dogs, friendly; cat stays indoors" /></div>
@@ -269,7 +269,7 @@ export function PropertyInfo({ propertyId, initialBedrooms, initialBathrooms }: 
 
       <div className="flex items-center justify-end gap-3 sticky bottom-0 bg-gradient-to-t from-white dark:from-slate-950 py-3">
         {saved && <span className="flex items-center gap-1.5 text-sm text-emerald-600"><CheckCircle2 className="h-4 w-4" /> Saved</span>}
-        <Button onClick={save} disabled={saving} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+        <Button onClick={save} disabled={saving} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
           Save Property Info
         </Button>

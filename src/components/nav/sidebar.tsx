@@ -58,7 +58,7 @@ export function Sidebar({ role }: SidebarProps) {
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
               )}
             >
-              <link.icon className={cn("h-4 w-4 shrink-0", isActive && "text-[#C9A96E]")} />
+              <link.icon className={cn("h-4 w-4 shrink-0", isActive && "text-[#0E7C67]")} />
               {link.label}
             </Link>
           )

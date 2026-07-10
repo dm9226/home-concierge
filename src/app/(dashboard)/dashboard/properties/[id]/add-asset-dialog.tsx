@@ -171,7 +171,7 @@ export function AddAssetDialog({ propertyId }: Props) {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button size="sm" className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+        <Button size="sm" className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
           <Plus className="h-4 w-4" /> Add Item
         </Button>
       </DialogTrigger>
@@ -188,9 +188,9 @@ export function AddAssetDialog({ propertyId }: Props) {
               <button
                 type="button"
                 onClick={() => setMode("scan")}
-                className="flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-slate-200 p-6 text-center hover:border-[#C9A96E] hover:bg-amber-50/50 transition-colors"
+                className="flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-slate-200 p-6 text-center hover:border-[#0E7C67] hover:bg-amber-50/50 transition-colors"
               >
-                <Sparkles className="h-8 w-8 text-[#C9A96E]" />
+                <Sparkles className="h-8 w-8 text-[#0E7C67]" />
                 <div>
                   <p className="font-semibold text-[#0F1B2D] text-sm">Scan Label</p>
                   <p className="text-xs text-slate-400 mt-0.5">Photo auto-fills details</p>
@@ -199,7 +199,7 @@ export function AddAssetDialog({ propertyId }: Props) {
               <button
                 type="button"
                 onClick={() => setMode("manual")}
-                className="flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-slate-200 p-6 text-center hover:border-[#C9A96E] hover:bg-amber-50/50 transition-colors"
+                className="flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-slate-200 p-6 text-center hover:border-[#0E7C67] hover:bg-amber-50/50 transition-colors"
               >
                 <PenLine className="h-8 w-8 text-slate-400" />
                 <div>
@@ -233,7 +233,7 @@ export function AddAssetDialog({ propertyId }: Props) {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-slate-200 py-10">
-                <Sparkles className="h-10 w-10 text-[#C9A96E]" />
+                <Sparkles className="h-10 w-10 text-[#0E7C67]" />
                 <div className="text-center">
                   <p className="font-medium text-[#0F1B2D]">Take a photo of the label</p>
                   <p className="text-xs text-slate-400 mt-0.5">Serial number plate, data tag, or nameplate</p>
@@ -390,7 +390,7 @@ export function AddAssetDialog({ propertyId }: Props) {
               </Button>
               <div className="flex gap-2">
                 <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={saving} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
+                <Button type="submit" disabled={saving} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]">
                   {saving ? "Saving..." : "Save to Inventory"}
                 </Button>
               </div>

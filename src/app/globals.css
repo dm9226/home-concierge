@@ -4,9 +4,9 @@
   --color-navy-950: #0F1B2D;
   --color-navy-900: #162235;
   --color-navy-800: #1e3045;
-  --color-gold-400: #d4b483;
-  --color-gold-500: #C9A96E;
-  --color-gold-600: #b8954f;
+  --color-gold-400: #2F9179;
+  --color-gold-500: #0E7C67;
+  --color-gold-600: #0A5F4E;
   --color-cream: #F5F0E8;
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
@@ -22,8 +22,8 @@
   --input: #e2e8f0;
   --primary: #0F1B2D;
   --primary-foreground: #ffffff;
-  --gold: #C9A96E;
-  --gold-foreground: #0F1B2D;
+  --gold: #0E7C67;
+  --gold-foreground: #ffffff;
   --cream: #F5F0E8;
   --radius: 0.375rem;
 }
@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6, .font-display {
 }
 
 .gold-gradient {
-  background: linear-gradient(135deg, #C9A96E 0%, #d4b483 50%, #b8954f 100%);
+  background: linear-gradient(135deg, #0E7C67 0%, #2F9179 50%, #0A5F4E 100%);
 }
 
 .navy-gradient {

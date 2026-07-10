@@ -109,7 +109,7 @@ function Section({ title, color, items }: { title: string; color: string; items:
               <div>
                 <p className="font-medium text-[#0F1B2D] dark:text-white">{item.title}</p>
                 {property && (
-                  <Link href={`/dashboard/properties/${property.id}`} className="text-sm text-[#C9A96E] hover:underline">
+                  <Link href={`/dashboard/properties/${property.id}`} className="text-sm text-[#0E7C67] hover:underline">
                     {property.address}, {property.city}
                   </Link>
                 )}

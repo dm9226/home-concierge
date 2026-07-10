@@ -16,7 +16,7 @@ const statusConfig: Record<string, { label: string; className: string }> = {
   overdue: { label: "Overdue", className: "bg-red-50 text-red-700 border border-red-200" },
   planning: { label: "Planning", className: "bg-slate-50 text-slate-600 border border-slate-200" },
   on_hold: { label: "On Hold", className: "bg-amber-50 text-amber-700 border border-amber-200" },
-  preferred: { label: "Preferred", className: "bg-[#C9A96E]/10 text-[#b8954f] border border-[#C9A96E]/30" },
+  preferred: { label: "Preferred", className: "bg-[#0E7C67]/10 text-[#0A5F4E] border border-[#0E7C67]/30" },
   probationary: { label: "Probationary", className: "bg-orange-50 text-orange-700 border border-orange-200" },
   blacklisted: { label: "Blacklisted", className: "bg-red-100 text-red-700 border border-red-300" },
 }

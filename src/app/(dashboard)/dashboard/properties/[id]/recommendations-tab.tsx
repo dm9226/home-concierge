@@ -164,7 +164,7 @@ export function RecommendationsTab({ propertyId, userId }: { propertyId: string;
             From Inspection
           </Button>
           {!adding && (
-            <Button size="sm" onClick={() => { setAdding(true); setError(null) }} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+            <Button size="sm" onClick={() => { setAdding(true); setError(null) }} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
               <Plus className="h-4 w-4" /> Add
             </Button>
           )}
@@ -209,7 +209,7 @@ export function RecommendationsTab({ propertyId, userId }: { propertyId: string;
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => { setAdding(false); setForm(EMPTY) }}>Cancel</Button>
-            <Button onClick={addRec} disabled={saving} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
+            <Button onClick={addRec} disabled={saving} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]">
               {saving ? "Adding..." : "Add Recommendation"}
             </Button>
           </div>

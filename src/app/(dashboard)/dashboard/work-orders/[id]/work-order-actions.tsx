@@ -142,7 +142,7 @@ export function WorkOrderActions({ workOrder }: { workOrder: any }) {
               type="checkbox"
               checked={isOnDemand}
               onChange={e => toggleOnDemand(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 accent-[#C9A96E]"
+              className="h-4 w-4 rounded border-slate-300 accent-[#0E7C67]"
             />
             <span className="text-sm text-slate-600 dark:text-slate-400">On-Demand Service Call</span>
           </label>
@@ -155,7 +155,7 @@ export function WorkOrderActions({ workOrder }: { workOrder: any }) {
                   type="checkbox"
                   checked={isHandyman}
                   onChange={e => toggleHandyman(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 accent-[#C9A96E]"
+                  className="h-4 w-4 rounded border-slate-300 accent-[#0E7C67]"
                 />
                 <span className="text-sm text-slate-600 dark:text-slate-400">Handyman request</span>
               </label>

@@ -43,7 +43,7 @@ export default async function AuditPage() {
       {/* Logins */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><LogIn className="h-4 w-4 text-[#C9A96E]" /> Recent Sign-ins</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><LogIn className="h-4 w-4 text-[#0E7C67]" /> Recent Sign-ins</CardTitle>
         </CardHeader>
         <CardContent>
           {(!logins || logins.length === 0) ? (
@@ -74,7 +74,7 @@ export default async function AuditPage() {
       {/* Changes */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2"><History className="h-4 w-4 text-[#C9A96E]" /> Recent Changes</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2"><History className="h-4 w-4 text-[#0E7C67]" /> Recent Changes</CardTitle>
         </CardHeader>
         <CardContent>
           {(!changes || changes.length === 0) ? (

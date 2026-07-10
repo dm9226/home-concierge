@@ -94,7 +94,7 @@ export default async function DashboardMessagesPage() {
                       )}
                     </div>
                     {unread > 0 && (
-                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#C9A96E] text-white text-xs font-bold px-1 shrink-0">
+                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#0E7C67] text-white text-xs font-bold px-1 shrink-0">
                         {unread}
                       </span>
                     )}

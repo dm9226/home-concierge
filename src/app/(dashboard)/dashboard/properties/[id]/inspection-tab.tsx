@@ -670,14 +670,14 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
               className={cn(
                 "flex w-full items-center justify-between rounded-xl border p-3 text-sm font-medium transition-colors",
                 setupConfig[key]
-                  ? "border-[#C9A96E] bg-amber-50 text-[#0F1B2D]"
+                  ? "border-[#0E7C67] bg-amber-50 text-[#0F1B2D]"
                   : "border-slate-200 text-slate-600 hover:border-slate-300"
               )}
             >
               {label}
               <span className={cn(
                 "flex h-5 w-5 items-center justify-center rounded-full border",
-                setupConfig[key] ? "border-[#C9A96E] bg-[#C9A96E] text-white" : "border-slate-300"
+                setupConfig[key] ? "border-[#0E7C67] bg-[#0E7C67] text-white" : "border-slate-300"
               )}>
                 {setupConfig[key] && <CheckCircle2 className="h-3.5 w-3.5" />}
               </span>
@@ -694,7 +694,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
           <Button
             onClick={startInspection}
             disabled={starting}
-            className="flex-1 bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2"
+            className="flex-1 bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-2"
           >
             {starting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ClipboardList className="h-4 w-4" />}
             Begin Walkthrough
@@ -717,7 +717,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
         </div>
         <Button
           onClick={() => openSetup("initial")}
-          className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2"
+          className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-2"
         >
           <Plus className="h-4 w-4" />
           Start Initial Inspection
@@ -768,7 +768,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
             size="sm"
             onClick={completeInspection}
             disabled={completing}
-            className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5"
+            className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5"
           >
             {completing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
             Mark Complete
@@ -779,7 +779,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
       {/* Overall progress bar */}
       <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
         <div
-          className="h-full bg-[#C9A96E] transition-all duration-300"
+          className="h-full bg-[#0E7C67] transition-all duration-300"
           style={{ width: `${totalItems > 0 ? (totalAssessed / totalItems) * 100 : 0}%` }}
         />
       </div>
@@ -853,7 +853,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
                           )}
                           <span className="text-sm font-medium text-[#0F1B2D] dark:text-white">{item.label}</span>
                           {finding.aiAssessed && (
-                            <span className="rounded bg-[#C9A96E]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[#C9A96E]">AI</span>
+                            <span className="rounded bg-[#0E7C67]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[#0E7C67]">AI</span>
                           )}
                         </div>
 
@@ -879,7 +879,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
                             className={cn(
                               "flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium transition-colors",
                               isEquipment
-                                ? "border-[#C9A96E]/40 bg-amber-50 text-[#C9A96E] hover:bg-amber-100"
+                                ? "border-[#0E7C67]/40 bg-amber-50 text-[#0E7C67] hover:bg-amber-100"
                                 : "border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
                             )}
                           >
@@ -909,7 +909,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
                           value={finding.value ?? ""}
                           onChange={e => updateFinding(section.key, item.key, { ...finding, value: e.target.value })}
                           placeholder={item.placeholder}
-                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#C9A96E] mb-2"
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#0E7C67] mb-2"
                         />
                       )}
 
@@ -921,7 +921,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
                           ? undefined
                           : "Notes (optional)"}
                         rows={finding.notes && finding.notes.length > 60 ? 2 : 1}
-                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#C9A96E] resize-none"
+                        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#0E7C67] resize-none"
                       />
                     </div>
                   )

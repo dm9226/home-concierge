@@ -16,16 +16,16 @@ export function PortalOnboardingTracker({
   const pct = total ? Math.round((done / total) * 100) : 0
 
   return (
-    <div className="rounded-2xl border border-[#C9A96E]/40 bg-white dark:bg-slate-900 p-5">
+    <div className="rounded-2xl border border-[#0E7C67]/40 bg-white dark:bg-slate-900 p-5">
       <div className="flex items-center gap-2 mb-1">
-        <Sparkles className="h-4 w-4 text-[#C9A96E]" />
+        <Sparkles className="h-4 w-4 text-[#0E7C67]" />
         <p className="font-display font-semibold text-[#0F1B2D] dark:text-white">Setting up your home</p>
-        <span className="ml-auto text-sm font-semibold text-[#C9A96E]">{done}/{total}</span>
+        <span className="ml-auto text-sm font-semibold text-[#0E7C67]">{done}/{total}</span>
       </div>
       <p className="text-sm text-slate-500 mb-3">Your team is building your home profile. Here&apos;s where things stand.</p>
 
       <div className="h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden mb-4">
-        <div className="h-full bg-[#C9A96E] transition-all duration-300" style={{ width: `${pct}%` }} />
+        <div className="h-full bg-[#0E7C67] transition-all duration-300" style={{ width: `${pct}%` }} />
       </div>
 
       <div className="space-y-1.5">
@@ -44,7 +44,7 @@ export function PortalOnboardingTracker({
       {agreementActionable && (
         <Link
           href={`/portal/property?id=${propertyId}&tab=agreement`}
-          className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#C9A96E] px-4 py-2.5 text-sm font-semibold text-[#0F1B2D] hover:bg-[#b8954f] transition-colors"
+          className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#0E7C67] px-4 py-2.5 text-sm font-semibold text-[#0F1B2D] hover:bg-[#0A5F4E] transition-colors"
         >
           Review &amp; sign your membership agreement <ArrowRight className="h-4 w-4" />
         </Link>

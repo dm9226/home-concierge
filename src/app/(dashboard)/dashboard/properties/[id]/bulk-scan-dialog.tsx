@@ -273,11 +273,11 @@ export function BulkScanDialog({ propertyId }: Props) {
               className={cn(
                 "flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed cursor-pointer transition-colors py-10",
                 isDragging
-                  ? "border-[#C9A96E] bg-amber-50/60"
-                  : "border-slate-200 hover:border-[#C9A96E] hover:bg-amber-50/30"
+                  ? "border-[#0E7C67] bg-amber-50/60"
+                  : "border-slate-200 hover:border-[#0E7C67] hover:bg-amber-50/30"
               )}
             >
-              <Upload className="h-10 w-10 text-[#C9A96E]" />
+              <Upload className="h-10 w-10 text-[#0E7C67]" />
               <div className="text-center">
                 <p className="font-medium text-[#0F1B2D]">Drop appliance label photos here</p>
                 <p className="text-xs text-slate-400 mt-1">or click to browse -- JPEG, PNG, HEIC accepted</p>
@@ -325,7 +325,7 @@ export function BulkScanDialog({ propertyId }: Props) {
               <Button
                 onClick={startScanning}
                 disabled={items.length === 0}
-                className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5"
+                className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5"
               >
                 Scan {items.length > 0 ? `${items.length} ` : ""}Photo{items.length === 1 ? "" : "s"}
               </Button>
@@ -343,7 +343,7 @@ export function BulkScanDialog({ propertyId }: Props) {
               </div>
               <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
                 <div
-                  className="h-full bg-[#C9A96E] transition-all duration-300"
+                  className="h-full bg-[#0E7C67] transition-all duration-300"
                   style={{ width: `${items.length ? (scannedCount / items.length) * 100 : 0}%` }}
                 />
               </div>
@@ -412,7 +412,7 @@ export function BulkScanDialog({ propertyId }: Props) {
                         type="checkbox"
                         checked={item.included}
                         onChange={e => updateItem(item.id, { included: e.target.checked })}
-                        className="h-4 w-4 rounded border-slate-300 accent-[#C9A96E] shrink-0"
+                        className="h-4 w-4 rounded border-slate-300 accent-[#0E7C67] shrink-0"
                       />
 
                       {/* Thumbnail */}
@@ -574,7 +574,7 @@ export function BulkScanDialog({ propertyId }: Props) {
                   <Button
                     onClick={handleSave}
                     disabled={saving || includedCount === 0}
-                    className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]"
+                    className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]"
                   >
                     {saving ? (
                       <><Loader2 className="h-4 w-4 animate-spin mr-1.5" /> Saving...</>

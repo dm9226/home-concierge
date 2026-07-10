@@ -86,7 +86,7 @@ export default async function PlansPage({
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#0F1B2D]">
-              <Home className="h-5 w-5 text-[#C9A96E]" />
+              <Home className="h-5 w-5 text-[#0E7C67]" />
             </div>
             <span className="font-display text-xl font-semibold text-[#0F1B2D]">Carefree Casa</span>
           </Link>
@@ -97,7 +97,7 @@ export default async function PlansPage({
           </nav>
           <div className="flex items-center gap-3">
             <Button variant="ghost" asChild size="sm"><Link href="/login">Sign in</Link></Button>
-            <Button asChild size="sm" className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
+            <Button asChild size="sm" className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]">
               <Link href="/#contact">Schedule Consultation</Link>
             </Button>
           </div>
@@ -108,9 +108,9 @@ export default async function PlansPage({
         {/* Hero */}
         <section className="navy-gradient py-20 text-center">
           <div className="mx-auto max-w-2xl px-6">
-            <p className="text-sm font-medium uppercase tracking-widest text-[#C9A96E]">Membership Plans</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">Membership Plans</p>
             <h1 className="mt-3 font-display text-5xl font-light text-white">
-              Choose Your <span className="text-[#C9A96E]">Level of Care</span>
+              Choose Your <span className="text-[#0E7C67]">Level of Care</span>
             </h1>
             <p className="mt-4 text-lg text-white/70">
               Both plans include quarterly walkthroughs, a vetted vendor network, and your complete digital home profile.
@@ -134,7 +134,7 @@ export default async function PlansPage({
               >
                 {tab.label}
                 {tab.value === "annual" && (
-                  <span className="absolute -top-2 -right-2 rounded-full bg-[#C9A96E] px-1.5 py-0.5 text-[9px] font-bold text-[#0F1B2D] leading-none">BEST</span>
+                  <span className="absolute -top-2 -right-2 rounded-full bg-[#0E7C67] px-1.5 py-0.5 text-[9px] font-bold text-[#0F1B2D] leading-none">BEST</span>
                 )}
               </Link>
             ))}
@@ -176,13 +176,13 @@ export default async function PlansPage({
             </div>
 
             {/* Proactive + OnDemand */}
-            <div className="rounded-2xl border-2 border-[#C9A96E] bg-white p-8 flex flex-col relative">
+            <div className="rounded-2xl border-2 border-[#0E7C67] bg-white p-8 flex flex-col relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="rounded-full bg-[#C9A96E] px-4 py-1 text-xs font-bold text-[#0F1B2D] uppercase tracking-wide whitespace-nowrap">Most Popular</span>
+                <span className="rounded-full bg-[#0E7C67] px-4 py-1 text-xs font-bold text-[#0F1B2D] uppercase tracking-wide whitespace-nowrap">Most Popular</span>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-widest text-[#C9A96E]">Plan 2</p>
-                <h2 className="mt-1 font-display text-3xl font-semibold text-[#0F1B2D]">Proactive <span className="text-[#C9A96E]">+ OnDemand</span></h2>
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#0E7C67]">Plan 2</p>
+                <h2 className="mt-1 font-display text-3xl font-semibold text-[#0F1B2D]">Proactive <span className="text-[#0E7C67]">+ OnDemand</span></h2>
                 <p className="mt-2 text-sm text-slate-500 leading-relaxed">
                   Everything in Proactive, plus 24-hour reactive response, 2 included on-demand service instances per quarter, and an annual property report.
                 </p>
@@ -194,12 +194,12 @@ export default async function PlansPage({
               <ul className="space-y-2.5 text-sm flex-1">
                 {["Everything in Proactive", "24-hour reactive response guarantee", "2 reactive service instances/quarter included", "Emergency supply kit delivery", "Pest control quarterly coordination", "Year-end annual property report"].map(f => (
                   <li key={f} className="flex items-start gap-2.5">
-                    <Check className="h-4 w-4 text-[#C9A96E] mt-0.5 shrink-0" />
+                    <Check className="h-4 w-4 text-[#0E7C67] mt-0.5 shrink-0" />
                     <span className="text-slate-600">{f}</span>
                   </li>
                 ))}
               </ul>
-              <Button asChild className="mt-8 w-full bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
+              <Button asChild className="mt-8 w-full bg-[#0E7C67] text-white hover:bg-[#0A5F4E]">
                 <Link href="/#contact">Get Started</Link>
               </Button>
             </div>
@@ -219,7 +219,7 @@ export default async function PlansPage({
               <div className="grid grid-cols-[1fr_120px_120px] bg-[#0F1B2D] text-white text-sm font-medium">
                 <div className="px-6 py-4">Feature</div>
                 <div className="px-4 py-4 text-center border-l border-white/10">Proactive</div>
-                <div className="px-4 py-4 text-center border-l border-white/10 text-[#C9A96E]">Proactive+</div>
+                <div className="px-4 py-4 text-center border-l border-white/10 text-[#0E7C67]">Proactive+</div>
               </div>
 
               {FEATURES.map((section) => (
@@ -256,12 +256,12 @@ export default async function PlansPage({
         <section className="navy-gradient py-20 text-center px-6">
           <div className="mx-auto max-w-2xl">
             <h2 className="font-display text-4xl font-light text-white">
-              Ready to get <span className="text-[#C9A96E]">started?</span>
+              Ready to get <span className="text-[#0E7C67]">started?</span>
             </h2>
             <p className="mt-4 text-white/70">
               Schedule a private consultation and we'll recommend the right plan for your home and lifestyle.
             </p>
-            <Button asChild size="xl" className="mt-8 bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold">
+            <Button asChild size="xl" className="mt-8 bg-[#0E7C67] text-white hover:bg-[#0A5F4E] font-semibold">
               <Link href="/#contact">
                 Schedule Your Consultation
                 <ArrowRight className="h-5 w-5" />

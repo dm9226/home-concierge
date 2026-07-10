@@ -325,7 +325,7 @@ export default async function PropertyDetailPage({
           <TabsTrigger value="messages" className="gap-1.5">
             Messages
             {unreadMessageCount > 0 && (
-              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C9A96E] text-white text-[10px] font-bold px-1">
+              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#0E7C67] text-white text-[10px] font-bold px-1">
                 {unreadMessageCount}
               </span>
             )}
@@ -419,7 +419,7 @@ export default async function PropertyDetailPage({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Plan</span>
-                  <span className={`font-medium ${(property as any).plan_tier === "proactive_plus" ? "text-[#C9A96E]" : "text-[#0F1B2D] dark:text-white"}`}>
+                  <span className={`font-medium ${(property as any).plan_tier === "proactive_plus" ? "text-[#0E7C67]" : "text-[#0F1B2D] dark:text-white"}`}>
                     {(property as any).plan_tier === "proactive_plus" ? "Proactive + OnDemand" : "Proactive"}
                   </span>
                 </div>
@@ -526,8 +526,8 @@ export default async function PropertyDetailPage({
                   <div className="space-y-3 pl-7">
                     {activityLogs.slice(0, 6).map((log) => (
                       <div key={log.id} className="relative">
-                        <div className="absolute -left-[1.35rem] top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-[#C9A96E] bg-white dark:bg-slate-900">
-                          <div className="h-1 w-1 rounded-full bg-[#C9A96E]" />
+                        <div className="absolute -left-[1.35rem] top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-[#0E7C67] bg-white dark:bg-slate-900">
+                          <div className="h-1 w-1 rounded-full bg-[#0E7C67]" />
                         </div>
                         <p className="text-sm text-slate-700 dark:text-slate-300">{log.description}</p>
                         <div className="mt-0.5 flex items-center gap-2 text-xs text-slate-400">

@@ -79,7 +79,7 @@ export function BottomNav() {
                     active ? "text-[#0F1B2D]" : "text-slate-500"
                   )}
                 >
-                  <link.icon className={cn("h-5 w-5", active && "text-[#C9A96E]")} />
+                  <link.icon className={cn("h-5 w-5", active && "text-[#0E7C67]")} />
                   {link.label}
                 </Link>
               )
@@ -101,7 +101,7 @@ export function BottomNav() {
                 active ? "text-[#0F1B2D]" : "text-slate-400"
               )}
             >
-              <link.icon className={cn("h-5 w-5", active && "text-[#C9A96E]")} />
+              <link.icon className={cn("h-5 w-5", active && "text-[#0E7C67]")} />
               <span>{link.label.split(" ")[0]}</span>
             </Link>
           )
@@ -115,7 +115,7 @@ export function BottomNav() {
             anyMoreActive || moreOpen ? "text-[#0F1B2D]" : "text-slate-400"
           )}
         >
-          <MoreHorizontal className={cn("h-5 w-5", (anyMoreActive || moreOpen) && "text-[#C9A96E]")} />
+          <MoreHorizontal className={cn("h-5 w-5", (anyMoreActive || moreOpen) && "text-[#0E7C67]")} />
           <span>More</span>
         </button>
       </nav>

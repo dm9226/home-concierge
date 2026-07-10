@@ -173,7 +173,7 @@ export function RecurringServices({ propertyId }: { propertyId: string }) {
           <p className="text-sm text-slate-500">Standing service providers: who comes, how often, and what access they need.</p>
         </div>
         {editingId === null && (
-          <Button size="sm" onClick={openAdd} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+          <Button size="sm" onClick={openAdd} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
             <Plus className="h-4 w-4" /> Add Service
           </Button>
         )}
@@ -241,7 +241,7 @@ export function RecurringServices({ propertyId }: { propertyId: string }) {
 
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => { setEditingId(null); setForm(EMPTY) }}>Cancel</Button>
-            <Button onClick={save} disabled={saving} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+            <Button onClick={save} disabled={saving} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {editingId === "new" ? "Add Service" : "Save Changes"}
             </Button>
@@ -290,7 +290,7 @@ export function RecurringServices({ propertyId }: { propertyId: string }) {
                   <div className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5 shrink-0" />{s.phone}</div>
                 )}
                 {s.vendor_id && (
-                  <div className="flex items-center gap-1.5 text-[#C9A96E]"><Building2 className="h-3.5 w-3.5 shrink-0" />Linked vendor</div>
+                  <div className="flex items-center gap-1.5 text-[#0E7C67]"><Building2 className="h-3.5 w-3.5 shrink-0" />Linked vendor</div>
                 )}
               </div>
 

@@ -32,7 +32,7 @@ export function PortalMobileNav() {
                   : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
               )}
             >
-              <item.icon className={cn("h-5 w-5", isActive && "text-[#C9A96E]")} />
+              <item.icon className={cn("h-5 w-5", isActive && "text-[#0E7C67]")} />
               {item.label}
             </Link>
           )

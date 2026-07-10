@@ -14,7 +14,7 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#0F1B2D]">
-              <Home className="h-5 w-5 text-[#C9A96E]" />
+              <Home className="h-5 w-5 text-[#0E7C67]" />
             </div>
             <span className="font-display text-xl font-semibold text-[#0F1B2D]">Carefree Casa</span>
           </div>
@@ -36,7 +36,7 @@ export default function LandingPage() {
             <Button variant="ghost" asChild size="sm">
               <Link href="/login">Sign in</Link>
             </Button>
-            <Button asChild size="sm" className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
+            <Button asChild size="sm" className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]">
               <a href="#contact">Schedule Consultation</a>
             </Button>
           </div>
@@ -47,19 +47,19 @@ export default function LandingPage() {
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden navy-gradient pt-16">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
-            backgroundImage: "radial-gradient(circle at 2px 2px, #C9A96E 1px, transparent 0)",
+            backgroundImage: "radial-gradient(circle at 2px 2px, #0E7C67 1px, transparent 0)",
             backgroundSize: "40px 40px",
           }} />
         </div>
         <div className="relative mx-auto max-w-4xl px-6 text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#C9A96E]/30 bg-[#C9A96E]/10 px-4 py-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#C9A96E]" />
-            <span className="text-sm font-medium text-[#C9A96E]">Now accepting new clients in Metro Atlanta</span>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#0E7C67]/30 bg-[#0E7C67]/10 px-4 py-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#0E7C67]" />
+            <span className="text-sm font-medium text-[#0E7C67]">Now accepting new clients in Metro Atlanta</span>
           </div>
           <h1 className="font-display text-5xl font-light leading-tight text-white md:text-7xl">
             Your Home,
             <br />
-            <span className="text-[#C9A96E]">Perfectly Maintained</span>
+            <span className="text-[#0E7C67]">Perfectly Maintained</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
             Carefree Casa is the premium home management service for Atlanta's most discerning homeowners.
@@ -69,7 +69,7 @@ export default function LandingPage() {
             <Button
               asChild
               size="xl"
-              className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold w-full sm:w-auto"
+              className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] font-semibold w-full sm:w-auto"
             >
               <a href="#contact">
                 Schedule Your Consultation
@@ -114,7 +114,7 @@ export default function LandingPage() {
       <section id="how-it-works" className="py-24">
         <div className="mx-auto max-w-4xl px-6">
           <div className="mb-16 text-center">
-            <p className="text-sm font-medium uppercase tracking-widest text-[#C9A96E]">The Process</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">The Process</p>
             <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
               How Carefree Casa Works
             </h2>
@@ -148,7 +148,7 @@ export default function LandingPage() {
               },
             ].map((item) => (
               <div key={item.step} className="relative">
-                <div className="mb-4 font-display text-5xl font-light text-[#C9A96E]/30">
+                <div className="mb-4 font-display text-5xl font-light text-[#0E7C67]/30">
                   {item.step}
                 </div>
                 <h3 className="mb-2 font-display text-xl font-semibold text-[#0F1B2D]">{item.title}</h3>
@@ -163,7 +163,7 @@ export default function LandingPage() {
       <section id="services" className="bg-[#F5F0E8] py-24">
         <div className="mx-auto max-w-4xl px-6">
           <div className="mb-16 text-center">
-            <p className="text-sm font-medium uppercase tracking-widest text-[#C9A96E]">What We Do</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">What We Do</p>
             <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
               Complete Home Care
             </h2>
@@ -211,7 +211,7 @@ export default function LandingPage() {
               <Card key={service.title} className="border-slate-200/60 bg-white">
                 <CardContent className="pt-6">
                   <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#0F1B2D]">
-                    <service.icon className="h-5 w-5 text-[#C9A96E]" />
+                    <service.icon className="h-5 w-5 text-[#0E7C67]" />
                   </div>
                   <h3 className="mb-2 font-display text-lg font-semibold text-[#0F1B2D]">
                     {service.title}
@@ -228,7 +228,7 @@ export default function LandingPage() {
       <section id="testimonials" className="py-24">
         <div className="mx-auto max-w-4xl px-6">
           <div className="mb-16 text-center">
-            <p className="text-sm font-medium uppercase tracking-widest text-[#C9A96E]">Client Stories</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">Client Stories</p>
             <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
               What Our Members Say
             </h2>
@@ -262,7 +262,7 @@ export default function LandingPage() {
                 <CardContent className="pt-6">
                   <div className="mb-3 flex gap-0.5">
                     {Array.from({ length: testimonial.stars }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#C9A96E] text-[#C9A96E]" />
+                      <Star key={i} className="h-4 w-4 fill-[#0E7C67] text-[#0E7C67]" />
                     ))}
                   </div>
                   <p className="font-display text-[1.05rem] italic leading-relaxed text-[#0F1B2D]">
@@ -283,7 +283,7 @@ export default function LandingPage() {
       <section className="navy-gradient py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="font-display text-5xl font-light text-white">
-            Your Home, <span className="text-[#C9A96E]">Handled.</span>
+            Your Home, <span className="text-[#0E7C67]">Handled.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg text-white/70">
             Plans starting at $335/month. Custom options available for larger estates.
@@ -293,7 +293,7 @@ export default function LandingPage() {
             <Button
               asChild
               size="xl"
-              className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold"
+              className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] font-semibold"
             >
               <a href="#contact">
                 Schedule Your Private Consultation
@@ -310,7 +310,7 @@ export default function LandingPage() {
       {/* Contact */}
       <section id="contact" className="bg-[#F5F0E8] py-24">
         <div className="mx-auto max-w-2xl px-6 text-center">
-          <p className="text-sm font-medium uppercase tracking-widest text-[#C9A96E]">Get Started</p>
+          <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">Get Started</p>
           <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
             Schedule Your Consultation
           </h2>
@@ -364,7 +364,7 @@ export default function LandingPage() {
                   placeholder="Buckhead, 30342"
                 />
               </div>
-              <Button className="w-full bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold" size="lg">
+              <Button className="w-full bg-[#0E7C67] text-white hover:bg-[#0A5F4E] font-semibold" size="lg">
                 Request a Consultation
               </Button>
             </div>
@@ -378,7 +378,7 @@ export default function LandingPage() {
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#0F1B2D]">
-                <Home className="h-4 w-4 text-[#C9A96E]" />
+                <Home className="h-4 w-4 text-[#0E7C67]" />
               </div>
               <span className="font-display text-lg font-semibold text-[#0F1B2D]">Carefree Casa</span>
             </div>

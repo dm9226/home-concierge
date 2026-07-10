@@ -65,7 +65,7 @@ export function AgreementDocument({
     <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
       {/* Letterhead */}
       <div className="bg-[#0F1B2D] px-6 py-6 text-center sm:px-10">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C9A96E]">Carefree Casa</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#0E7C67]">Carefree Casa</p>
         <h1 className="font-display text-2xl font-semibold text-white sm:text-3xl mt-1">{title}</h1>
       </div>
 
@@ -81,7 +81,7 @@ export function AgreementDocument({
             if (block.type === "heading") {
               return (
                 <h2 key={i} className="font-display text-base font-semibold text-[#0F1B2D] dark:text-white pt-3">
-                  {block.num && <span className="text-[#C9A96E]">{block.num}.</span>} {block.title}
+                  {block.num && <span className="text-[#0E7C67]">{block.num}.</span>} {block.title}
                 </h2>
               )
             }
@@ -90,7 +90,7 @@ export function AgreementDocument({
                 <ul key={i} className="space-y-2 pl-1">
                   {block.items.map((item, j) => (
                     <li key={j} className="flex gap-2.5 text-[15px] leading-7 text-slate-600 dark:text-slate-300">
-                      <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#C9A96E]" />
+                      <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#0E7C67]" />
                       <span>{renderInline(item, `${i}-${j}`)}</span>
                     </li>
                   ))}

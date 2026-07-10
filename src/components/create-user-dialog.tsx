@@ -75,7 +75,7 @@ export function CreateUserDialog({ fixedRole, label }: CreateUserDialogProps) {
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) handleClose(); else setOpen(true) }}>
       <DialogTrigger asChild>
-        <Button className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2">
+        <Button className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-2">
           <Plus className="h-4 w-4" />
           {label ?? "Invite User"}
         </Button>
@@ -98,7 +98,7 @@ export function CreateUserDialog({ fixedRole, label }: CreateUserDialogProps) {
                 An email was sent to <span className="font-medium text-slate-700">{sentEmail}</span> with a link to set their password.
               </p>
             </div>
-            <Button onClick={handleClose} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
+            <Button onClick={handleClose} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]">
               Done
             </Button>
           </div>
@@ -161,7 +161,7 @@ export function CreateUserDialog({ fixedRole, label }: CreateUserDialogProps) {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2"
+                className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-2"
               >
                 <Mail className="h-4 w-4" />
                 {loading ? "Sending..." : "Send Invitation"}

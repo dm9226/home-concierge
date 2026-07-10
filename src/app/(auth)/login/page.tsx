@@ -13,7 +13,7 @@ export default function LoginPage() {
       {/* Left panel */}
       <div className="hidden w-1/2 flex-col justify-between navy-gradient p-12 lg:flex">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#C9A96E]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#0E7C67]">
             <Home className="h-5 w-5 text-[#0F1B2D]" />
           </div>
           <span className="font-display text-xl font-semibold text-white">Carefree Casa</span>
@@ -40,7 +40,7 @@ export default function LoginPage() {
           <div className="mb-8 text-center">
             <Link href="/" className="mb-6 flex items-center justify-center gap-2 lg:hidden">
               <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#0F1B2D]">
-                <Home className="h-4 w-4 text-[#C9A96E]" />
+                <Home className="h-4 w-4 text-[#0E7C67]" />
               </div>
               <span className="font-display text-lg font-semibold text-[#0F1B2D]">Carefree Casa</span>
             </Link>
@@ -52,7 +52,7 @@ export default function LoginPage() {
 
           <p className="mt-6 text-center text-sm text-slate-500">
             New client?{" "}
-            <Link href="/signup" className="font-medium text-[#C9A96E] hover:underline">
+            <Link href="/signup" className="font-medium text-[#0E7C67] hover:underline">
               Contact us to get started
             </Link>
           </p>

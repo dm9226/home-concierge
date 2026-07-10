@@ -98,7 +98,7 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2"><FileSignature className="h-4 w-4 text-[#C9A96E]" /> Membership Agreement</CardTitle>
+        <CardTitle className="text-base flex items-center gap-2"><FileSignature className="h-4 w-4 text-[#0E7C67]" /> Membership Agreement</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Merged header preview */}
@@ -116,7 +116,7 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
         {!agreement ? (
           <div className="text-center py-4">
             <p className="text-sm text-slate-500 mb-3">No agreement prepared yet. Create one from the standard template, edit if needed, then send it to the client to accept.</p>
-            <Button onClick={create} disabled={busy} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+            <Button onClick={create} disabled={busy} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSignature className="h-4 w-4" />}
               Create Agreement
             </Button>
@@ -174,7 +174,7 @@ export function ServiceAgreementAdmin({ propertyId, userId, parties }: {
               <div className="flex gap-2">
                 <Button variant="outline" onClick={save} disabled={busy}>Save</Button>
                 {agreement.status === "draft" ? (
-                  <Button onClick={() => setStatus("sent")} disabled={busy} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+                  <Button onClick={() => setStatus("sent")} disabled={busy} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
                     <Send className="h-4 w-4" /> Send to Client
                   </Button>
                 ) : (

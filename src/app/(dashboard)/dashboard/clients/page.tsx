@@ -83,7 +83,7 @@ export default async function ClientsPage() {
                           <Link
                             key={p.id}
                             href={`/dashboard/properties/${p.id}`}
-                            className="flex items-center gap-2 text-sm text-slate-600 hover:text-[#C9A96E] transition-colors"
+                            className="flex items-center gap-2 text-sm text-slate-600 hover:text-[#0E7C67] transition-colors"
                           >
                             <Home className="h-3.5 w-3.5 text-slate-400 shrink-0" />
                             {p.address}, {p.city}

@@ -204,7 +204,7 @@ export function NewPropertyForm() {
                   onClick={() => lookupProperty(false)}
                   className="gap-1.5 text-xs h-8"
                 >
-                  {looking ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5 text-[#C9A96E]" />}
+                  {looking ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5 text-[#0E7C67]" />}
                   {looking ? "Looking up..." : "Look up property"}
                 </Button>
               </div>
@@ -322,7 +322,7 @@ export function NewPropertyForm() {
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <div className="flex items-center gap-3">
-          <Button type="submit" disabled={loading} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold">
+          <Button type="submit" disabled={loading} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] font-semibold">
             {loading ? "Creating..." : "Create Property"}
           </Button>
           <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>

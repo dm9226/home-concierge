@@ -218,7 +218,7 @@ export function AddMaintenanceItemDialog({ propertyId }: { propertyId: string })
             <Button
               type="submit"
               disabled={saving}
-              className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold gap-2"
+              className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] font-semibold gap-2"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {saving ? "Saving..." : "Add to Schedule"}

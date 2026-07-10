@@ -190,7 +190,7 @@ export function VendorActions({ vendor }: { vendor: Vendor }) {
                     className={cn(
                       "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                       specialties.includes(s)
-                        ? "border-[#C9A96E] bg-amber-50 text-[#0F1B2D]"
+                        ? "border-[#0E7C67] bg-amber-50 text-[#0F1B2D]"
                         : "border-slate-200 text-slate-500 hover:border-slate-300"
                     )}
                   >
@@ -209,7 +209,7 @@ export function VendorActions({ vendor }: { vendor: Vendor }) {
 
             <div className="flex justify-end gap-2 pt-1">
               <Button type="button" variant="outline" onClick={() => setEditOpen(false)}>Cancel</Button>
-              <Button type="submit" disabled={saving} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]">
+              <Button type="submit" disabled={saving} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]">
                 {saving ? "Saving..." : "Save Changes"}
               </Button>
             </div>

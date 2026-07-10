@@ -84,7 +84,7 @@ export function RecommendationsClient({ recommendations }: { recommendations: Re
                   {r.estimated_cost != null && <p className="text-sm text-slate-500 mt-1.5">Estimated: {money(r.estimated_cost)}</p>}
 
                   <div className="flex gap-2 mt-3">
-                    <Button size="sm" disabled={busy === r.id} onClick={() => respond(r.id, "approve")} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+                    <Button size="sm" disabled={busy === r.id} onClick={() => respond(r.id, "approve")} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
                       {busy === r.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
                       Approve
                     </Button>

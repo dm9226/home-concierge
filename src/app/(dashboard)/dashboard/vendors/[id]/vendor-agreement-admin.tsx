@@ -110,7 +110,7 @@ export function VendorAgreementAdmin({ vendorId, userId, vendor }: {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2"><FileSignature className="h-4 w-4 text-[#C9A96E]" /> Partnership Agreement</CardTitle>
+        <CardTitle className="text-base flex items-center gap-2"><FileSignature className="h-4 w-4 text-[#0E7C67]" /> Partnership Agreement</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {error && <p className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>}
@@ -118,7 +118,7 @@ export function VendorAgreementAdmin({ vendorId, userId, vendor }: {
         {!agreement ? (
           <div className="text-center py-4">
             <p className="text-sm text-slate-500 mb-3">No agreement prepared yet. Create one from the standard template, edit if needed, then send the vendor a link to review and execute.</p>
-            <Button onClick={create} disabled={busy} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+            <Button onClick={create} disabled={busy} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSignature className="h-4 w-4" />}
               Create Agreement
             </Button>
@@ -183,7 +183,7 @@ export function VendorAgreementAdmin({ vendorId, userId, vendor }: {
               <div className="flex gap-2">
                 <Button type="button" variant="outline" onClick={save} disabled={busy}>Save</Button>
                 {agreement.status === "draft" ? (
-                  <Button type="button" onClick={() => setStatus("sent")} disabled={busy} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+                  <Button type="button" onClick={() => setStatus("sent")} disabled={busy} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
                     <Send className="h-4 w-4" /> Send to Vendor
                   </Button>
                 ) : (

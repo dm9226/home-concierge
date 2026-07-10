@@ -49,7 +49,7 @@ export default function ResetPasswordPage() {
         <div className="mb-8 text-center">
           <Link href="/" className="mb-6 inline-flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#0F1B2D]">
-              <Home className="h-4 w-4 text-[#C9A96E]" />
+              <Home className="h-4 w-4 text-[#0E7C67]" />
             </div>
             <span className="font-display text-lg font-semibold text-[#0F1B2D]">Carefree Casa</span>
           </Link>
@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] font-semibold"
+            className="w-full bg-[#0E7C67] text-white hover:bg-[#0A5F4E] font-semibold"
           >
             {loading ? "Updating..." : "Update Password"}
           </Button>

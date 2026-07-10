@@ -216,7 +216,7 @@ export default async function PortalHomePage({
               href={`/portal?p=${p.id}`}
               className={`shrink-0 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
                 p.id === property.id
-                  ? "border-[#C9A96E] bg-[#C9A96E]/10 text-[#0F1B2D] dark:text-white"
+                  ? "border-[#0E7C67] bg-[#0E7C67]/10 text-[#0F1B2D] dark:text-white"
                   : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
               }`}
             >
@@ -318,9 +318,9 @@ export default async function PortalHomePage({
         <div className="space-y-2">
           {agreementActionable && (
             <Link href={`/portal/property?id=${propertyId}&tab=agreement`}>
-              <div className="flex items-center justify-between rounded-xl border border-[#C9A96E]/50 bg-[#C9A96E]/10 p-4 hover:border-[#C9A96E] transition-colors">
+              <div className="flex items-center justify-between rounded-xl border border-[#0E7C67]/50 bg-[#0E7C67]/10 p-4 hover:border-[#0E7C67] transition-colors">
                 <div className="flex items-center gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-[#C9A96E] shrink-0" />
+                  <CheckCircle2 className="h-5 w-5 text-[#0E7C67] shrink-0" />
                   <div>
                     <p className="font-semibold text-[#0F1B2D] dark:text-white">Action needed: sign your membership agreement</p>
                     <p className="text-sm text-slate-500">Review the terms and accept to get started.</p>
@@ -350,12 +350,12 @@ export default async function PortalHomePage({
 
           {latestUnread && (
             <Link href="/portal/messages">
-              <div className="flex items-start gap-3 rounded-xl border border-[#C9A96E]/40 bg-[#C9A96E]/8 p-4 hover:border-[#C9A96E]/70 transition-colors">
+              <div className="flex items-start gap-3 rounded-xl border border-[#0E7C67]/40 bg-[#0E7C67]/8 p-4 hover:border-[#0E7C67]/70 transition-colors">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0F1B2D] text-white text-xs font-semibold shrink-0 mt-0.5">CC</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
                     <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">New message from your team</p>
-                    <div className="h-2 w-2 rounded-full bg-[#C9A96E] shrink-0" />
+                    <div className="h-2 w-2 rounded-full bg-[#0E7C67] shrink-0" />
                   </div>
                   <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-1">{latestUnread.body}</p>
                 </div>
@@ -437,7 +437,7 @@ export default async function PortalHomePage({
 
       {/* ── HOME CARE PLAN (dark card) ─────────────────────────────── */}
       <div className="rounded-2xl bg-gradient-to-br from-[#0F1B2D] to-[#1e3452] p-5 text-white">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[#C9A96E] mb-4">Your Home Care Plan</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-[#0E7C67] mb-4">Your Home Care Plan</p>
 
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div className="bg-white/10 rounded-xl p-3 text-center">
@@ -458,9 +458,9 @@ export default async function PortalHomePage({
           <div className="flex items-center justify-between bg-white/10 rounded-xl px-4 py-3 mb-4">
             <div>
               <p className="text-[11px] text-white/55 uppercase tracking-wider">Estimated Annual Maintenance Value</p>
-              <p className="font-display text-xl font-bold text-[#C9A96E] mt-0.5">{formatCurrency(maintenanceCost)}</p>
+              <p className="font-display text-xl font-bold text-[#0E7C67] mt-0.5">{formatCurrency(maintenanceCost)}</p>
             </div>
-            <Shield className="h-8 w-8 text-[#C9A96E]/30" />
+            <Shield className="h-8 w-8 text-[#0E7C67]/30" />
           </div>
         )}
 
@@ -468,17 +468,17 @@ export default async function PortalHomePage({
           <div className="flex items-center justify-between bg-white/10 rounded-xl px-4 py-3 mb-4">
             <div>
               <p className="text-[11px] text-white/55 uppercase tracking-wider">Total Work Completed for You</p>
-              <p className="font-display text-xl font-bold text-[#C9A96E] mt-0.5">{formatCurrency(completedWorkCost)}</p>
+              <p className="font-display text-xl font-bold text-[#0E7C67] mt-0.5">{formatCurrency(completedWorkCost)}</p>
             </div>
-            <CheckCircle2 className="h-8 w-8 text-[#C9A96E]/30" />
+            <CheckCircle2 className="h-8 w-8 text-[#0E7C67]/30" />
           </div>
         )}
 
         <div className="border-t border-white/10 pt-4">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#C9A96E] mb-2">{seasonalTip.season} Tip from Your Team</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#0E7C67] mb-2">{seasonalTip.season} Tip from Your Team</p>
           <p className="font-display font-semibold leading-snug mb-2">{seasonalTip.title}</p>
           <p className="text-sm text-white/65 leading-relaxed">{seasonalTip.body}</p>
-          <Link href="/portal/maintenance" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[#C9A96E] hover:underline">
+          <Link href="/portal/maintenance" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[#0E7C67] hover:underline">
             View maintenance schedule <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -487,9 +487,9 @@ export default async function PortalHomePage({
       {/* ── PROPERTY DETAILS ─────────────────────────────────────────── */}
       <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
         <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-          <Home className="h-4 w-4 text-[#C9A96E]" />
+          <Home className="h-4 w-4 text-[#0E7C67]" />
           <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">Property Details</p>
-          <Link href={`/portal/property?id=${propertyId}`} className="ml-auto text-xs text-[#C9A96E] flex items-center gap-1 hover:underline">
+          <Link href={`/portal/property?id=${propertyId}`} className="ml-auto text-xs text-[#0E7C67] flex items-center gap-1 hover:underline">
             Full profile <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -516,7 +516,7 @@ export default async function PortalHomePage({
       {marketData && Object.keys(marketData).length > 0 && (
         <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
           <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-[#C9A96E]" />
+            <TrendingUp className="h-4 w-4 text-[#0E7C67]" />
             <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">Market Context</p>
             {property.zip && <span className="ml-auto text-xs text-slate-400">{property.zip}</span>}
           </div>
@@ -544,7 +544,7 @@ export default async function PortalHomePage({
       <div>
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Maintenance Schedule</h2>
-          <Link href="/portal/maintenance" className="text-sm text-[#C9A96E] flex items-center gap-1 hover:underline">
+          <Link href="/portal/maintenance" className="text-sm text-[#0E7C67] flex items-center gap-1 hover:underline">
             View all <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -600,7 +600,7 @@ export default async function PortalHomePage({
             {(allMaintenance?.length ?? 0) > 8 && (
               <Link
                 href="/portal/maintenance"
-                className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 py-3 text-sm text-slate-500 hover:border-[#C9A96E] hover:text-[#C9A96E] transition-colors"
+                className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 py-3 text-sm text-slate-500 hover:border-[#0E7C67] hover:text-[#0E7C67] transition-colors"
               >
                 +{(allMaintenance?.length ?? 0) - 8} more tasks <ArrowRight className="h-3.5 w-3.5" />
               </Link>
@@ -620,7 +620,7 @@ export default async function PortalHomePage({
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Your Home Systems</h2>
-            <Link href="/portal/property" className="text-sm text-[#C9A96E] flex items-center gap-1 hover:underline">
+            <Link href="/portal/property" className="text-sm text-[#0E7C67] flex items-center gap-1 hover:underline">
               Details <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
@@ -664,7 +664,7 @@ export default async function PortalHomePage({
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Active Service</h2>
-            <Link href="/portal/service" className="text-sm text-[#C9A96E] flex items-center gap-1 hover:underline">
+            <Link href="/portal/service" className="text-sm text-[#0E7C67] flex items-center gap-1 hover:underline">
               View all <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
@@ -712,8 +712,8 @@ export default async function PortalHomePage({
             <div className="space-y-3 pl-10">
               {completedWorkOrders.map(wo => (
                 <div key={wo.id} className="relative">
-                  <div className="absolute -left-6 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#C9A96E] bg-white dark:bg-slate-950">
-                    <div className="h-1.5 w-1.5 rounded-full bg-[#C9A96E]" />
+                  <div className="absolute -left-6 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#0E7C67] bg-white dark:bg-slate-950">
+                    <div className="h-1.5 w-1.5 rounded-full bg-[#0E7C67]" />
                   </div>
                   <div className="rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 px-4 py-3">
                     <p className="font-medium text-sm text-[#0F1B2D] dark:text-white">{wo.title}</p>

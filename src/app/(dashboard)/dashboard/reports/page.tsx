@@ -77,7 +77,7 @@ export default async function ReportsPage() {
       {/* Revenue */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2"><DollarSign className="h-5 w-5 text-[#C9A96E]" /> Revenue</CardTitle>
+          <CardTitle className="flex items-center gap-2"><DollarSign className="h-5 w-5 text-[#0E7C67]" /> Revenue</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -105,7 +105,7 @@ export default async function ReportsPage() {
       {/* Work order breakdown */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5 text-[#C9A96E]" /> Work Orders by Priority</CardTitle>
+          <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5 text-[#0E7C67]" /> Work Orders by Priority</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -132,7 +132,7 @@ export default async function ReportsPage() {
       {/* Health score distribution */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2"><Home className="h-5 w-5 text-[#C9A96E]" /> Health Score Distribution</CardTitle>
+          <CardTitle className="flex items-center gap-2"><Home className="h-5 w-5 text-[#0E7C67]" /> Health Score Distribution</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -167,7 +167,7 @@ function KpiCard({ icon, label, value, sub }: { icon: React.ReactNode; label: st
   return (
     <Card>
       <CardContent className="pt-4 pb-4">
-        <div className="text-[#C9A96E] mb-2">{icon}</div>
+        <div className="text-[#0E7C67] mb-2">{icon}</div>
         <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">{value}</p>
         <p className="text-xs text-slate-500 mt-0.5">{label}</p>
         {sub && <p className="text-xs text-slate-400">{sub}</p>}

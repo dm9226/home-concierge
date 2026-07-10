@@ -90,7 +90,7 @@ export default async function PropertiesPage({
             {tab.label}
             <span className={`rounded-full px-1.5 py-0.5 text-xs font-semibold ${
               activeTab === tab.value
-                ? "bg-[#C9A96E]/15 text-[#C9A96E]"
+                ? "bg-[#0E7C67]/15 text-[#0E7C67]"
                 : "bg-slate-200 dark:bg-slate-700 text-slate-500"
             }`}>
               {tab.count}
@@ -152,13 +152,13 @@ export default async function PropertiesPage({
                         </Badge>
                       )}
                       {(unreadByProperty[property.id] ?? 0) > 0 && (
-                        <span className="flex items-center gap-1 rounded-full bg-[#C9A96E]/15 px-2 py-0.5 text-xs font-semibold text-[#C9A96E]">
+                        <span className="flex items-center gap-1 rounded-full bg-[#0E7C67]/15 px-2 py-0.5 text-xs font-semibold text-[#0E7C67]">
                           <MessageSquare className="h-3 w-3" />
                           {unreadByProperty[property.id]}
                         </span>
                       )}
                     </div>
-                    <span className="flex items-center gap-1 text-xs font-medium text-[#C9A96E]">
+                    <span className="flex items-center gap-1 text-xs font-medium text-[#0E7C67]">
                       View details <ArrowRight className="h-3 w-3" />
                     </span>
                   </div>

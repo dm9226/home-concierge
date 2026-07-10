@@ -94,7 +94,7 @@ export function TopNav({ user }: TopNavProps) {
           {/* Logo */}
           <Link href={dashboardPath} className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#0F1B2D]">
-              <Home className="h-4 w-4 text-[#C9A96E]" />
+              <Home className="h-4 w-4 text-[#0E7C67]" />
             </div>
             <span className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
               Carefree Casa
@@ -183,7 +183,7 @@ export function TopNav({ user }: TopNavProps) {
                         : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5"
                     )}
                   >
-                    <link.icon className={cn("h-5 w-5 shrink-0", active && "text-[#C9A96E]")} />
+                    <link.icon className={cn("h-5 w-5 shrink-0", active && "text-[#0E7C67]")} />
                     {link.label}
                   </Link>
                 )

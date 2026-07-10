@@ -60,12 +60,12 @@ export function AssignOwnerDialog({ propertyId, clients, currentOwner }: Props) 
     <Dialog open={open} onOpenChange={v => { setOpen(v); if (!v) setError(null) }}>
       <DialogTrigger asChild>
         {hasOwner ? (
-          <button className="flex items-center gap-1.5 mt-1 text-xs text-[#C9A96E] hover:underline">
+          <button className="flex items-center gap-1.5 mt-1 text-xs text-[#0E7C67] hover:underline">
             <UserCog className="h-3.5 w-3.5" />
             Manage owner
           </button>
         ) : (
-          <Button className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-2">
+          <Button className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-2">
             <UserPlus className="h-4 w-4" />
             Assign Owner
           </Button>
@@ -126,7 +126,7 @@ export function AssignOwnerDialog({ propertyId, clients, currentOwner }: Props) 
               <Button
                 onClick={handleAssign}
                 disabled={!selectedId || selectedId === currentOwner?.id || loading}
-                className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f]"
+                className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E]"
               >
                 {loading ? "Saving..." : hasOwner ? "Reassign" : "Assign Owner"}
               </Button>

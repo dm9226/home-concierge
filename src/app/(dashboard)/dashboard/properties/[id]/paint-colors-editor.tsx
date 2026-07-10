@@ -39,14 +39,14 @@ export function PaintColorsEditor({ propertyId, initialValue }: Props) {
           onChange={e => setValue(e.target.value)}
           placeholder="e.g. Living Room: Sherwin-Williams SW 7015 Repose Gray / Trim: SW 7012 Creamy"
           rows={3}
-          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#C9A96E] resize-none"
+          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#0E7C67] resize-none"
           autoFocus
         />
         <div className="flex gap-2">
           <button
             onClick={save}
             disabled={saving}
-            className="flex items-center gap-1 rounded-md bg-[#C9A96E] px-2.5 py-1 text-xs font-medium text-[#0F1B2D] hover:bg-[#b8954f] disabled:opacity-50"
+            className="flex items-center gap-1 rounded-md bg-[#0E7C67] px-2.5 py-1 text-xs font-medium text-[#0F1B2D] hover:bg-[#0A5F4E] disabled:opacity-50"
           >
             <Check className="h-3 w-3" /> {saving ? "Saving..." : "Save"}
           </button>

@@ -138,7 +138,7 @@ export default async function ServiceDetailPage({
               {updates.map((update: any, i: number) => (
                 <div key={update.id} className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <div className="h-2.5 w-2.5 rounded-full bg-[#C9A96E] mt-1 shrink-0" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-[#0E7C67] mt-1 shrink-0" />
                     {i < updates.length - 1 && <div className="w-px flex-1 bg-slate-200 mt-1" />}
                   </div>
                   <div className="pb-4">

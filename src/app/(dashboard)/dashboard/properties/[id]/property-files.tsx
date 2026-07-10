@@ -144,7 +144,7 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={() => docInputRef.current?.click()} disabled={uploading} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+            <Button onClick={() => docInputRef.current?.click()} disabled={uploading} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
               {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
               Upload Documents
             </Button>
@@ -169,7 +169,7 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
                       {f.category}{f.category ? " · " : ""}{formatBytes(f.file_size)}{f.file_size ? " · " : ""}{formatDateShort(f.created_at)}
                     </p>
                   </div>
-                  <a href={`/api/files/${f.id}`} target="_blank" rel="noopener noreferrer" className="rounded p-1.5 text-slate-400 hover:text-[#C9A96E] hover:bg-slate-100 dark:hover:bg-slate-800" title="Open / download">
+                  <a href={`/api/files/${f.id}`} target="_blank" rel="noopener noreferrer" className="rounded p-1.5 text-slate-400 hover:text-[#0E7C67] hover:bg-slate-100 dark:hover:bg-slate-800" title="Open / download">
                     <Download className="h-4 w-4" />
                   </a>
                   <button onClick={() => remove(f.id)} className="rounded p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50" title="Delete">
@@ -183,7 +183,7 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
 
         {/* PHOTOS */}
         <TabsContent value="photos" className="space-y-4 pt-2">
-          <Button onClick={() => photoInputRef.current?.click()} disabled={uploading} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+          <Button onClick={() => photoInputRef.current?.click()} disabled={uploading} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
             Upload Photos
           </Button>

@@ -76,14 +76,14 @@ export function AgreementClient({ agreement, parties }: { agreement: Agreement; 
         <Card>
           <CardContent className="pt-5 space-y-3">
             <p className="text-sm font-medium text-[#0F1B2D] dark:text-white flex items-center gap-2">
-              <FileSignature className="h-4 w-4 text-[#C9A96E]" /> Electronic Acceptance
+              <FileSignature className="h-4 w-4 text-[#0E7C67]" /> Electronic Acceptance
             </p>
             <div className="space-y-1.5">
               <label className="text-xs text-slate-500">Type your full legal name</label>
               <Input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" />
             </div>
             <label className="flex items-start gap-2.5 cursor-pointer select-none">
-              <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)} className="mt-0.5 h-4 w-4 rounded border-slate-300 accent-[#C9A96E]" />
+              <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)} className="mt-0.5 h-4 w-4 rounded border-slate-300 accent-[#0E7C67]" />
               <span className="text-sm text-slate-600 dark:text-slate-400">
                 I have read and agree to these terms. I understand that typing my name and selecting Accept is the legal equivalent of my signature.
               </span>
@@ -91,7 +91,7 @@ export function AgreementClient({ agreement, parties }: { agreement: Agreement; 
 
             {error && <p className="text-sm text-red-600">{error}</p>}
 
-            <Button onClick={accept} disabled={busy || !agreed || !name.trim()} className="bg-[#C9A96E] text-[#0F1B2D] hover:bg-[#b8954f] gap-1.5">
+            <Button onClick={accept} disabled={busy || !agreed || !name.trim()} className="bg-[#0E7C67] text-white hover:bg-[#0A5F4E] gap-1.5">
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
               Accept Agreement
             </Button>
