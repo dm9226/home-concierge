@@ -76,7 +76,7 @@ export function BottomNav() {
                   onClick={() => setMoreOpen(false)}
                   className={cn(
                     "flex flex-col items-center gap-1.5 bg-white px-3 py-4 text-xs font-medium transition-colors",
-                    active ? "text-[#0F1B2D]" : "text-slate-500"
+                    active ? "text-[#1A2320]" : "text-slate-500"
                   )}
                 >
                   <link.icon className={cn("h-5 w-5", active && "text-[#0E7C67]")} />
@@ -98,7 +98,7 @@ export function BottomNav() {
               href={link.href}
               className={cn(
                 "flex flex-1 flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors",
-                active ? "text-[#0F1B2D]" : "text-slate-400"
+                active ? "text-[#1A2320]" : "text-slate-400"
               )}
             >
               <link.icon className={cn("h-5 w-5", active && "text-[#0E7C67]")} />
@@ -112,7 +112,7 @@ export function BottomNav() {
           onClick={() => setMoreOpen((v) => !v)}
           className={cn(
             "flex flex-1 flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors",
-            anyMoreActive || moreOpen ? "text-[#0F1B2D]" : "text-slate-400"
+            anyMoreActive || moreOpen ? "text-[#1A2320]" : "text-slate-400"
           )}
         >
           <MoreHorizontal className={cn("h-5 w-5", (anyMoreActive || moreOpen) && "text-[#0E7C67]")} />

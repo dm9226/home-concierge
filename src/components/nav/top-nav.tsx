@@ -79,7 +79,7 @@ export function TopNav({ user }: TopNavProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-sm dark:border-slate-800 dark:bg-[#0a1628]/95">
+      <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-sm dark:border-slate-800 dark:bg-[#0F1512]/95">
         <div className="flex h-16 items-center justify-between px-4 md:px-6">
 
           {/* Hamburger -- mobile only */}
@@ -93,10 +93,10 @@ export function TopNav({ user }: TopNavProps) {
 
           {/* Logo */}
           <Link href={dashboardPath} className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#0F1B2D]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#1A2320]">
               <Home className="h-4 w-4 text-[#0E7C67]" />
             </div>
-            <span className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
+            <span className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">
               Carefree Casa
             </span>
           </Link>
@@ -159,9 +159,9 @@ export function TopNav({ user }: TopNavProps) {
             onClick={() => setMenuOpen(false)}
           />
           {/* Drawer */}
-          <div className="fixed left-0 top-0 z-50 flex h-full w-72 flex-col bg-white shadow-2xl lg:hidden dark:bg-[#0a1628]">
+          <div className="fixed left-0 top-0 z-50 flex h-full w-72 flex-col bg-white shadow-2xl lg:hidden dark:bg-[#0F1512]">
             <div className="flex h-16 items-center justify-between border-b border-slate-200 px-4 dark:border-slate-800">
-              <span className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Menu</span>
+              <span className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Menu</span>
               <button
                 className="flex h-9 w-9 items-center justify-center rounded-md text-slate-400 hover:bg-slate-100"
                 onClick={() => setMenuOpen(false)}
@@ -179,7 +179,7 @@ export function TopNav({ user }: TopNavProps) {
                     className={cn(
                       "flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors mb-0.5",
                       active
-                        ? "bg-[#0F1B2D] text-white"
+                        ? "bg-[#1A2320] text-white"
                         : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5"
                     )}
                   >
@@ -196,7 +196,7 @@ export function TopNav({ user }: TopNavProps) {
                   <AvatarFallback className="text-xs">{getInitials(user.full_name)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#0F1B2D] truncate dark:text-white">{user.full_name}</p>
+                  <p className="text-sm font-medium text-[#1A2320] truncate dark:text-white">{user.full_name}</p>
                   <p className="text-xs text-slate-500 truncate">{user.email}</p>
                 </div>
               </div>

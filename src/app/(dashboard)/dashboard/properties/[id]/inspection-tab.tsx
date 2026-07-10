@@ -617,7 +617,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
     return (
       <div className="max-w-md mx-auto py-8 space-y-6">
         <div className="text-center">
-          <p className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white capitalize">
+          <p className="font-display text-lg font-semibold text-[#1A2320] dark:text-white capitalize">
             Set up {setupFor} inspection
           </p>
           <p className="mt-1 text-sm text-slate-500">
@@ -632,7 +632,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
             { key: "bathrooms", label: "Bathrooms" },
           ] as const).map(({ key, label }) => (
             <div key={key} className="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-800 p-3">
-              <span className="text-sm font-medium text-[#0F1B2D] dark:text-white">{label}</span>
+              <span className="text-sm font-medium text-[#1A2320] dark:text-white">{label}</span>
               <div className="flex items-center gap-3">
                 <button
                   type="button"
@@ -670,7 +670,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
               className={cn(
                 "flex w-full items-center justify-between rounded-xl border p-3 text-sm font-medium transition-colors",
                 setupConfig[key]
-                  ? "border-[#0E7C67] bg-amber-50 text-[#0F1B2D]"
+                  ? "border-[#0E7C67] bg-amber-50 text-[#1A2320]"
                   : "border-slate-200 text-slate-600 hover:border-slate-300"
               )}
             >
@@ -712,7 +712,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
           <ClipboardList className="h-10 w-10 text-slate-400" />
         </div>
         <div>
-          <p className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">No inspection on file</p>
+          <p className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">No inspection on file</p>
           <p className="mt-1 text-sm text-slate-500 max-w-sm">Start the initial walkthrough to document every system, appliance, and condition in the home.</p>
         </div>
         <Button
@@ -742,7 +742,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white capitalize">
+            <h3 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white capitalize">
               {inspection.type} Inspection
             </h3>
             <span className={cn(
@@ -757,7 +757,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
           <p className="text-sm text-slate-500 mt-0.5">
             {new Date(inspection.inspection_date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
             {" -- "}
-            <span className="font-medium text-[#0F1B2D] dark:text-white">{totalAssessed}/{totalItems}</span> items assessed
+            <span className="font-medium text-[#1A2320] dark:text-white">{totalAssessed}/{totalItems}</span> items assessed
             {flaggedCount > 0 && (
               <span className="ml-2 text-red-600 font-medium">{flaggedCount} flagged</span>
             )}
@@ -807,7 +807,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
             >
               <div className="flex items-center gap-2.5">
                 <span className="text-slate-500">{section.icon}</span>
-                <span className="font-semibold text-sm text-[#0F1B2D] dark:text-white">{section.label}</span>
+                <span className="font-semibold text-sm text-[#1A2320] dark:text-white">{section.label}</span>
                 {sectionFlags > 0 && (
                   <span className="flex items-center gap-0.5 text-xs text-red-600 font-medium">
                     <AlertTriangle className="h-3 w-3" />{sectionFlags}
@@ -851,7 +851,7 @@ export function InspectionTab({ propertyId, userId, defaultBedrooms, defaultBath
                           {finding.flagged && (
                             <AlertTriangle className="h-3.5 w-3.5 text-red-500 shrink-0" />
                           )}
-                          <span className="text-sm font-medium text-[#0F1B2D] dark:text-white">{item.label}</span>
+                          <span className="text-sm font-medium text-[#1A2320] dark:text-white">{item.label}</span>
                           {finding.aiAssessed && (
                             <span className="rounded bg-[#0E7C67]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[#0E7C67]">AI</span>
                           )}

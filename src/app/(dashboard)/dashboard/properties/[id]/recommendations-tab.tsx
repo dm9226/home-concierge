@@ -155,7 +155,7 @@ export function RecommendationsTab({ propertyId, userId }: { propertyId: string;
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Recommendations</h3>
+          <h3 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Recommendations</h3>
           <p className="text-sm text-slate-500">What the team recommends, and where each item stands with the client.</p>
         </div>
         <div className="flex gap-2">
@@ -237,7 +237,7 @@ export function RecommendationsTab({ propertyId, userId }: { propertyId: string;
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-sm text-[#0F1B2D] dark:text-white">{r.title}</span>
+                          <span className="font-medium text-sm text-[#1A2320] dark:text-white">{r.title}</span>
                           <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 uppercase">{TYPE_LABELS[r.rec_type]}</span>
                           {r.priority === "high" && <span className="rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-semibold text-red-700 uppercase">High</span>}
                         </div>

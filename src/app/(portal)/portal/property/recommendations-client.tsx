@@ -70,13 +70,13 @@ export function RecommendationsClient({ recommendations }: { recommendations: Re
       {/* Needs your decision */}
       {pending.length > 0 && (
         <div>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Needs Your Decision ({pending.length})</h2>
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3">Needs Your Decision ({pending.length})</h2>
           <div className="space-y-3">
             {pending.map(r => (
               <Card key={r.id} className={r.priority === "high" ? "border-amber-200" : ""}>
                 <CardContent className="pt-4 pb-4">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-[#0F1B2D] dark:text-white">{r.title}</span>
+                    <span className="font-semibold text-[#1A2320] dark:text-white">{r.title}</span>
                     <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 uppercase">{TYPE_LABELS[r.rec_type]}</span>
                     {r.status === "deferred" && <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 uppercase">Deferred</span>}
                   </div>
@@ -107,13 +107,13 @@ export function RecommendationsClient({ recommendations }: { recommendations: Re
       {/* Approved / in progress */}
       {approved.length > 0 && (
         <div>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3 flex items-center gap-2">
             <Wrench className="h-4 w-4 text-blue-500" /> Approved ({approved.length})
           </h2>
           <div className="space-y-2">
             {approved.map(r => (
               <div key={r.id} className="flex items-center justify-between rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3">
-                <span className="text-sm text-[#0F1B2D] dark:text-white">{r.title}</span>
+                <span className="text-sm text-[#1A2320] dark:text-white">{r.title}</span>
                 {r.estimated_cost != null && <span className="text-xs text-slate-400">{money(r.estimated_cost)}</span>}
               </div>
             ))}
@@ -124,7 +124,7 @@ export function RecommendationsClient({ recommendations }: { recommendations: Re
       {/* Completed */}
       {completed.length > 0 && (
         <div>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3 flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Completed ({completed.length})
           </h2>
           <div className="space-y-2">

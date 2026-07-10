@@ -87,7 +87,7 @@ export function EmergencyForm({ propertyId, userId }: { propertyId: string; user
       <Card>
         <CardContent className="pt-5 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#0F1B2D] dark:text-white mb-2">
+            <label className="block text-sm font-medium text-[#1A2320] dark:text-white mb-2">
               Type of emergency <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -109,7 +109,7 @@ export function EmergencyForm({ propertyId, userId }: { propertyId: string; user
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#0F1B2D] dark:text-white mb-1.5">
+            <label className="block text-sm font-medium text-[#1A2320] dark:text-white mb-1.5">
               Describe the situation
             </label>
             <textarea
@@ -117,7 +117,7 @@ export function EmergencyForm({ propertyId, userId }: { propertyId: string; user
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               rows={4}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#0F1B2D] placeholder:text-slate-400 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white resize-none"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#1A2320] placeholder:text-slate-400 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white resize-none"
             />
           </div>
         </CardContent>

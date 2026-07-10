@@ -158,7 +158,7 @@ export function MessageThread({
             <div key={msg.id}>
               {showDate && (
                 <div className="flex items-center justify-center my-3">
-                  <span className="text-xs text-slate-400 bg-[#F5F0E8] dark:bg-[#060e1a] px-3 py-1 rounded-full">
+                  <span className="text-xs text-slate-400 bg-[#F5F0E8] dark:bg-[#0A0F0C] px-3 py-1 rounded-full">
                     {new Date(msg.created_at).toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" })}
                   </span>
                 </div>
@@ -190,8 +190,8 @@ export function MessageThread({
                     <div className={cn(
                       "rounded-2xl px-4 py-2.5 text-sm",
                       isOwn
-                        ? "bg-[#0F1B2D] text-white rounded-br-sm"
-                        : "bg-white dark:bg-slate-800 text-[#0F1B2D] dark:text-white border border-slate-200/80 dark:border-slate-700 rounded-bl-sm"
+                        ? "bg-[#1A2320] text-white rounded-br-sm"
+                        : "bg-white dark:bg-slate-800 text-[#1A2320] dark:text-white border border-slate-200/80 dark:border-slate-700 rounded-bl-sm"
                     )}>
                       {msg.body}
                     </div>
@@ -256,13 +256,13 @@ export function MessageThread({
             }}
             placeholder="Message your team..."
             rows={1}
-            className="flex-1 resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-[#0F1B2D] placeholder:text-slate-400 focus:border-[#0F1B2D] focus:outline-none focus:ring-1 focus:ring-[#0F1B2D] dark:border-slate-700 dark:bg-slate-800 dark:text-white max-h-32"
+            className="flex-1 resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-[#1A2320] placeholder:text-slate-400 focus:border-[#1A2320] focus:outline-none focus:ring-1 focus:ring-[#1A2320] dark:border-slate-700 dark:bg-slate-800 dark:text-white max-h-32"
             style={{ minHeight: "44px" }}
           />
           <button
             type="submit"
             disabled={(!text.trim() && !attachment) || sending}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#0F1B2D] text-white disabled:opacity-40 hover:bg-[#1a2d47] transition-colors"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#1A2320] text-white disabled:opacity-40 hover:bg-[#1a2d47] transition-colors"
           >
             {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </button>

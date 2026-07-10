@@ -36,7 +36,7 @@ export default async function AuditPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Audit Log</h1>
+        <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Audit Log</h1>
         <p className="mt-1 text-sm text-slate-500">Sign-in activity and a record of changes made across the platform.</p>
       </div>
 
@@ -53,7 +53,7 @@ export default async function AuditPage() {
               {logins.map(e => (
                 <div key={e.id} className="flex items-center justify-between gap-3 py-2.5">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-[#0F1B2D] dark:text-white truncate">
+                    <p className="text-sm font-medium text-[#1A2320] dark:text-white truncate">
                       {(e as any).user?.full_name ?? "Unknown user"}
                       <span className="ml-2 text-xs font-normal text-slate-400">{(e as any).user?.email}</span>
                     </p>
@@ -88,7 +88,7 @@ export default async function AuditPage() {
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${ACTION_STYLE[c.action] ?? "bg-slate-100 text-slate-600"}`}>{c.action}</span>
-                        <span className="text-sm font-medium text-[#0F1B2D] dark:text-white">{TABLE_LABELS[c.table_name] ?? c.table_name}</span>
+                        <span className="text-sm font-medium text-[#1A2320] dark:text-white">{TABLE_LABELS[c.table_name] ?? c.table_name}</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-0.5">
                         {(c as any).user?.full_name ?? "System"}

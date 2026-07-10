@@ -139,8 +139,8 @@ export function VendorAgreementAdmin({ vendorId, userId, vendor }: {
           <>
             <div className="flex items-center justify-end">
               <div className="inline-flex rounded-lg border border-slate-200 dark:border-slate-700 p-0.5 text-xs font-medium">
-                <button type="button" onClick={() => setPreview(false)} className={`rounded-md px-2.5 py-1 ${!preview ? "bg-[#0F1B2D] text-white" : "text-slate-500"}`}>Edit</button>
-                <button type="button" onClick={() => setPreview(true)} className={`rounded-md px-2.5 py-1 ${preview ? "bg-[#0F1B2D] text-white" : "text-slate-500"}`}>Preview</button>
+                <button type="button" onClick={() => setPreview(false)} className={`rounded-md px-2.5 py-1 ${!preview ? "bg-[#1A2320] text-white" : "text-slate-500"}`}>Edit</button>
+                <button type="button" onClick={() => setPreview(true)} className={`rounded-md px-2.5 py-1 ${preview ? "bg-[#1A2320] text-white" : "text-slate-500"}`}>Preview</button>
               </div>
             </div>
 

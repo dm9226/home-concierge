@@ -190,7 +190,7 @@ export function VendorActions({ vendor }: { vendor: Vendor }) {
                     className={cn(
                       "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                       specialties.includes(s)
-                        ? "border-[#0E7C67] bg-amber-50 text-[#0F1B2D]"
+                        ? "border-[#0E7C67] bg-amber-50 text-[#1A2320]"
                         : "border-slate-200 text-slate-500 hover:border-slate-300"
                     )}
                   >

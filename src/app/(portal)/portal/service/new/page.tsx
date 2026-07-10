@@ -23,7 +23,7 @@ export default async function NewServicePage() {
         <Link href="/portal/service" className="flex items-center justify-center h-9 w-9 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
           <ArrowLeft className="h-4 w-4 text-slate-600" />
         </Link>
-        <h1 className="font-display text-xl font-semibold text-[#0F1B2D] dark:text-white">Request Service</h1>
+        <h1 className="font-display text-xl font-semibold text-[#1A2320] dark:text-white">Request Service</h1>
       </div>
 
       <ServiceRequestForm propertyId={propertyId} userId={user.id} />

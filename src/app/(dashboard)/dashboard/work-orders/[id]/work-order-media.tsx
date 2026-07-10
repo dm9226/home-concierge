@@ -89,7 +89,7 @@ export function WorkOrderMedia({
             onClick={() => setActivePhase(phase)}
             className={`px-4 py-2 text-sm font-medium capitalize border-b-2 -mb-px transition-colors ${
               activePhase === phase
-                ? "border-[#0E7C67] text-[#0F1B2D]"
+                ? "border-[#0E7C67] text-[#1A2320]"
                 : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
           >

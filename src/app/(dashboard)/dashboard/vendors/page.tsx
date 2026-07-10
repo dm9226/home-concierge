@@ -59,7 +59,7 @@ export default async function VendorsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Vendors</h1>
+        <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Vendors</h1>
         <div className="flex items-center gap-4">
           <span className="text-sm text-slate-500">{vendors?.length ?? 0} vendors</span>
           <AddVendorDialog />
@@ -68,7 +68,7 @@ export default async function VendorsPage() {
 
       {categoriesSorted.map(category => (
         <section key={category}>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 capitalize">
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3 capitalize">
             {category}
             <span className="ml-2 text-sm font-normal text-slate-500">({byCategory[category]?.length})</span>
           </h2>
@@ -83,7 +83,7 @@ export default async function VendorsPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <p className="font-semibold text-[#0F1B2D] dark:text-white truncate">{vendor.company_name}</p>
+                          <p className="font-semibold text-[#1A2320] dark:text-white truncate">{vendor.company_name}</p>
                           <Badge className={`text-xs ${STATUS_COLORS[vendor.status] ?? ""}`}>{vendor.status}</Badge>
                         </div>
                         {vendor.contact_name && (
@@ -119,7 +119,7 @@ export default async function VendorsPage() {
       {!vendors?.length && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Building2 className="h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D] mb-4">No vendors yet</h2>
+          <h2 className="font-display text-xl font-semibold text-[#1A2320] mb-4">No vendors yet</h2>
           <AddVendorDialog />
         </div>
       )}

@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   if (profile.role === "client") redirect("/portal")
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-[#060e1a]">
+    <div className="flex min-h-screen flex-col bg-[#F5F0E8] dark:bg-[#0A0F0C]">
       <TopNav user={profile} />
       <div className="flex flex-1">
         <Sidebar role={profile.role as "admin" | "concierge"} />

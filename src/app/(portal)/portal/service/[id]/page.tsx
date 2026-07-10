@@ -51,7 +51,7 @@ export default async function ServiceDetailPage({
         <Link href="/portal/service" className="flex items-center justify-center h-9 w-9 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
           <ArrowLeft className="h-4 w-4 text-slate-600" />
         </Link>
-        <h1 className="font-display text-xl font-semibold text-[#0F1B2D] dark:text-white flex-1 truncate">{workOrder.title}</h1>
+        <h1 className="font-display text-xl font-semibold text-[#1A2320] dark:text-white flex-1 truncate">{workOrder.title}</h1>
         <StatusBadge status={workOrder.status} />
       </div>
 
@@ -68,7 +68,7 @@ export default async function ServiceDetailPage({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Submitted</p>
-              <p className="text-sm font-medium text-[#0F1B2D] dark:text-white flex items-center gap-1.5">
+              <p className="text-sm font-medium text-[#1A2320] dark:text-white flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-slate-400" />
                 {formatDateShort(workOrder.created_at)}
               </p>
@@ -76,7 +76,7 @@ export default async function ServiceDetailPage({
             {workOrder.scheduled_date && (
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Scheduled</p>
-                <p className="text-sm font-medium text-[#0F1B2D] dark:text-white flex items-center gap-1.5">
+                <p className="text-sm font-medium text-[#1A2320] dark:text-white flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 text-slate-400" />
                   {formatDateShort(workOrder.scheduled_date)}
                 </p>
@@ -85,7 +85,7 @@ export default async function ServiceDetailPage({
             {workOrder.completed_date && (
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Completed</p>
-                <p className="text-sm font-medium text-[#0F1B2D] dark:text-white flex items-center gap-1.5">
+                <p className="text-sm font-medium text-[#1A2320] dark:text-white flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 text-slate-400" />
                   {formatDateShort(workOrder.completed_date)}
                 </p>
@@ -94,7 +94,7 @@ export default async function ServiceDetailPage({
             {workOrder.actual_cost && (
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Cost</p>
-                <p className="text-sm font-medium text-[#0F1B2D] dark:text-white flex items-center gap-1.5">
+                <p className="text-sm font-medium text-[#1A2320] dark:text-white flex items-center gap-1.5">
                   <DollarSign className="h-3.5 w-3.5 text-slate-400" />
                   {formatCurrency(workOrder.actual_cost)}
                 </p>
@@ -103,7 +103,7 @@ export default async function ServiceDetailPage({
             {!workOrder.actual_cost && workOrder.cost_estimate && (
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Estimate</p>
-                <p className="text-sm font-medium text-[#0F1B2D] dark:text-white flex items-center gap-1.5">
+                <p className="text-sm font-medium text-[#1A2320] dark:text-white flex items-center gap-1.5">
                   <DollarSign className="h-3.5 w-3.5 text-slate-400" />
                   {formatCurrency(workOrder.cost_estimate)}
                 </p>
@@ -142,7 +142,7 @@ export default async function ServiceDetailPage({
                     {i < updates.length - 1 && <div className="w-px flex-1 bg-slate-200 mt-1" />}
                   </div>
                   <div className="pb-4">
-                    <p className="text-sm font-medium text-[#0F1B2D] dark:text-white">{update.status_message}</p>
+                    <p className="text-sm font-medium text-[#1A2320] dark:text-white">{update.status_message}</p>
                     <p className="text-xs text-slate-500 mt-0.5">{formatDateShort(update.created_at)}</p>
                   </div>
                 </div>
@@ -155,7 +155,7 @@ export default async function ServiceDetailPage({
       {/* Photos */}
       {photos.length > 0 && (
         <div>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Photos</h2>
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3">Photos</h2>
           <div className="grid grid-cols-2 gap-2">
             {photos.map((photo: any) => (
               <div key={photo.id} className="aspect-video rounded-xl overflow-hidden bg-slate-100">

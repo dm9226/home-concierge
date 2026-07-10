@@ -25,12 +25,12 @@ export default async function VendorSignPage({
   ]
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0a1628] py-8 px-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0F1512] py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {!ag || ag.status === "void" ? (
           <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 p-10 text-center">
             <FileX className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-            <p className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Agreement not available</p>
+            <p className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Agreement not available</p>
             <p className="text-sm text-slate-500 mt-1">This link is invalid or the agreement is no longer active. Contact Carefree Casa for a new link.</p>
           </div>
         ) : (

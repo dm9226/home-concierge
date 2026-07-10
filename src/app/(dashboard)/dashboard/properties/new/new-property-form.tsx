@@ -191,7 +191,7 @@ export function NewPropertyForm() {
         <Card>
           <CardContent className="pt-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-[#0F1B2D] dark:text-white">Address</h2>
+              <h2 className="font-semibold text-[#1A2320] dark:text-white">Address</h2>
               <div className="flex items-center gap-2">
                 {usageCount !== null && (
                   <span className="text-xs text-slate-400">{usageCount}/50 lookups</span>
@@ -280,7 +280,7 @@ export function NewPropertyForm() {
 
         <Card>
           <CardContent className="pt-6 space-y-4">
-            <h2 className="font-semibold text-[#0F1B2D] dark:text-white">Details</h2>
+            <h2 className="font-semibold text-[#1A2320] dark:text-white">Details</h2>
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="year_built">Year Built</Label>

@@ -13,7 +13,7 @@ export default async function DashboardSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Account Settings</h1>
+      <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Account Settings</h1>
       <ProfileSettingsForm user={profile} />
     </div>
   )

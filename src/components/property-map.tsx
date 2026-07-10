@@ -34,7 +34,7 @@ export function PropertyMap({ address, latitude, longitude, className = "" }: Pr
         href={directionsUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 h-10 w-full bg-[#0F1B2D] hover:bg-[#1a2d47] text-white text-sm font-medium transition-colors"
+        className="flex items-center justify-center gap-2 h-10 w-full bg-[#1A2320] hover:bg-[#1a2d47] text-white text-sm font-medium transition-colors"
       >
         <Navigation className="h-4 w-4" />
         Get Directions

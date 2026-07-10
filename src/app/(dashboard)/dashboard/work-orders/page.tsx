@@ -39,7 +39,7 @@ export default async function WorkOrdersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Work Orders</h1>
+        <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Work Orders</h1>
       </div>
 
       {emergency.length > 0 && (
@@ -56,7 +56,7 @@ export default async function WorkOrdersPage() {
 
       {active.length > 0 && (
         <section>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Active ({active.length})</h2>
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3">Active ({active.length})</h2>
           <div className="space-y-2">
             {active.map(wo => <WorkOrderRow key={wo.id} wo={wo} />)}
           </div>
@@ -75,7 +75,7 @@ export default async function WorkOrdersPage() {
       {!workOrders?.length && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Wrench className="h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No work orders</h2>
+          <h2 className="font-display text-xl font-semibold text-[#1A2320]">No work orders</h2>
         </div>
       )}
     </div>
@@ -90,7 +90,7 @@ function WorkOrderRow({ wo }: { wo: any }) {
       className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
     >
       <div className="min-w-0 flex-1">
-        <p className="font-medium text-[#0F1B2D] dark:text-white truncate">{wo.title}</p>
+        <p className="font-medium text-[#1A2320] dark:text-white truncate">{wo.title}</p>
         <p className="text-sm text-slate-500 mt-0.5">
           {property ? `${property.address}, ${property.city}` : ""}
           {wo.scheduled_date ? ` · ${formatDateShort(wo.scheduled_date)}` : ""}

@@ -75,7 +75,7 @@ export function AgreementClient({ agreement, parties }: { agreement: Agreement; 
       ) : (
         <Card>
           <CardContent className="pt-5 space-y-3">
-            <p className="text-sm font-medium text-[#0F1B2D] dark:text-white flex items-center gap-2">
+            <p className="text-sm font-medium text-[#1A2320] dark:text-white flex items-center gap-2">
               <FileSignature className="h-4 w-4 text-[#0E7C67]" /> Electronic Acceptance
             </p>
             <div className="space-y-1.5">

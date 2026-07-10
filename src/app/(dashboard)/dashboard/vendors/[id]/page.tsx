@@ -62,7 +62,7 @@ export default async function VendorDetailPage({
         </Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h1 className="font-display text-xl font-semibold text-[#0F1B2D] dark:text-white">{vendor.company_name}</h1>
+            <h1 className="font-display text-xl font-semibold text-[#1A2320] dark:text-white">{vendor.company_name}</h1>
             <Badge className={STATUS_COLORS[vendor.status] ?? ""}>{vendor.status}</Badge>
           </div>
           {vendor.contact_name && <p className="text-sm text-slate-500">{vendor.contact_name}</p>}
@@ -133,7 +133,7 @@ export default async function VendorDetailPage({
                     className={`h-5 w-5 ${i < Math.round(vendor.rating!) ? "fill-amber-400 text-amber-400" : "text-slate-200"}`}
                   />
                 ))}
-                <span className="font-semibold text-[#0F1B2D] dark:text-white ml-1">{vendor.rating.toFixed(1)}</span>
+                <span className="font-semibold text-[#1A2320] dark:text-white ml-1">{vendor.rating.toFixed(1)}</span>
               </div>
             ) : (
               <p className="text-sm text-slate-400">Not yet rated</p>
@@ -143,18 +143,18 @@ export default async function VendorDetailPage({
               <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-500">Total jobs</span>
-                  <span className="font-medium text-[#0F1B2D] dark:text-white">{scorecard.total_jobs}</span>
+                  <span className="font-medium text-[#1A2320] dark:text-white">{scorecard.total_jobs}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-500">On-time</span>
-                  <span className="font-medium text-[#0F1B2D] dark:text-white">
+                  <span className="font-medium text-[#1A2320] dark:text-white">
                     {scorecard.total_jobs > 0 ? `${Math.round((scorecard.on_time_count / scorecard.total_jobs) * 100)}%` : "--"}
                   </span>
                 </div>
                 {scorecard.average_satisfaction_rating && (
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-500">Avg satisfaction</span>
-                    <span className="font-medium text-[#0F1B2D] dark:text-white">{scorecard.average_satisfaction_rating.toFixed(1)}/5</span>
+                    <span className="font-medium text-[#1A2320] dark:text-white">{scorecard.average_satisfaction_rating.toFixed(1)}/5</span>
                   </div>
                 )}
                 {scorecard.callback_count > 0 && (
@@ -166,7 +166,7 @@ export default async function VendorDetailPage({
                 {totalSpend > 0 && (
                   <div className="flex justify-between text-sm pt-1 border-t border-slate-100">
                     <span className="text-slate-500">Total spend</span>
-                    <span className="font-medium text-[#0F1B2D] dark:text-white">{formatCurrency(totalSpend)}</span>
+                    <span className="font-medium text-[#1A2320] dark:text-white">{formatCurrency(totalSpend)}</span>
                   </div>
                 )}
               </div>
@@ -192,7 +192,7 @@ export default async function VendorDetailPage({
 
       {workOrders && workOrders.length > 0 && (
         <div>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Work History</h2>
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3">Work History</h2>
           <div className="space-y-2">
             {workOrders.map(wo => (
               <Link
@@ -201,7 +201,7 @@ export default async function VendorDetailPage({
                 className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
               >
                 <div>
-                  <p className="font-medium text-[#0F1B2D] dark:text-white">{wo.title}</p>
+                  <p className="font-medium text-[#1A2320] dark:text-white">{wo.title}</p>
                   <p className="text-sm text-slate-500">
                     {(wo as any).property?.address}
                     {wo.completed_date && ` · ${formatDateShort(wo.completed_date)}`}

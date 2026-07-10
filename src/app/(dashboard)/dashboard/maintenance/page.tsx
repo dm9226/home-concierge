@@ -63,7 +63,7 @@ export default async function MaintenanceDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Maintenance</h1>
+      <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Maintenance</h1>
 
       <div className="grid grid-cols-3 gap-4">
         <StatCard icon={<AlertTriangle className="h-5 w-5 text-red-500" />} label="Overdue" value={overdue.length} color="red" />
@@ -89,14 +89,14 @@ function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label:
   return (
     <div className={`rounded-xl border p-4 ${bg}`}>
       <div className="flex items-center gap-2 mb-1">{icon}</div>
-      <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">{value}</p>
+      <p className="text-2xl font-bold text-[#1A2320] dark:text-white">{value}</p>
       <p className="text-xs text-slate-600">{label}</p>
     </div>
   )
 }
 
 function Section({ title, color, items }: { title: string; color: string; items: any[] }) {
-  const titleColor = color === "red" ? "text-red-600" : color === "amber" ? "text-amber-600" : "text-[#0F1B2D] dark:text-white"
+  const titleColor = color === "red" ? "text-red-600" : color === "amber" ? "text-amber-600" : "text-[#1A2320] dark:text-white"
   return (
     <section>
       <h2 className={`font-semibold mb-3 ${titleColor}`}>{title} ({items.length})</h2>
@@ -107,7 +107,7 @@ function Section({ title, color, items }: { title: string; color: string; items:
           return (
             <div key={item.id} className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
               <div>
-                <p className="font-medium text-[#0F1B2D] dark:text-white">{item.title}</p>
+                <p className="font-medium text-[#1A2320] dark:text-white">{item.title}</p>
                 {property && (
                   <Link href={`/dashboard/properties/${property.id}`} className="text-sm text-[#0E7C67] hover:underline">
                     {property.address}, {property.city}

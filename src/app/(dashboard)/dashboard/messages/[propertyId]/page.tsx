@@ -54,7 +54,7 @@ export default async function DashboardMessageThreadPage({
           <ArrowLeft className="h-4 w-4 text-slate-600" />
         </Link>
         <div>
-          <p className="font-semibold text-[#0F1B2D] dark:text-white">{client?.full_name ?? "Client"}</p>
+          <p className="font-semibold text-[#1A2320] dark:text-white">{client?.full_name ?? "Client"}</p>
           <p className="text-xs text-slate-500">{property.address}, {property.city}</p>
         </div>
       </div>

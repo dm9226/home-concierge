@@ -69,7 +69,7 @@ export function MarketStatsCard({ marketData, zipCode }: MarketStatsCardProps) {
         {entries.slice(0, 8).map(([k, v]) => (
           <div key={k} className="flex justify-between">
             <span className="text-slate-500">{k}</span>
-            <span className="font-medium text-[#0F1B2D] dark:text-white">{v}</span>
+            <span className="font-medium text-[#1A2320] dark:text-white">{v}</span>
           </div>
         ))}
       </CardContent>

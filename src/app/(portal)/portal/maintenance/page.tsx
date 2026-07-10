@@ -41,7 +41,7 @@ export default async function MaintenancePage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-      <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Maintenance Schedule</h1>
+      <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Maintenance Schedule</h1>
 
       {overdue.length > 0 && (
         <section>
@@ -88,7 +88,7 @@ export default async function MaintenancePage() {
       {!schedules?.length && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <CheckCircle className="h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No maintenance scheduled</h2>
+          <h2 className="font-display text-xl font-semibold text-[#1A2320]">No maintenance scheduled</h2>
           <p className="mt-2 text-slate-500">Your maintenance schedule will appear here once your team sets it up.</p>
         </div>
       )}

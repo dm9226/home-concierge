@@ -42,7 +42,7 @@ export function ConciergeNotesEditor({
         onChange={e => { setNotes(e.target.value); setDirty(true) }}
         rows={4}
         placeholder="Add notes visible to the client..."
-        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#0F1B2D] placeholder:text-slate-400 focus:border-[#0F1B2D] focus:outline-none focus:ring-1 focus:ring-[#0F1B2D] dark:border-slate-700 dark:bg-slate-900 dark:text-white resize-none"
+        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#1A2320] placeholder:text-slate-400 focus:border-[#1A2320] focus:outline-none focus:ring-1 focus:ring-[#1A2320] dark:border-slate-700 dark:bg-slate-900 dark:text-white resize-none"
       />
       {dirty && (
         <Button size="sm" onClick={save} disabled={saving} className="gap-1.5">

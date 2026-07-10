@@ -48,7 +48,7 @@ export default async function InvoicesPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-      <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Invoices</h1>
+      <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Invoices</h1>
 
       {unpaid.length > 0 && (
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/40 dark:bg-amber-950/20">
@@ -66,7 +66,7 @@ export default async function InvoicesPage() {
 
       {unpaid.length > 0 && (
         <section>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Awaiting Payment</h2>
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3">Awaiting Payment</h2>
           <div className="space-y-2">
             {unpaid.map(inv => (
               <InvoiceRow key={inv.id} invoice={inv} propertyAddress={properties.length > 1 ? propertyMap[inv.property_id] : undefined} />
@@ -77,7 +77,7 @@ export default async function InvoicesPage() {
 
       {paid.length > 0 && (
         <section>
-          <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">Paid</h2>
+          <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3">Paid</h2>
           <div className="space-y-2">
             {paid.map(inv => (
               <InvoiceRow key={inv.id} invoice={inv} propertyAddress={properties.length > 1 ? propertyMap[inv.property_id] : undefined} />
@@ -89,7 +89,7 @@ export default async function InvoicesPage() {
       {!invoices?.length && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <FileText className="h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No invoices yet</h2>
+          <h2 className="font-display text-xl font-semibold text-[#1A2320]">No invoices yet</h2>
           <p className="mt-2 text-slate-500">Invoices from your team will appear here.</p>
         </div>
       )}
@@ -104,7 +104,7 @@ function InvoiceRow({ invoice, propertyAddress }: { invoice: any; propertyAddres
         <CardContent className="pt-4 pb-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-[#0F1B2D] dark:text-white truncate">
+              <p className="font-medium text-[#1A2320] dark:text-white truncate">
                 {invoice.invoice_number ?? "Invoice"}
               </p>
               <p className="text-sm text-slate-500 mt-0.5">
@@ -114,7 +114,7 @@ function InvoiceRow({ invoice, propertyAddress }: { invoice: any; propertyAddres
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <p className="font-semibold text-[#0F1B2D] dark:text-white">{formatCurrency(invoice.total)}</p>
+                <p className="font-semibold text-[#1A2320] dark:text-white">{formatCurrency(invoice.total)}</p>
                 <InvoiceStatusBadge status={invoice.status} dueDate={invoice.due_date} />
               </div>
               <ChevronRight className="h-4 w-4 text-slate-400 shrink-0" />

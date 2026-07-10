@@ -83,7 +83,7 @@ export function AssignOwnerDialog({ propertyId, clients, currentOwner }: Props) 
           {hasOwner && (
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800">
               <p className="text-xs uppercase tracking-wider text-slate-400 mb-1">Current Owner</p>
-              <p className="font-semibold text-[#0F1B2D] dark:text-white">{currentOwner!.full_name}</p>
+              <p className="font-semibold text-[#1A2320] dark:text-white">{currentOwner!.full_name}</p>
               <p className="text-sm text-slate-500">{currentOwner!.email}</p>
             </div>
           )}

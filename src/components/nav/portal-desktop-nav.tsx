@@ -18,7 +18,7 @@ export function PortalDesktopNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="hidden md:block border-b border-slate-200/80 bg-white/95 backdrop-blur-sm dark:border-slate-800 dark:bg-[#0a1628]/95">
+    <nav className="hidden md:block border-b border-slate-200/80 bg-white/95 backdrop-blur-sm dark:border-slate-800 dark:bg-[#0F1512]/95">
       <div className="max-w-2xl mx-auto px-4 flex gap-0.5">
         {navItems.map(item => {
           const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
@@ -29,7 +29,7 @@ export function PortalDesktopNav() {
               className={cn(
                 "flex items-center gap-2 px-3 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
                 isActive
-                  ? "border-[#0E7C67] text-[#0F1B2D] dark:text-white"
+                  ? "border-[#0E7C67] text-[#1A2320] dark:text-white"
                   : "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
               )}
             >

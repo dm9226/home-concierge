@@ -93,7 +93,7 @@ export function CreateUserDialog({ fixedRole, label }: CreateUserDialogProps) {
               <CheckCircle2 className="h-7 w-7 text-emerald-600" />
             </div>
             <div>
-              <p className="font-semibold text-[#0F1B2D]">Invitation sent</p>
+              <p className="font-semibold text-[#1A2320]">Invitation sent</p>
               <p className="mt-1 text-sm text-slate-500">
                 An email was sent to <span className="font-medium text-slate-700">{sentEmail}</span> with a link to set their password.
               </p>

@@ -46,7 +46,7 @@ export function PaintColorsEditor({ propertyId, initialValue }: Props) {
           <button
             onClick={save}
             disabled={saving}
-            className="flex items-center gap-1 rounded-md bg-[#0E7C67] px-2.5 py-1 text-xs font-medium text-[#0F1B2D] hover:bg-[#0A5F4E] disabled:opacity-50"
+            className="flex items-center gap-1 rounded-md bg-[#0E7C67] px-2.5 py-1 text-xs font-medium text-[#1A2320] hover:bg-[#0A5F4E] disabled:opacity-50"
           >
             <Check className="h-3 w-3" /> {saving ? "Saving..." : "Save"}
           </button>

@@ -26,7 +26,7 @@ export default async function PortalLayout({
   if (profile.role !== "client") redirect("/dashboard")
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F5F0E8] dark:bg-[#060e1a]">
+    <div className="flex min-h-screen flex-col bg-[#F5F0E8] dark:bg-[#0A0F0C]">
       <TopNav user={profile} />
       <PortalDesktopNav />
       <main className="flex-1 pb-20 md:pb-6">

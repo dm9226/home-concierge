@@ -40,7 +40,7 @@ export default async function DashboardInvoiceDetailPage({
         <Link href="/dashboard/invoices" className="flex items-center justify-center h-9 w-9 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
           <ArrowLeft className="h-4 w-4 text-slate-600" />
         </Link>
-        <h1 className="font-display text-xl font-semibold text-[#0F1B2D] dark:text-white flex-1">
+        <h1 className="font-display text-xl font-semibold text-[#1A2320] dark:text-white flex-1">
           {invoice.invoice_number}
         </h1>
       </div>
@@ -50,7 +50,7 @@ export default async function DashboardInvoiceDetailPage({
           <CardContent className="pt-5 space-y-4">
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Client</p>
-              <p className="font-medium text-[#0F1B2D] dark:text-white">{client?.full_name}</p>
+              <p className="font-medium text-[#1A2320] dark:text-white">{client?.full_name}</p>
               {property && (
                 <Link href={`/dashboard/properties/${property.id}`} className="text-sm text-[#0E7C67] hover:underline">
                   {property.address}, {property.city}
@@ -60,13 +60,13 @@ export default async function DashboardInvoiceDetailPage({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Period</p>
-                <p className="text-sm font-medium text-[#0F1B2D] dark:text-white">
+                <p className="text-sm font-medium text-[#1A2320] dark:text-white">
                   {formatDateShort(invoice.period_start)} -- {formatDateShort(invoice.period_end)}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Due date</p>
-                <p className="text-sm font-medium text-[#0F1B2D] dark:text-white">{formatDateShort(invoice.due_date)}</p>
+                <p className="text-sm font-medium text-[#1A2320] dark:text-white">{formatDateShort(invoice.due_date)}</p>
               </div>
               {invoice.paid_date && (
                 <div>
@@ -86,12 +86,12 @@ export default async function DashboardInvoiceDetailPage({
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-slate-600 dark:text-slate-300">Management fee</span>
-              <span className="font-medium text-[#0F1B2D] dark:text-white">{formatCurrency(invoice.fee_amount)}</span>
+              <span className="font-medium text-[#1A2320] dark:text-white">{formatCurrency(invoice.fee_amount)}</span>
             </div>
             {Array.isArray(additionalCharges) && additionalCharges.map((charge, i) => (
               <div key={i} className="flex justify-between text-sm">
                 <span className="text-slate-600 dark:text-slate-300">{charge.description}</span>
-                <span className="font-medium text-[#0F1B2D] dark:text-white">{formatCurrency(charge.amount)}</span>
+                <span className="font-medium text-[#1A2320] dark:text-white">{formatCurrency(charge.amount)}</span>
               </div>
             ))}
           </div>

@@ -279,7 +279,7 @@ export function BulkScanDialog({ propertyId }: Props) {
             >
               <Upload className="h-10 w-10 text-[#0E7C67]" />
               <div className="text-center">
-                <p className="font-medium text-[#0F1B2D]">Drop appliance label photos here</p>
+                <p className="font-medium text-[#1A2320]">Drop appliance label photos here</p>
                 <p className="text-xs text-slate-400 mt-1">or click to browse -- JPEG, PNG, HEIC accepted</p>
               </div>
             </div>
@@ -339,7 +339,7 @@ export function BulkScanDialog({ propertyId }: Props) {
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-slate-500">Scanning labels...</span>
-                <span className="font-medium text-[#0F1B2D]">{scannedCount} / {items.length}</span>
+                <span className="font-medium text-[#1A2320]">{scannedCount} / {items.length}</span>
               </div>
               <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
                 <div
@@ -424,7 +424,7 @@ export function BulkScanDialog({ propertyId }: Props) {
 
                       {/* Name + badges */}
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm text-[#0F1B2D] truncate">
+                        <p className="font-medium text-sm text-[#1A2320] truncate">
                           {item.name || <span className="text-slate-400 italic">Unnamed</span>}
                         </p>
                         <p className="text-xs text-slate-500">

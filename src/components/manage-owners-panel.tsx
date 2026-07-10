@@ -154,7 +154,7 @@ export function ManageOwnersPanel({ propertyId, owners, allClients }: Props) {
           {owners.map(owner => (
             <div key={owner.id} className="flex items-center justify-between gap-2">
               <div className="min-w-0">
-                <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">{owner.full_name}</p>
+                <p className="font-semibold text-sm text-[#1A2320] dark:text-white">{owner.full_name}</p>
                 <p className="text-xs text-slate-500 truncate">{owner.phone ?? owner.email}</p>
               </div>
               <button

@@ -64,7 +64,7 @@ export default async function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Reports</h1>
+      <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Reports</h1>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -83,11 +83,11 @@ export default async function ReportsPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Total Collected</p>
-              <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">{formatCurrency(totalRevenue)}</p>
+              <p className="text-2xl font-bold text-[#1A2320] dark:text-white">{formatCurrency(totalRevenue)}</p>
             </div>
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">This Year</p>
-              <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">{formatCurrency(revenueThisYear)}</p>
+              <p className="text-2xl font-bold text-[#1A2320] dark:text-white">{formatCurrency(revenueThisYear)}</p>
             </div>
             <div>
               <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Outstanding</p>
@@ -116,7 +116,7 @@ export default async function ReportsPage() {
               return (
                 <div key={priority}>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="capitalize text-[#0F1B2D] dark:text-white font-medium">{priority}</span>
+                    <span className="capitalize text-[#1A2320] dark:text-white font-medium">{priority}</span>
                     <span className="text-slate-500">{count} ({pct}%)</span>
                   </div>
                   <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800">
@@ -147,7 +147,7 @@ export default async function ReportsPage() {
               return (
                 <div key={band.label}>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-[#0F1B2D] dark:text-white font-medium">{band.label}</span>
+                    <span className="text-[#1A2320] dark:text-white font-medium">{band.label}</span>
                     <span className="text-slate-500">{count} properties</span>
                   </div>
                   <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800">
@@ -168,7 +168,7 @@ function KpiCard({ icon, label, value, sub }: { icon: React.ReactNode; label: st
     <Card>
       <CardContent className="pt-4 pb-4">
         <div className="text-[#0E7C67] mb-2">{icon}</div>
-        <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">{value}</p>
+        <p className="text-2xl font-bold text-[#1A2320] dark:text-white">{value}</p>
         <p className="text-xs text-slate-500 mt-0.5">{label}</p>
         {sub && <p className="text-xs text-slate-400">{sub}</p>}
       </CardContent>

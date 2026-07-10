@@ -224,7 +224,7 @@ export default async function PortalPropertyPage({
     <div className="max-w-2xl mx-auto px-4 py-6">
       {/* Page header */}
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">{property.address}</h1>
+        <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">{property.address}</h1>
         <p className="text-slate-500 flex items-center gap-1.5 mt-0.5">
           <MapPin className="h-3.5 w-3.5" />
           {property.city}, {property.state} {property.zip}
@@ -315,7 +315,7 @@ export default async function PortalPropertyPage({
                   const isOverdue = days !== null && days < 0
                   return (
                     <div key={item.id} className="flex items-center justify-between text-sm gap-3">
-                      <span className="text-[#0F1B2D] dark:text-white truncate">{item.title}</span>
+                      <span className="text-[#1A2320] dark:text-white truncate">{item.title}</span>
                       <span className={`shrink-0 text-xs font-medium ${isOverdue ? "text-red-500" : days !== null && days <= 14 ? "text-amber-500" : "text-slate-400"}`}>
                         {isOverdue ? `${Math.abs(days!)}d overdue` : days === 0 ? "Today" : days !== null ? `in ${days}d` : item.next_due ? formatDateShort(item.next_due) : "Scheduled"}
                       </span>
@@ -339,7 +339,7 @@ export default async function PortalPropertyPage({
                 {recurringServices.map(s => (
                   <div key={s.id} className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#0F1B2D] dark:text-white">{s.service_type}</p>
+                      <p className="text-sm font-medium text-[#1A2320] dark:text-white">{s.service_type}</p>
                       {(s.company_name || s.schedule) && (
                         <p className="text-xs text-slate-500">
                           {s.company_name}{s.company_name && s.schedule ? " · " : ""}{s.schedule}
@@ -372,7 +372,7 @@ export default async function PortalPropertyPage({
                       {utilities.filter(u => u.company).map((u, i) => (
                         <div key={i} className="flex justify-between">
                           <span className="text-slate-500">{u.type}</span>
-                          <span className="font-medium text-[#0F1B2D] dark:text-white">{u.company}</span>
+                          <span className="font-medium text-[#1A2320] dark:text-white">{u.company}</span>
                         </div>
                       ))}
                     </div>
@@ -384,7 +384,7 @@ export default async function PortalPropertyPage({
                     <div className="flex justify-between">
                       <span className="text-slate-500">{onboarding.hoa_name}</span>
                       {onboarding.hoa_contact_phone && (
-                        <span className="font-medium text-[#0F1B2D] dark:text-white">{onboarding.hoa_contact_phone}</span>
+                        <span className="font-medium text-[#1A2320] dark:text-white">{onboarding.hoa_contact_phone}</span>
                       )}
                     </div>
                   </div>
@@ -396,7 +396,7 @@ export default async function PortalPropertyPage({
                       {emergencyContacts.filter(c => c.name).map((c, i) => (
                         <div key={i} className="flex justify-between">
                           <span className="text-slate-500">{c.name}{c.relationship ? ` (${c.relationship})` : ""}</span>
-                          {c.phone && <span className="font-medium text-[#0F1B2D] dark:text-white">{c.phone}</span>}
+                          {c.phone && <span className="font-medium text-[#1A2320] dark:text-white">{c.phone}</span>}
                         </div>
                       ))}
                     </div>
@@ -418,7 +418,7 @@ export default async function PortalPropertyPage({
               <CardContent className="space-y-2">
                 {openWork.map(wo => (
                   <div key={wo.id} className="flex items-center justify-between gap-3">
-                    <span className="text-sm text-[#0F1B2D] dark:text-white truncate">{wo.title}</span>
+                    <span className="text-sm text-[#1A2320] dark:text-white truncate">{wo.title}</span>
                     <StatusBadge status={wo.status} />
                   </div>
                 ))}
@@ -480,7 +480,7 @@ export default async function PortalPropertyPage({
                         const disp = CONDITION_DISPLAY[s.condition]
                         return (
                           <div key={s.section} className="flex items-center justify-between rounded-lg border border-slate-200/70 dark:border-slate-800 px-3 py-2">
-                            <span className="text-sm text-[#0F1B2D] dark:text-white truncate">{humanizeSection(s.section)}</span>
+                            <span className="text-sm text-[#1A2320] dark:text-white truncate">{humanizeSection(s.section)}</span>
                             <span className="flex items-center gap-1.5 shrink-0">
                               <span className={`h-2 w-2 rounded-full ${disp.dot}`} />
                               <span className={`text-xs font-medium ${disp.text}`}>{disp.label}</span>
@@ -496,7 +496,7 @@ export default async function PortalPropertyPage({
               {/* Items flagged during the walkthrough */}
               {recommendations.length > 0 && (
                 <div>
-                  <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+                  <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3 flex items-center gap-2">
                     <ClipboardCheck className="h-4 w-4 text-[#0E7C67]" />
                     Flagged During Inspection ({recommendations.length})
                   </h2>
@@ -511,7 +511,7 @@ export default async function PortalPropertyPage({
                                 ? <XCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
                                 : <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />}
                               <div className="min-w-0">
-                                <p className="font-medium text-[#0F1B2D] dark:text-white text-sm">{f.item_label}</p>
+                                <p className="font-medium text-[#1A2320] dark:text-white text-sm">{f.item_label}</p>
                                 <p className="text-xs text-slate-400 mt-0.5">{humanizeSection(f.section)}</p>
                                 {f.notes && (
                                   <p className="text-sm text-slate-600 dark:text-slate-300 mt-1.5">{f.notes}</p>
@@ -562,7 +562,7 @@ export default async function PortalPropertyPage({
           )}
 
           {Object.keys(assetsByCategory).length > 0 && (
-            <h2 className="font-semibold text-[#0F1B2D] dark:text-white pt-2 flex items-center gap-2">
+            <h2 className="font-semibold text-[#1A2320] dark:text-white pt-2 flex items-center gap-2">
               <Package className="h-4 w-4 text-[#0E7C67]" />
               Your Home Systems &amp; Equipment
             </h2>
@@ -570,7 +570,7 @@ export default async function PortalPropertyPage({
 
           {Object.entries(assetsByCategory).map(([category, items]) => (
             <div key={category}>
-              <h3 className="font-semibold text-sm text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+              <h3 className="font-semibold text-sm text-[#1A2320] dark:text-white mb-3 flex items-center gap-2">
                 <Shield className="h-4 w-4 text-[#0E7C67]" />
                 {categoryLabels[category] ?? category}
               </h3>
@@ -596,7 +596,7 @@ export default async function PortalPropertyPage({
                       <CardContent className="pt-4 pb-4">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
-                            <p className="font-semibold text-[#0F1B2D] dark:text-white">{asset.name}</p>
+                            <p className="font-semibold text-[#1A2320] dark:text-white">{asset.name}</p>
                             {asset.brand && (
                               <p className="text-sm text-slate-500">{asset.brand}{asset.model ? ` ${asset.model}` : ""}</p>
                             )}
@@ -678,7 +678,7 @@ export default async function PortalPropertyPage({
           <TabsContent value="documents" className="space-y-6">
             {clientDocuments.length > 0 && (
               <div>
-                <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+                <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3 flex items-center gap-2">
                   <FileText className="h-4 w-4 text-[#0E7C67]" />
                   Documents
                 </h2>
@@ -695,7 +695,7 @@ export default async function PortalPropertyPage({
                         <FileText className="h-5 w-5 text-slate-500" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm text-[#0F1B2D] dark:text-white truncate">{f.name}</p>
+                        <p className="font-medium text-sm text-[#1A2320] dark:text-white truncate">{f.name}</p>
                         <p className="text-xs text-slate-400">{f.category}{f.category ? " · " : ""}{formatDateShort(f.created_at)}</p>
                       </div>
                       <Download className="h-4 w-4 text-slate-400 shrink-0" />
@@ -707,7 +707,7 @@ export default async function PortalPropertyPage({
 
             {clientPhotos.length > 0 && (
               <div>
-                <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+                <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3 flex items-center gap-2">
                   <Package className="h-4 w-4 text-[#0E7C67]" />
                   Photos
                 </h2>
@@ -737,7 +737,7 @@ export default async function PortalPropertyPage({
             <>
               {openWork.length > 0 && (
                 <div>
-                  <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+                  <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3 flex items-center gap-2">
                     <Clock className="h-4 w-4 text-amber-500" />
                     In Progress
                   </h2>
@@ -745,7 +745,7 @@ export default async function PortalPropertyPage({
                     {openWork.map(wo => (
                       <div key={wo.id} className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 px-4 py-3 gap-3">
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-[#0F1B2D] dark:text-white text-sm">{wo.title}</p>
+                          <p className="font-medium text-[#1A2320] dark:text-white text-sm">{wo.title}</p>
                           <p className="text-xs text-slate-500 mt-0.5 capitalize">{wo.category.replace("_", " ")} &bull; Submitted {formatDateShort(wo.created_at)}</p>
                         </div>
                         <StatusBadge status={wo.status} />
@@ -757,7 +757,7 @@ export default async function PortalPropertyPage({
 
               {doneWork.length > 0 && (
                 <div>
-                  <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3 flex items-center gap-2">
+                  <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3 flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     Completed ({doneWork.length})
                   </h2>
@@ -771,7 +771,7 @@ export default async function PortalPropertyPage({
                           </div>
                           <div className="rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 px-4 py-3">
                             <div className="flex items-start justify-between gap-2">
-                              <p className="font-medium text-[#0F1B2D] dark:text-white text-sm">{wo.title}</p>
+                              <p className="font-medium text-[#1A2320] dark:text-white text-sm">{wo.title}</p>
                               {wo.is_emergency && (
                                 <span className="shrink-0 text-xs bg-red-100 text-red-700 rounded-full px-2 py-0.5 font-medium">Emergency</span>
                               )}
@@ -804,7 +804,7 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between">
       <span className="text-slate-500">{label}</span>
-      <span className="font-medium text-[#0F1B2D] dark:text-white capitalize">{value}</span>
+      <span className="font-medium text-[#1A2320] dark:text-white capitalize">{value}</span>
     </div>
   )
 }

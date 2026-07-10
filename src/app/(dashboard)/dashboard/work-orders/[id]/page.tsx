@@ -48,7 +48,7 @@ export default async function WorkOrderDetailPage({
         <Link href="/dashboard/work-orders" className="flex items-center justify-center h-9 w-9 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
           <ArrowLeft className="h-4 w-4 text-slate-600" />
         </Link>
-        <h1 className="font-display text-xl font-semibold text-[#0F1B2D] dark:text-white flex-1 truncate">{wo.title}</h1>
+        <h1 className="font-display text-xl font-semibold text-[#1A2320] dark:text-white flex-1 truncate">{wo.title}</h1>
         <PriorityBadge priority={wo.priority} />
         <StatusBadge status={wo.status} />
       </div>
@@ -129,7 +129,7 @@ export default async function WorkOrderDetailPage({
                     {i < updates.length - 1 && <div className="w-px flex-1 bg-slate-200 mt-1" />}
                   </div>
                   <div className="pb-4">
-                    <p className="text-sm font-medium text-[#0F1B2D] dark:text-white">{update.message}</p>
+                    <p className="text-sm font-medium text-[#1A2320] dark:text-white">{update.message}</p>
                     <p className="text-xs text-slate-500 mt-0.5">{formatDateShort(update.created_at)}</p>
                   </div>
                 </div>
@@ -157,7 +157,7 @@ function DetailRow({ icon, label, children }: { icon: React.ReactNode; label: st
       <span className="text-slate-400 mt-0.5 shrink-0">{icon}</span>
       <div>
         <p className="text-xs text-slate-500">{label}</p>
-        <div className="text-sm font-medium text-[#0F1B2D] dark:text-white">{children}</div>
+        <div className="text-sm font-medium text-[#1A2320] dark:text-white">{children}</div>
       </div>
     </div>
   )

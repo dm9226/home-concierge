@@ -23,7 +23,7 @@ export default async function EmergencyPage() {
         <Link href="/portal" className="flex items-center justify-center h-9 w-9 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
           <ArrowLeft className="h-4 w-4 text-slate-600" />
         </Link>
-        <h1 className="font-display text-xl font-semibold text-[#0F1B2D] dark:text-white flex items-center gap-2">
+        <h1 className="font-display text-xl font-semibold text-[#1A2320] dark:text-white flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-red-600" />
           Emergency Request
         </h1>
@@ -37,12 +37,12 @@ export default async function EmergencyPage() {
       <div className="rounded-xl border border-slate-200 bg-white p-4 flex items-center justify-between dark:border-slate-800 dark:bg-slate-900">
         <div>
           <p className="text-xs uppercase tracking-wider text-slate-500 mb-0.5">Direct line</p>
-          <p className="font-semibold text-[#0F1B2D] dark:text-white">Carefree Casa Team</p>
+          <p className="font-semibold text-[#1A2320] dark:text-white">Carefree Casa Team</p>
           <p className="text-sm text-slate-500">(404) 555-0100</p>
         </div>
         <a
           href="tel:4045550100"
-          className="flex items-center gap-2 rounded-full bg-[#0F1B2D] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1a2d47] transition-colors"
+          className="flex items-center gap-2 rounded-full bg-[#1A2320] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1a2d47] transition-colors"
         >
           <Phone className="h-4 w-4" />
           Call Now

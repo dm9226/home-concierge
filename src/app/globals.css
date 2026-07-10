@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-navy-950: #0F1B2D;
-  --color-navy-900: #162235;
-  --color-navy-800: #1e3045;
+  --color-navy-950: #1A2320;
+  --color-navy-900: #232D29;
+  --color-navy-800: #2E3A35;
   --color-gold-400: #2F9179;
   --color-gold-500: #0E7C67;
   --color-gold-600: #0A5F4E;
@@ -13,14 +13,14 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #0F1B2D;
+  --background: #F5F0E8;
+  --foreground: #1A2320;
   --card: #ffffff;
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --primary: #0F1B2D;
+  --primary: #1A2320;
   --primary-foreground: #ffffff;
   --gold: #0E7C67;
   --gold-foreground: #ffffff;
@@ -29,15 +29,15 @@
 }
 
 .dark {
-  --background: #0a1628;
+  --background: #0F1512;
   --foreground: #f1f5f9;
-  --card: #0f1e35;
-  --muted: #162235;
+  --card: #131A16;
+  --muted: #232D29;
   --muted-foreground: #94a3b8;
-  --border: #1e3045;
-  --input: #1e3045;
+  --border: #2E3A35;
+  --input: #2E3A35;
   --primary: #f1f5f9;
-  --primary-foreground: #0F1B2D;
+  --primary-foreground: #1A2320;
 }
 
 * {
@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6, .font-display {
 }
 
 .navy-gradient {
-  background: linear-gradient(135deg, #0F1B2D 0%, #1e3045 100%);
+  background: linear-gradient(135deg, #1A2320 0%, #2E3A35 100%);
 }
 
 .scrollbar-hide {

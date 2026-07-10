@@ -343,7 +343,7 @@ export default async function PropertyDetailPage({
           <Card className="mb-4">
             <CardContent className="pt-5">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-[#0F1B2D] dark:text-white">Property Snapshot</h3>
+                <h3 className="font-semibold text-[#1A2320] dark:text-white">Property Snapshot</h3>
                 <span className="text-xs text-slate-400">
                   {lastInspection ? `Last inspected ${formatDateShort(lastInspection.inspection_date)}` : "Not yet inspected"}
                 </span>
@@ -353,18 +353,18 @@ export default async function PropertyDetailPage({
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 mb-2">Taken Care Of</p>
                   <div className="space-y-1.5 text-sm">
-                    <div className="flex justify-between"><span className="text-slate-500">Completed work</span><span className="font-semibold text-[#0F1B2D] dark:text-white">{completedWorkCount ?? 0}</span></div>
-                    <div className="flex justify-between"><span className="text-slate-500">Resolved recommendations</span><span className="font-semibold text-[#0F1B2D] dark:text-white">{recCounts.completed ?? 0}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Completed work</span><span className="font-semibold text-[#1A2320] dark:text-white">{completedWorkCount ?? 0}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Resolved recommendations</span><span className="font-semibold text-[#1A2320] dark:text-white">{recCounts.completed ?? 0}</span></div>
                   </div>
                 </div>
                 {/* Outstanding */}
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 mb-2">Outstanding</p>
                   <div className="space-y-1.5 text-sm">
-                    <div className="flex justify-between"><span className="text-slate-500">Open work orders</span><span className={`font-semibold ${openWorkOrderCount > 0 ? "text-amber-600" : "text-[#0F1B2D] dark:text-white"}`}>{openWorkOrderCount}</span></div>
-                    <div className="flex justify-between"><span className="text-slate-500">Awaiting client decision</span><span className={`font-semibold ${(recCounts.pending ?? 0) > 0 ? "text-amber-600" : "text-[#0F1B2D] dark:text-white"}`}>{recCounts.pending ?? 0}</span></div>
-                    <div className="flex justify-between"><span className="text-slate-500">Approved, to schedule</span><span className="font-semibold text-[#0F1B2D] dark:text-white">{recCounts.approved ?? 0}</span></div>
-                    <div className="flex justify-between"><span className="text-slate-500">Deferred / monitoring</span><span className="font-semibold text-[#0F1B2D] dark:text-white">{recCounts.deferred ?? 0}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Open work orders</span><span className={`font-semibold ${openWorkOrderCount > 0 ? "text-amber-600" : "text-[#1A2320] dark:text-white"}`}>{openWorkOrderCount}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Awaiting client decision</span><span className={`font-semibold ${(recCounts.pending ?? 0) > 0 ? "text-amber-600" : "text-[#1A2320] dark:text-white"}`}>{recCounts.pending ?? 0}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Approved, to schedule</span><span className="font-semibold text-[#1A2320] dark:text-white">{recCounts.approved ?? 0}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-500">Deferred / monitoring</span><span className="font-semibold text-[#1A2320] dark:text-white">{recCounts.deferred ?? 0}</span></div>
                   </div>
                 </div>
               </div>
@@ -398,34 +398,34 @@ export default async function PropertyDetailPage({
                 {property.year_built && (
                   <div className="flex justify-between">
                     <span className="text-slate-500">Year Built</span>
-                    <span className="font-medium text-[#0F1B2D] dark:text-white">{property.year_built}</span>
+                    <span className="font-medium text-[#1A2320] dark:text-white">{property.year_built}</span>
                   </div>
                 )}
                 {property.square_footage && (
                   <div className="flex justify-between">
                     <span className="text-slate-500">Size</span>
-                    <span className="font-medium text-[#0F1B2D] dark:text-white">{property.square_footage.toLocaleString()} sq ft</span>
+                    <span className="font-medium text-[#1A2320] dark:text-white">{property.square_footage.toLocaleString()} sq ft</span>
                   </div>
                 )}
                 {property.lot_size && (
                   <div className="flex justify-between">
                     <span className="text-slate-500">Lot</span>
-                    <span className="font-medium text-[#0F1B2D] dark:text-white">{property.lot_size}</span>
+                    <span className="font-medium text-[#1A2320] dark:text-white">{property.lot_size}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span className="text-slate-500">Type</span>
-                  <span className="font-medium text-[#0F1B2D] dark:text-white capitalize">{property.property_type.replace("_", " ")}</span>
+                  <span className="font-medium text-[#1A2320] dark:text-white capitalize">{property.property_type.replace("_", " ")}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Plan</span>
-                  <span className={`font-medium ${(property as any).plan_tier === "proactive_plus" ? "text-[#0E7C67]" : "text-[#0F1B2D] dark:text-white"}`}>
+                  <span className={`font-medium ${(property as any).plan_tier === "proactive_plus" ? "text-[#0E7C67]" : "text-[#1A2320] dark:text-white"}`}>
                     {(property as any).plan_tier === "proactive_plus" ? "Proactive + OnDemand" : "Proactive"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Fee</span>
-                  <span className="font-medium text-[#0F1B2D] dark:text-white">
+                  <span className="font-medium text-[#1A2320] dark:text-white">
                     {formatCurrency(property.fee_amount)}/{property.billing_period === "annually" ? "yr" : property.billing_period === "quarterly" ? "qtr" : "mo"}
                   </span>
                 </div>
@@ -452,7 +452,7 @@ export default async function PropertyDetailPage({
                   return (
                     <div key={status} className="flex justify-between items-center">
                       <StatusBadge status={status} />
-                      <span className="font-semibold text-[#0F1B2D] dark:text-white">{count}</span>
+                      <span className="font-semibold text-[#1A2320] dark:text-white">{count}</span>
                     </div>
                   )
                 })}
@@ -460,7 +460,7 @@ export default async function PropertyDetailPage({
                   <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
                     <div className="flex justify-between items-center">
                       <span className="text-slate-500">On-Demand ({currentYear})</span>
-                      <span className={`font-semibold ${onDemandCount >= 4 ? "text-red-500" : onDemandCount >= 3 ? "text-amber-500" : "text-[#0F1B2D] dark:text-white"}`}>
+                      <span className={`font-semibold ${onDemandCount >= 4 ? "text-red-500" : onDemandCount >= 3 ? "text-amber-500" : "text-[#1A2320] dark:text-white"}`}>
                         {onDemandCount} / 4 included
                       </span>
                     </div>
@@ -475,7 +475,7 @@ export default async function PropertyDetailPage({
                   <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                     <div className="flex justify-between items-center">
                       <span className="text-slate-500">On-Demand ({currentYear})</span>
-                      <span className="font-semibold text-[#0F1B2D] dark:text-white">{onDemandCount} {onDemandCount === 1 ? "call" : "calls"}</span>
+                      <span className="font-semibold text-[#1A2320] dark:text-white">{onDemandCount} {onDemandCount === 1 ? "call" : "calls"}</span>
                     </div>
                     <p className="text-xs text-slate-400 mt-1">Proactive plan: each on-demand call is billable (per-call rate).</p>
                   </div>
@@ -639,7 +639,7 @@ export default async function PropertyDetailPage({
 
             {Object.entries(assetsByCategory).map(([category, items]) => (
               <div key={category}>
-                <h3 className="mb-3 font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
+                <h3 className="mb-3 font-display text-lg font-semibold text-[#1A2320] dark:text-white">
                   {categoryLabels[category] ?? category}
                 </h3>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -665,7 +665,7 @@ export default async function PropertyDetailPage({
                         <CardContent className="pt-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1 min-w-0">
-                              <p className="font-semibold text-[#0F1B2D] dark:text-white">{asset.name}</p>
+                              <p className="font-semibold text-[#1A2320] dark:text-white">{asset.name}</p>
                               {asset.brand && (
                                 <p className="text-sm text-slate-500">
                                   {asset.brand}{asset.model ? ` ${asset.model}` : ""}
@@ -759,7 +759,7 @@ export default async function PropertyDetailPage({
         <TabsContent value="work-orders">
           <div className="space-y-4">
             <div className="flex justify-between">
-              <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Work Orders</h3>
+              <h3 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Work Orders</h3>
               <Button size="sm">
                 <Plus className="h-4 w-4" /> New Work Order
               </Button>
@@ -773,7 +773,7 @@ export default async function PropertyDetailPage({
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-medium text-[#0F1B2D] dark:text-white">{wo.title}</p>
+                      <p className="font-medium text-[#1A2320] dark:text-white">{wo.title}</p>
                       {wo.is_emergency && <Badge variant="emergency">Emergency</Badge>}
                       {(wo as any).is_on_demand && <Badge variant="warning">On-Demand</Badge>}
                     </div>
@@ -785,7 +785,7 @@ export default async function PropertyDetailPage({
                   </div>
                   <div className="ml-4 flex items-center gap-3">
                     {wo.client_cost && (
-                      <span className="text-sm font-semibold text-[#0F1B2D] dark:text-white">
+                      <span className="text-sm font-semibold text-[#1A2320] dark:text-white">
                         {formatCurrency(wo.client_cost)}
                       </span>
                     )}
@@ -804,7 +804,7 @@ export default async function PropertyDetailPage({
         <TabsContent value="maintenance">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">
+              <h3 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">
                 Maintenance Schedule
               </h3>
               <div className="flex items-center gap-2">
@@ -834,7 +834,7 @@ export default async function PropertyDetailPage({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-wider text-slate-400 mb-1">Management Fee</p>
-                    <p className="text-2xl font-bold text-[#0F1B2D] dark:text-white">
+                    <p className="text-2xl font-bold text-[#1A2320] dark:text-white">
                       {formatCurrency(property.fee_amount)}
                       <span className="text-sm font-normal text-slate-500 ml-1">
                         / {property.billing_period === "annually" ? "year" : property.billing_period === "quarterly" ? "quarter" : "month"}
@@ -854,7 +854,7 @@ export default async function PropertyDetailPage({
               </CardContent>
             </Card>
             <div className="flex justify-between">
-              <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Invoices</h3>
+              <h3 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Invoices</h3>
               <Button size="sm">
                 <Plus className="h-4 w-4" /> New Invoice
               </Button>
@@ -866,7 +866,7 @@ export default async function PropertyDetailPage({
                   className="flex items-center justify-between rounded-lg border border-slate-200/80 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
                 >
                   <div>
-                    <p className="font-medium text-[#0F1B2D] dark:text-white">{invoice.invoice_number}</p>
+                    <p className="font-medium text-[#1A2320] dark:text-white">{invoice.invoice_number}</p>
                     <p className="text-sm text-slate-500">
                       {formatDateShort(invoice.period_start)} - {formatDateShort(invoice.period_end)}
                     </p>
@@ -889,11 +889,11 @@ export default async function PropertyDetailPage({
           {client ? (
             <div className="flex h-[520px] flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900">
               <div className="flex items-center gap-3 border-b border-slate-200/80 px-4 py-3 dark:border-slate-800">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0F1B2D] text-white text-xs font-semibold shrink-0">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A2320] text-white text-xs font-semibold shrink-0">
                   {client.full_name.split(" ").map((n: string) => n[0]).join("")}
                 </div>
                 <div>
-                  <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">{client.full_name}</p>
+                  <p className="font-semibold text-sm text-[#1A2320] dark:text-white">{client.full_name}</p>
                   <p className="text-xs text-slate-500">{client.email}</p>
                 </div>
               </div>

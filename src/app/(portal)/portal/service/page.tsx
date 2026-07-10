@@ -32,7 +32,7 @@ export default async function ServicePage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Service Requests</h1>
+        <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Service Requests</h1>
         <div className="flex gap-2">
           <Link href="/portal/service/emergency">
             <Button variant="destructive" size="sm" className="gap-1.5">
@@ -54,7 +54,7 @@ export default async function ServicePage() {
         <section>
           <div className="flex items-center gap-2 mb-3">
             <Clock className="h-4 w-4 text-amber-500" />
-            <h2 className="font-semibold text-[#0F1B2D] dark:text-white">Active ({open.length})</h2>
+            <h2 className="font-semibold text-[#1A2320] dark:text-white">Active ({open.length})</h2>
           </div>
           <div className="space-y-2">
             {open.map(wo => (
@@ -64,7 +64,7 @@ export default async function ServicePage() {
                 className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium text-[#0F1B2D] dark:text-white truncate">{wo.title}</p>
+                  <p className="font-medium text-[#1A2320] dark:text-white truncate">{wo.title}</p>
                   <p className="text-sm text-slate-500 mt-0.5">
                     Submitted {formatDateShort(wo.created_at)}
                     {wo.scheduled_date && ` Â· Scheduled ${formatDateShort(wo.scheduled_date)}`}
@@ -82,7 +82,7 @@ export default async function ServicePage() {
         <section>
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle className="h-4 w-4 text-emerald-500" />
-            <h2 className="font-semibold text-[#0F1B2D] dark:text-white">Completed ({completed.length})</h2>
+            <h2 className="font-semibold text-[#1A2320] dark:text-white">Completed ({completed.length})</h2>
           </div>
           <div className="space-y-2">
             {completed.map(wo => (
@@ -92,7 +92,7 @@ export default async function ServicePage() {
                 className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900 opacity-80"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium text-[#0F1B2D] dark:text-white truncate">{wo.title}</p>
+                  <p className="font-medium text-[#1A2320] dark:text-white truncate">{wo.title}</p>
                   <p className="text-sm text-slate-500 mt-0.5">
                     Completed {wo.completed_date ? formatDateShort(wo.completed_date) : formatDateShort(wo.created_at)}
                   </p>
@@ -107,7 +107,7 @@ export default async function ServicePage() {
       {workOrders?.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Wrench className="h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No service requests yet</h2>
+          <h2 className="font-display text-xl font-semibold text-[#1A2320]">No service requests yet</h2>
           <p className="mt-2 text-slate-500 max-w-xs">Submit a request and our team will coordinate everything.</p>
           <Link href="/portal/service/new" className="mt-4">
             <Button>Request Service</Button>

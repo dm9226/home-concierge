@@ -57,7 +57,7 @@ export default async function PropertiesPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">
+          <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">
             Properties
           </h1>
           <p className="mt-0.5 text-sm text-slate-500">
@@ -83,7 +83,7 @@ export default async function PropertiesPage({
             href={tab.value === "active" ? "/dashboard/properties" : `/dashboard/properties?status=${tab.value}`}
             className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
               activeTab === tab.value
-                ? "bg-white dark:bg-slate-900 text-[#0F1B2D] dark:text-white shadow-sm"
+                ? "bg-white dark:bg-slate-900 text-[#1A2320] dark:text-white shadow-sm"
                 : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
             }`}
           >
@@ -124,7 +124,7 @@ export default async function PropertiesPage({
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-[#0F1B2D] dark:text-white leading-snug truncate">
+                      <p className="font-semibold text-[#1A2320] dark:text-white leading-snug truncate">
                         {property.address}
                       </p>
                       <p className="flex items-center gap-1 mt-0.5 text-sm text-slate-500">

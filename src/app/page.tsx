@@ -13,22 +13,22 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#0F1B2D]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#1A2320]">
               <Home className="h-5 w-5 text-[#0E7C67]" />
             </div>
-            <span className="font-display text-xl font-semibold text-[#0F1B2D]">Carefree Casa</span>
+            <span className="font-display text-xl font-semibold text-[#1A2320]">Carefree Casa</span>
           </div>
           <nav className="hidden items-center gap-8 md:flex">
-            <a href="#how-it-works" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">
+            <a href="#how-it-works" className="text-sm text-slate-600 hover:text-[#1A2320] transition-colors">
               How It Works
             </a>
-            <a href="#services" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">
+            <a href="#services" className="text-sm text-slate-600 hover:text-[#1A2320] transition-colors">
               Services
             </a>
-            <a href="#testimonials" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">
+            <a href="#testimonials" className="text-sm text-slate-600 hover:text-[#1A2320] transition-colors">
               Testimonials
             </a>
-            <Link href="/plans" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">
+            <Link href="/plans" className="text-sm text-slate-600 hover:text-[#1A2320] transition-colors">
               Plans
             </Link>
           </nav>
@@ -102,7 +102,7 @@ export default function LandingPage() {
               { value: "24/7", label: "Always Available" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <p className="font-display text-3xl font-semibold text-[#0F1B2D]">{stat.value}</p>
+                <p className="font-display text-3xl font-semibold text-[#1A2320]">{stat.value}</p>
                 <p className="mt-1 text-sm text-slate-500">{stat.label}</p>
               </div>
             ))}
@@ -115,7 +115,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-6">
           <div className="mb-16 text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">The Process</p>
-            <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
+            <h2 className="mt-3 font-display text-4xl font-semibold text-[#1A2320]">
               How Carefree Casa Works
             </h2>
           </div>
@@ -151,7 +151,7 @@ export default function LandingPage() {
                 <div className="mb-4 font-display text-5xl font-light text-[#0E7C67]/30">
                   {item.step}
                 </div>
-                <h3 className="mb-2 font-display text-xl font-semibold text-[#0F1B2D]">{item.title}</h3>
+                <h3 className="mb-2 font-display text-xl font-semibold text-[#1A2320]">{item.title}</h3>
                 <p className="text-sm leading-relaxed text-slate-500">{item.description}</p>
               </div>
             ))}
@@ -164,7 +164,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-6">
           <div className="mb-16 text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">What We Do</p>
-            <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
+            <h2 className="mt-3 font-display text-4xl font-semibold text-[#1A2320]">
               Complete Home Care
             </h2>
           </div>
@@ -210,10 +210,10 @@ export default function LandingPage() {
             ].map((service) => (
               <Card key={service.title} className="border-slate-200/60 bg-white">
                 <CardContent className="pt-6">
-                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#0F1B2D]">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#1A2320]">
                     <service.icon className="h-5 w-5 text-[#0E7C67]" />
                   </div>
-                  <h3 className="mb-2 font-display text-lg font-semibold text-[#0F1B2D]">
+                  <h3 className="mb-2 font-display text-lg font-semibold text-[#1A2320]">
                     {service.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-slate-500">{service.description}</p>
@@ -229,7 +229,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-6">
           <div className="mb-16 text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">Client Stories</p>
-            <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
+            <h2 className="mt-3 font-display text-4xl font-semibold text-[#1A2320]">
               What Our Members Say
             </h2>
           </div>
@@ -265,11 +265,11 @@ export default function LandingPage() {
                       <Star key={i} className="h-4 w-4 fill-[#0E7C67] text-[#0E7C67]" />
                     ))}
                   </div>
-                  <p className="font-display text-[1.05rem] italic leading-relaxed text-[#0F1B2D]">
+                  <p className="font-display text-[1.05rem] italic leading-relaxed text-[#1A2320]">
                     "{testimonial.quote}"
                   </p>
                   <div className="mt-4">
-                    <p className="font-semibold text-[#0F1B2D]">{testimonial.author}</p>
+                    <p className="font-semibold text-[#1A2320]">{testimonial.author}</p>
                     <p className="text-sm text-slate-500">{testimonial.location}</p>
                   </div>
                 </CardContent>
@@ -311,7 +311,7 @@ export default function LandingPage() {
       <section id="contact" className="bg-[#F5F0E8] py-24">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <p className="text-sm font-medium uppercase tracking-widest text-[#0E7C67]">Get Started</p>
-          <h2 className="mt-3 font-display text-4xl font-semibold text-[#0F1B2D]">
+          <h2 className="mt-3 font-display text-4xl font-semibold text-[#1A2320]">
             Schedule Your Consultation
           </h2>
           <p className="mt-4 text-slate-500">
@@ -325,7 +325,7 @@ export default function LandingPage() {
                   <label className="mb-1.5 block text-sm font-medium text-slate-700">First Name</label>
                   <input
                     type="text"
-                    className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#0F1B2D]/40 focus:outline-none focus:ring-2 focus:ring-[#0F1B2D]/20"
+                    className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#1A2320]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2320]/20"
                     placeholder="Elizabeth"
                   />
                 </div>
@@ -333,7 +333,7 @@ export default function LandingPage() {
                   <label className="mb-1.5 block text-sm font-medium text-slate-700">Last Name</label>
                   <input
                     type="text"
-                    className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#0F1B2D]/40 focus:outline-none focus:ring-2 focus:ring-[#0F1B2D]/20"
+                    className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#1A2320]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2320]/20"
                     placeholder="Hartley"
                   />
                 </div>
@@ -342,7 +342,7 @@ export default function LandingPage() {
                 <label className="mb-1.5 block text-sm font-medium text-slate-700">Email</label>
                 <input
                   type="email"
-                  className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#0F1B2D]/40 focus:outline-none focus:ring-2 focus:ring-[#0F1B2D]/20"
+                  className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#1A2320]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2320]/20"
                   placeholder="you@example.com"
                 />
               </div>
@@ -350,7 +350,7 @@ export default function LandingPage() {
                 <label className="mb-1.5 block text-sm font-medium text-slate-700">Phone</label>
                 <input
                   type="tel"
-                  className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#0F1B2D]/40 focus:outline-none focus:ring-2 focus:ring-[#0F1B2D]/20"
+                  className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#1A2320]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2320]/20"
                   placeholder="(404) 555-0100"
                 />
               </div>
@@ -360,7 +360,7 @@ export default function LandingPage() {
                 </label>
                 <input
                   type="text"
-                  className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#0F1B2D]/40 focus:outline-none focus:ring-2 focus:ring-[#0F1B2D]/20"
+                  className="w-full rounded-sm border border-slate-200 px-3 py-2 text-sm focus:border-[#1A2320]/40 focus:outline-none focus:ring-2 focus:ring-[#1A2320]/20"
                   placeholder="Buckhead, 30342"
                 />
               </div>
@@ -377,17 +377,17 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-6">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#0F1B2D]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#1A2320]">
                 <Home className="h-4 w-4 text-[#0E7C67]" />
               </div>
-              <span className="font-display text-lg font-semibold text-[#0F1B2D]">Carefree Casa</span>
+              <span className="font-display text-lg font-semibold text-[#1A2320]">Carefree Casa</span>
             </div>
             <div className="flex items-center gap-6 text-sm text-slate-500">
-              <a href="tel:4045550100" className="flex items-center gap-1.5 hover:text-[#0F1B2D] transition-colors">
+              <a href="tel:4045550100" className="flex items-center gap-1.5 hover:text-[#1A2320] transition-colors">
                 <Phone className="h-3.5 w-3.5" />
                 (404) 555-0100
               </a>
-              <a href="mailto:hello@carefreecasa.com" className="flex items-center gap-1.5 hover:text-[#0F1B2D] transition-colors">
+              <a href="mailto:hello@carefreecasa.com" className="flex items-center gap-1.5 hover:text-[#1A2320] transition-colors">
                 <Mail className="h-3.5 w-3.5" />
                 hello@carefreecasa.com
               </a>

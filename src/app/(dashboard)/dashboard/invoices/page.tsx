@@ -47,7 +47,7 @@ export default async function DashboardInvoicesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Invoices</h1>
+        <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Invoices</h1>
       </div>
 
       {outstanding.length > 0 && (
@@ -72,7 +72,7 @@ export default async function DashboardInvoicesPage() {
       {!invoices?.length && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <FileText className="h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No invoices yet</h2>
+          <h2 className="font-display text-xl font-semibold text-[#1A2320]">No invoices yet</h2>
         </div>
       )}
     </div>
@@ -82,7 +82,7 @@ export default async function DashboardInvoicesPage() {
 function Section({ title, invoices }: { title: string; invoices: any[] }) {
   return (
     <section>
-      <h2 className="font-semibold text-[#0F1B2D] dark:text-white mb-3">{title} ({invoices.length})</h2>
+      <h2 className="font-semibold text-[#1A2320] dark:text-white mb-3">{title} ({invoices.length})</h2>
       <div className="space-y-2">
         {invoices.map(inv => {
           const property = (inv as any).property
@@ -93,7 +93,7 @@ function Section({ title, invoices }: { title: string; invoices: any[] }) {
                 <CardContent className="pt-4 pb-4">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-[#0F1B2D] dark:text-white">
+                      <p className="font-medium text-[#1A2320] dark:text-white">
                         {inv.invoice_number ?? "Invoice"}
                       </p>
                       <p className="text-sm text-slate-500 truncate">
@@ -105,7 +105,7 @@ function Section({ title, invoices }: { title: string; invoices: any[] }) {
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <p className="font-semibold text-[#0F1B2D] dark:text-white">{formatCurrency(inv.total)}</p>
+                        <p className="font-semibold text-[#1A2320] dark:text-white">{formatCurrency(inv.total)}</p>
                         {statusBadge(inv.status)}
                       </div>
                       <ChevronRight className="h-4 w-4 text-slate-400 shrink-0" />

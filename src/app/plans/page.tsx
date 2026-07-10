@@ -85,15 +85,15 @@ export default async function PlansPage({
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#0F1B2D]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#1A2320]">
               <Home className="h-5 w-5 text-[#0E7C67]" />
             </div>
-            <span className="font-display text-xl font-semibold text-[#0F1B2D]">Carefree Casa</span>
+            <span className="font-display text-xl font-semibold text-[#1A2320]">Carefree Casa</span>
           </Link>
           <nav className="hidden items-center gap-8 md:flex">
-            <Link href="/#how-it-works" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">How It Works</Link>
-            <Link href="/#services" className="text-sm text-slate-600 hover:text-[#0F1B2D] transition-colors">Services</Link>
-            <Link href="/plans" className="text-sm font-semibold text-[#0F1B2D]">Plans</Link>
+            <Link href="/#how-it-works" className="text-sm text-slate-600 hover:text-[#1A2320] transition-colors">How It Works</Link>
+            <Link href="/#services" className="text-sm text-slate-600 hover:text-[#1A2320] transition-colors">Services</Link>
+            <Link href="/plans" className="text-sm font-semibold text-[#1A2320]">Plans</Link>
           </nav>
           <div className="flex items-center gap-3">
             <Button variant="ghost" asChild size="sm"><Link href="/login">Sign in</Link></Button>
@@ -128,13 +128,13 @@ export default async function PlansPage({
                 href={tab.value === "monthly" ? "/plans" : `/plans?billing=${tab.value}`}
                 className={`relative rounded-md px-5 py-2 text-sm font-medium transition-colors ${
                   interval === tab.value
-                    ? "bg-[#0F1B2D] text-white shadow-sm"
+                    ? "bg-[#1A2320] text-white shadow-sm"
                     : "text-slate-500 hover:text-slate-700"
                 }`}
               >
                 {tab.label}
                 {tab.value === "annual" && (
-                  <span className="absolute -top-2 -right-2 rounded-full bg-[#0E7C67] px-1.5 py-0.5 text-[9px] font-bold text-[#0F1B2D] leading-none">BEST</span>
+                  <span className="absolute -top-2 -right-2 rounded-full bg-[#0E7C67] px-1.5 py-0.5 text-[9px] font-bold text-[#1A2320] leading-none">BEST</span>
                 )}
               </Link>
             ))}
@@ -149,13 +149,13 @@ export default async function PlansPage({
             <div className="rounded-2xl border border-slate-200 bg-white p-8 flex flex-col">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Plan 1</p>
-                <h2 className="mt-1 font-display text-3xl font-semibold text-[#0F1B2D]">Proactive</h2>
+                <h2 className="mt-1 font-display text-3xl font-semibold text-[#1A2320]">Proactive</h2>
                 <p className="mt-2 text-sm text-slate-500 leading-relaxed">
                   Quarterly walkthroughs, preventive maintenance, and proactive care. Reactive support available on demand for a small coordination fee.
                 </p>
               </div>
               <div className="my-6 border-t border-slate-100 pt-6">
-                <p className="font-display text-4xl font-semibold text-[#0F1B2D]">{pro.label}</p>
+                <p className="font-display text-4xl font-semibold text-[#1A2320]">{pro.label}</p>
                 <p className="mt-1 text-xs text-slate-400">{pro.sub}</p>
               </div>
               <ul className="space-y-2.5 text-sm flex-1">
@@ -178,17 +178,17 @@ export default async function PlansPage({
             {/* Proactive + OnDemand */}
             <div className="rounded-2xl border-2 border-[#0E7C67] bg-white p-8 flex flex-col relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="rounded-full bg-[#0E7C67] px-4 py-1 text-xs font-bold text-[#0F1B2D] uppercase tracking-wide whitespace-nowrap">Most Popular</span>
+                <span className="rounded-full bg-[#0E7C67] px-4 py-1 text-xs font-bold text-[#1A2320] uppercase tracking-wide whitespace-nowrap">Most Popular</span>
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest text-[#0E7C67]">Plan 2</p>
-                <h2 className="mt-1 font-display text-3xl font-semibold text-[#0F1B2D]">Proactive <span className="text-[#0E7C67]">+ OnDemand</span></h2>
+                <h2 className="mt-1 font-display text-3xl font-semibold text-[#1A2320]">Proactive <span className="text-[#0E7C67]">+ OnDemand</span></h2>
                 <p className="mt-2 text-sm text-slate-500 leading-relaxed">
                   Everything in Proactive, plus 24-hour reactive response, 2 included on-demand service instances per quarter, and an annual property report.
                 </p>
               </div>
               <div className="my-6 border-t border-slate-100 pt-6">
-                <p className="font-display text-4xl font-semibold text-[#0F1B2D]">{plus.label}</p>
+                <p className="font-display text-4xl font-semibold text-[#1A2320]">{plus.label}</p>
                 <p className="mt-1 text-xs text-slate-400">{plus.sub}</p>
               </div>
               <ul className="space-y-2.5 text-sm flex-1">
@@ -210,13 +210,13 @@ export default async function PlansPage({
         <section className="py-16 px-6">
           <div className="mx-auto max-w-4xl">
             <div className="mb-10 text-center">
-              <h2 className="font-display text-3xl font-semibold text-[#0F1B2D]">Full Comparison</h2>
+              <h2 className="font-display text-3xl font-semibold text-[#1A2320]">Full Comparison</h2>
               <p className="mt-2 text-sm text-slate-500">Every detail, side by side.</p>
             </div>
 
             <div className="overflow-hidden rounded-xl border border-slate-200">
               {/* Table header */}
-              <div className="grid grid-cols-[1fr_120px_120px] bg-[#0F1B2D] text-white text-sm font-medium">
+              <div className="grid grid-cols-[1fr_120px_120px] bg-[#1A2320] text-white text-sm font-medium">
                 <div className="px-6 py-4">Feature</div>
                 <div className="px-4 py-4 text-center border-l border-white/10">Proactive</div>
                 <div className="px-4 py-4 text-center border-l border-white/10 text-[#0E7C67]">Proactive+</div>

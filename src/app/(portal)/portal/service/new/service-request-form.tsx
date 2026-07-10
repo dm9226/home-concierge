@@ -74,7 +74,7 @@ export function ServiceRequestForm({ propertyId, userId }: { propertyId: string;
       <Card>
         <CardContent className="pt-5 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#0F1B2D] dark:text-white mb-1.5">
+            <label className="block text-sm font-medium text-[#1A2320] dark:text-white mb-1.5">
               What needs attention? <span className="text-red-500">*</span>
             </label>
             <input
@@ -82,13 +82,13 @@ export function ServiceRequestForm({ propertyId, userId }: { propertyId: string;
               placeholder="e.g. Kitchen faucet dripping"
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#0F1B2D] placeholder:text-slate-400 focus:border-[#0F1B2D] focus:outline-none focus:ring-1 focus:ring-[#0F1B2D] dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#1A2320] placeholder:text-slate-400 focus:border-[#1A2320] focus:outline-none focus:ring-1 focus:ring-[#1A2320] dark:border-slate-700 dark:bg-slate-900 dark:text-white"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#0F1B2D] dark:text-white mb-1.5">
+            <label className="block text-sm font-medium text-[#1A2320] dark:text-white mb-1.5">
               Category <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -99,7 +99,7 @@ export function ServiceRequestForm({ propertyId, userId }: { propertyId: string;
                   onClick={() => setForm(f => ({ ...f, category: cat.value }))}
                   className={`rounded-lg border px-3 py-2.5 text-sm font-medium text-left transition-colors ${
                     form.category === cat.value
-                      ? "border-[#0F1B2D] bg-[#0F1B2D] text-white"
+                      ? "border-[#1A2320] bg-[#1A2320] text-white"
                       : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
                   }`}
                 >
@@ -110,7 +110,7 @@ export function ServiceRequestForm({ propertyId, userId }: { propertyId: string;
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#0F1B2D] dark:text-white mb-1.5">
+            <label className="block text-sm font-medium text-[#1A2320] dark:text-white mb-1.5">
               Priority
             </label>
             <div className="space-y-2">
@@ -121,11 +121,11 @@ export function ServiceRequestForm({ propertyId, userId }: { propertyId: string;
                   onClick={() => setForm(f => ({ ...f, priority: p.value }))}
                   className={`w-full rounded-lg border px-4 py-3 text-left transition-colors ${
                     form.priority === p.value
-                      ? "border-[#0F1B2D] bg-[#0F1B2D]/5 dark:bg-[#0F1B2D]/20"
+                      ? "border-[#1A2320] bg-[#1A2320]/5 dark:bg-[#1A2320]/20"
                       : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900"
                   }`}
                 >
-                  <p className={`text-sm font-medium ${form.priority === p.value ? "text-[#0F1B2D] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
+                  <p className={`text-sm font-medium ${form.priority === p.value ? "text-[#1A2320] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
                     {p.label}
                   </p>
                   <p className="text-xs text-slate-500 mt-0.5">{p.description}</p>
@@ -135,7 +135,7 @@ export function ServiceRequestForm({ propertyId, userId }: { propertyId: string;
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#0F1B2D] dark:text-white mb-1.5">
+            <label className="block text-sm font-medium text-[#1A2320] dark:text-white mb-1.5">
               Additional details
             </label>
             <textarea
@@ -143,7 +143,7 @@ export function ServiceRequestForm({ propertyId, userId }: { propertyId: string;
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               rows={4}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#0F1B2D] placeholder:text-slate-400 focus:border-[#0F1B2D] focus:outline-none focus:ring-1 focus:ring-[#0F1B2D] dark:border-slate-700 dark:bg-slate-900 dark:text-white resize-none"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#1A2320] placeholder:text-slate-400 focus:border-[#1A2320] focus:outline-none focus:ring-1 focus:ring-[#1A2320] dark:border-slate-700 dark:bg-slate-900 dark:text-white resize-none"
             />
           </div>
         </CardContent>

@@ -35,7 +35,7 @@ export function VendorSignClient({ token }: { token: string }) {
   return (
     <Card>
       <CardContent className="pt-5 space-y-3">
-        <p className="text-sm font-medium text-[#0F1B2D] dark:text-white flex items-center gap-2">
+        <p className="text-sm font-medium text-[#1A2320] dark:text-white flex items-center gap-2">
           <FileSignature className="h-4 w-4 text-[#0E7C67]" /> Execute Agreement
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

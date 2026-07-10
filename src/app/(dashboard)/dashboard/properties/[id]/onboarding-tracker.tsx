@@ -13,7 +13,7 @@ export function OnboardingTracker({ steps, basePath }: { steps: OnboardingStep[]
     <Card className="mb-4 border-[#0E7C67]/40">
       <CardContent className="pt-5">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-[#0F1B2D] dark:text-white">Onboarding</h3>
+          <h3 className="font-semibold text-[#1A2320] dark:text-white">Onboarding</h3>
           <span className="text-sm font-semibold text-[#0E7C67]">{done} of {total} complete</span>
         </div>
 
@@ -36,7 +36,7 @@ export function OnboardingTracker({ steps, basePath }: { steps: OnboardingStep[]
                 {step.done
                   ? <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                   : <Circle className="h-4 w-4 text-slate-300 shrink-0" />}
-                <span className={`truncate ${step.done ? "text-slate-500 line-through" : "text-[#0F1B2D] dark:text-white font-medium"}`}>
+                <span className={`truncate ${step.done ? "text-slate-500 line-through" : "text-[#1A2320] dark:text-white font-medium"}`}>
                   {step.label}
                 </span>
               </span>

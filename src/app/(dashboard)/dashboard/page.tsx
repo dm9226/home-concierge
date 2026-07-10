@@ -204,7 +204,7 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">
+          <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">
             Good {getTimeOfDay()}, {profile.full_name.split(" ")[0]}
           </h1>
           <p className="mt-0.5 text-sm text-slate-500">
@@ -260,7 +260,7 @@ export default async function DashboardPage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Revenue (TTM)</p>
                 <TrendingUp className="h-4 w-4 text-[#0E7C67]" />
               </div>
-              <p className="font-display text-2xl font-bold text-[#0F1B2D] dark:text-white">{formatCurrency(arr)}</p>
+              <p className="font-display text-2xl font-bold text-[#1A2320] dark:text-white">{formatCurrency(arr)}</p>
               <p className="text-xs text-slate-500 mt-1">+{formatCurrency(monthRevenue)} collected this month</p>
               <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#0E7C67] group-hover:underline">
                 View reports <ArrowRight className="h-3 w-3" />
@@ -276,7 +276,7 @@ export default async function DashboardPage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Properties</p>
                 <Building2 className="h-4 w-4 text-blue-500" />
               </div>
-              <p className="font-display text-2xl font-bold text-[#0F1B2D] dark:text-white">{properties?.length ?? 0}</p>
+              <p className="font-display text-2xl font-bold text-[#1A2320] dark:text-white">{properties?.length ?? 0}</p>
               <p className="text-xs text-slate-500 mt-1">
                 Avg health score: {avgHealthScore}
                 {myPropertyIds.size > 0 && <span className="text-[#0E7C67]"> &bull; {myPropertyIds.size} yours</span>}
@@ -315,7 +315,7 @@ export default async function DashboardPage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Outstanding</p>
                 <DollarSign className={`h-4 w-4 ${outstanding > 0 ? "text-amber-500" : "text-emerald-500"}`} />
               </div>
-              <p className="font-display text-2xl font-bold text-[#0F1B2D] dark:text-white">{formatCurrency(outstanding)}</p>
+              <p className="font-display text-2xl font-bold text-[#1A2320] dark:text-white">{formatCurrency(outstanding)}</p>
               <p className="text-xs text-slate-500 mt-1">Receivables due</p>
               <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#0E7C67] group-hover:underline">
                 View invoices <ArrowRight className="h-3 w-3" />
@@ -330,7 +330,7 @@ export default async function DashboardPage() {
         {/* Open Action Items */}
         <div className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Open Action Items</h2>
+            <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Open Action Items</h2>
             {totalActionItems > 0 && (
               <Badge variant="warning" className="text-xs">{totalActionItems} open</Badge>
             )}
@@ -359,7 +359,7 @@ export default async function DashboardPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium text-[#0F1B2D] dark:text-white">{wo.title}</p>
+                      <p className="font-medium text-[#1A2320] dark:text-white">{wo.title}</p>
                       {mine && (
                         <span className="flex items-center gap-0.5 text-[10px] font-semibold text-[#0E7C67] uppercase tracking-wide">
                           <Star className="h-2.5 w-2.5" /> Yours
@@ -391,7 +391,7 @@ export default async function DashboardPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium text-[#0F1B2D] dark:text-white">{item.title}</p>
+                      <p className="font-medium text-[#1A2320] dark:text-white">{item.title}</p>
                       {mine && (
                         <span className="flex items-center gap-0.5 text-[10px] font-semibold text-[#0E7C67] uppercase tracking-wide">
                           <Star className="h-2.5 w-2.5" /> Yours
@@ -415,7 +415,7 @@ export default async function DashboardPage() {
                   <Home className="h-4 w-4 text-slate-500" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-[#0F1B2D] dark:text-white">{p.address}</p>
+                  <p className="font-medium text-[#1A2320] dark:text-white">{p.address}</p>
                   <p className="text-sm text-slate-500">No owner assigned</p>
                 </div>
                 <Badge variant="secondary" className="text-xs shrink-0">Unassigned</Badge>
@@ -427,7 +427,7 @@ export default async function DashboardPage() {
         {/* Recent Client Messages */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Client Messages</h2>
+            <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Client Messages</h2>
             <Link href="/dashboard/messages" className="flex items-center gap-1 text-sm text-[#0E7C67] hover:underline">
               View all <ArrowRight className="h-3 w-3" />
             </Link>
@@ -453,10 +453,10 @@ export default async function DashboardPage() {
                     : "border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
                 }`}>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0F1B2D] text-white text-xs font-semibold shrink-0">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1A2320] text-white text-xs font-semibold shrink-0">
                       {initials}
                     </div>
-                    <p className="font-medium text-sm text-[#0F1B2D] dark:text-white flex-1 truncate">{clientName}</p>
+                    <p className="font-medium text-sm text-[#1A2320] dark:text-white flex-1 truncate">{clientName}</p>
                     <div className="flex items-center gap-1.5 shrink-0">
                       {mine && <Star className="h-3 w-3 text-[#0E7C67]" />}
                       {!msg.is_read && <div className="h-2 w-2 rounded-full bg-[#0E7C67]" />}
@@ -478,7 +478,7 @@ export default async function DashboardPage() {
       {hasProactiveAlerts && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Things to Watch</h2>
+            <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Things to Watch</h2>
             <Badge variant="secondary" className="text-xs">
               {atRiskProperties.length + (expiringWarranties?.length ?? 0) + atRiskAssets.length} items
             </Badge>
@@ -494,7 +494,7 @@ export default async function DashboardPage() {
                     </div>
                     {myPropertyIds.has(p.id) && <Star className="h-3 w-3 text-[#0E7C67]" />}
                   </div>
-                  <p className="font-medium text-[#0F1B2D] dark:text-white">{p.address}</p>
+                  <p className="font-medium text-[#1A2320] dark:text-white">{p.address}</p>
                   <p className="text-sm text-slate-500 mt-0.5">Score: {p.health_score} -- needs attention</p>
                 </div>
               </Link>
@@ -509,7 +509,7 @@ export default async function DashboardPage() {
                     </div>
                     {myPropertyIds.has(asset.property_id) && <Star className="h-3 w-3 text-[#0E7C67]" />}
                   </div>
-                  <p className="font-medium text-[#0F1B2D] dark:text-white">{asset.name}</p>
+                  <p className="font-medium text-[#1A2320] dark:text-white">{asset.name}</p>
                   <p className="text-sm text-slate-500 mt-0.5">
                     {asset.properties?.address} &bull; expires {formatDateShort(asset.warranty_expiration!)}
                   </p>
@@ -526,7 +526,7 @@ export default async function DashboardPage() {
                     </div>
                     {myPropertyIds.has(asset.property_id) && <Star className="h-3 w-3 text-[#0E7C67]" />}
                   </div>
-                  <p className="font-medium text-[#0F1B2D] dark:text-white">{asset.name}</p>
+                  <p className="font-medium text-[#1A2320] dark:text-white">{asset.name}</p>
                   <p className="text-sm text-slate-500 mt-0.5">
                     {asset.properties?.address} &bull; plan replacement soon
                   </p>
@@ -540,7 +540,7 @@ export default async function DashboardPage() {
       {/* Scheduled This Week */}
       {upcomingWork && upcomingWork.length > 0 && (
         <div className="space-y-3">
-          <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Scheduled This Week</h2>
+          <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Scheduled This Week</h2>
           <div className="grid gap-2 sm:grid-cols-2">
             {upcomingWork.map((wo: any) => {
               const mine = isMyItem(wo.property_id, wo.assigned_to)
@@ -558,7 +558,7 @@ export default async function DashboardPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <p className="font-medium text-[#0F1B2D] dark:text-white line-clamp-1">{wo.title}</p>
+                        <p className="font-medium text-[#1A2320] dark:text-white line-clamp-1">{wo.title}</p>
                         {mine && <Star className="h-3 w-3 text-[#0E7C67] shrink-0" />}
                       </div>
                       <p className="text-sm text-slate-500 truncate">

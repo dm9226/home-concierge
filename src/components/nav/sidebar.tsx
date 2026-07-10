@@ -41,7 +41,7 @@ export function Sidebar({ role }: SidebarProps) {
   const links = adminLinks
 
   return (
-    <aside className="hidden w-60 shrink-0 flex-col border-r border-slate-200/80 bg-white dark:border-slate-800 dark:bg-[#0a1628] lg:flex">
+    <aside className="hidden w-60 shrink-0 flex-col border-r border-slate-200/80 bg-white dark:border-slate-800 dark:bg-[#0F1512] lg:flex">
       <nav className="flex flex-col gap-1 p-4 pt-6">
         {links.map((link) => {
           const isActive = link.exact
@@ -54,7 +54,7 @@ export function Sidebar({ role }: SidebarProps) {
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-[#0F1B2D] text-white"
+                  ? "bg-[#1A2320] text-white"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
               )}
             >

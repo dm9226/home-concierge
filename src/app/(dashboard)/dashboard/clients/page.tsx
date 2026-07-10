@@ -35,7 +35,7 @@ export default async function ClientsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Clients</h1>
+          <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Clients</h1>
           <p className="mt-0.5 text-sm text-slate-500">{clients?.length ?? 0} clients under management</p>
         </div>
         <CreateUserDialog fixedRole="client" label="Invite Client" />
@@ -44,7 +44,7 @@ export default async function ClientsPage() {
       {clients?.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Users className="h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No clients yet</h2>
+          <h2 className="font-display text-xl font-semibold text-[#1A2320]">No clients yet</h2>
           <p className="text-sm text-slate-500 mt-1">Invite your first client to get started.</p>
         </div>
       )}
@@ -59,13 +59,13 @@ export default async function ClientsPage() {
               <CardContent className="pt-4 pb-4">
                 <div className="flex items-start gap-4">
                   {/* Avatar */}
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0F1B2D] text-white font-semibold text-sm shrink-0">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1A2320] text-white font-semibold text-sm shrink-0">
                     {(client.full_name ?? "?").split(" ").map((n: string) => n[0]).join("").slice(0, 2) || "?"}
                   </div>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[#0F1B2D] dark:text-white">{client.full_name ?? "Unknown"}</p>
+                    <p className="font-semibold text-[#1A2320] dark:text-white">{client.full_name ?? "Unknown"}</p>
                     <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm text-slate-500">
                       <span className="flex items-center gap-1">
                         <Mail className="h-3.5 w-3.5" />{client.email}

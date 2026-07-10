@@ -164,7 +164,7 @@ export function PropertyFiles({ propertyId, userId }: { propertyId: string; user
                     <FileText className="h-5 w-5 text-slate-500" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm text-[#0F1B2D] dark:text-white truncate">{f.name}</p>
+                    <p className="font-medium text-sm text-[#1A2320] dark:text-white truncate">{f.name}</p>
                     <p className="text-xs text-slate-400">
                       {f.category}{f.category ? " · " : ""}{formatBytes(f.file_size)}{f.file_size ? " · " : ""}{formatDateShort(f.created_at)}
                     </p>

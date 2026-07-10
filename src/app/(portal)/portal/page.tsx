@@ -54,7 +54,7 @@ export default async function PortalHomePage({
       <div className="flex min-h-[60vh] items-center justify-center p-6">
         <div className="text-center">
           <Home className="mx-auto h-12 w-12 text-slate-300 mb-3" />
-          <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No properties yet</h2>
+          <h2 className="font-display text-xl font-semibold text-[#1A2320]">No properties yet</h2>
           <p className="mt-2 text-slate-500">Your home profile will appear here once your team sets it up.</p>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default async function PortalHomePage({
               href={`/portal?p=${p.id}`}
               className={`shrink-0 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
                 p.id === property.id
-                  ? "border-[#0E7C67] bg-[#0E7C67]/10 text-[#0F1B2D] dark:text-white"
+                  ? "border-[#0E7C67] bg-[#0E7C67]/10 text-[#1A2320] dark:text-white"
                   : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
               }`}
             >
@@ -258,21 +258,21 @@ export default async function PortalHomePage({
         <div className="grid grid-cols-4 divide-x divide-slate-100 border-t border-slate-100 dark:divide-slate-800 dark:border-slate-800">
           <div className="flex flex-col items-center py-3 px-1">
             <p className="text-[10px] uppercase tracking-wider text-slate-400">Built</p>
-            <p className="font-bold text-[#0F1B2D] dark:text-white text-sm mt-0.5">{property.year_built ?? "--"}</p>
+            <p className="font-bold text-[#1A2320] dark:text-white text-sm mt-0.5">{property.year_built ?? "--"}</p>
           </div>
           <div className="flex flex-col items-center py-3 px-1">
             <p className="text-[10px] uppercase tracking-wider text-slate-400">Size</p>
-            <p className="font-bold text-[#0F1B2D] dark:text-white text-sm mt-0.5">
+            <p className="font-bold text-[#1A2320] dark:text-white text-sm mt-0.5">
               {property.square_footage ? `${(property.square_footage / 1000).toFixed(1)}k sf` : "--"}
             </p>
           </div>
           <div className="flex flex-col items-center py-3 px-1">
             <p className="text-[10px] uppercase tracking-wider text-slate-400">Systems</p>
-            <p className="font-bold text-[#0F1B2D] dark:text-white text-sm mt-0.5">{assets?.length ?? 0}</p>
+            <p className="font-bold text-[#1A2320] dark:text-white text-sm mt-0.5">{assets?.length ?? 0}</p>
           </div>
           <div className="flex flex-col items-center py-3 px-1">
             <p className="text-[10px] uppercase tracking-wider text-slate-400">Tasks</p>
-            <p className="font-bold text-[#0F1B2D] dark:text-white text-sm mt-0.5">{allMaintenance?.length ?? 0}</p>
+            <p className="font-bold text-[#1A2320] dark:text-white text-sm mt-0.5">{allMaintenance?.length ?? 0}</p>
           </div>
         </div>
 
@@ -287,7 +287,7 @@ export default async function PortalHomePage({
           </Link>
           <Link
             href="/portal/service/new"
-            className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[#0F1B2D] px-4 py-2.5 text-sm font-medium text-[#0F1B2D] hover:bg-[#0F1B2D]/5 transition-colors dark:border-slate-600 dark:text-white"
+            className="flex flex-1 items-center justify-center gap-2 rounded-full border border-[#1A2320] px-4 py-2.5 text-sm font-medium text-[#1A2320] hover:bg-[#1A2320]/5 transition-colors dark:border-slate-600 dark:text-white"
           >
             <Wrench className="h-4 w-4" />
             Request Service
@@ -307,7 +307,7 @@ export default async function PortalHomePage({
             <Camera className="h-5 w-5 text-slate-400" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-medium text-[#0F1B2D] dark:text-white text-sm">Personalize your home profile</p>
+            <p className="font-medium text-[#1A2320] dark:text-white text-sm">Personalize your home profile</p>
             <p className="text-xs text-slate-500 mt-0.5">Add a photo to make your dashboard feel like home. Tap the camera icon above.</p>
           </div>
         </div>
@@ -322,7 +322,7 @@ export default async function PortalHomePage({
                 <div className="flex items-center gap-3">
                   <CheckCircle2 className="h-5 w-5 text-[#0E7C67] shrink-0" />
                   <div>
-                    <p className="font-semibold text-[#0F1B2D] dark:text-white">Action needed: sign your membership agreement</p>
+                    <p className="font-semibold text-[#1A2320] dark:text-white">Action needed: sign your membership agreement</p>
                     <p className="text-sm text-slate-500">Review the terms and accept to get started.</p>
                   </div>
                 </div>
@@ -351,10 +351,10 @@ export default async function PortalHomePage({
           {latestUnread && (
             <Link href="/portal/messages">
               <div className="flex items-start gap-3 rounded-xl border border-[#0E7C67]/40 bg-[#0E7C67]/8 p-4 hover:border-[#0E7C67]/70 transition-colors">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0F1B2D] text-white text-xs font-semibold shrink-0 mt-0.5">CC</div>
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1A2320] text-white text-xs font-semibold shrink-0 mt-0.5">CC</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">New message from your team</p>
+                    <p className="font-semibold text-sm text-[#1A2320] dark:text-white">New message from your team</p>
                     <div className="h-2 w-2 rounded-full bg-[#0E7C67] shrink-0" />
                   </div>
                   <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-1">{latestUnread.body}</p>
@@ -409,7 +409,7 @@ export default async function PortalHomePage({
             <Link href="/portal/invoices">
               <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 transition-colors dark:border-slate-800 dark:bg-slate-900">
                 <div>
-                  <p className="font-semibold text-[#0F1B2D] dark:text-white">
+                  <p className="font-semibold text-[#1A2320] dark:text-white">
                     {unpaidInvoices.length} invoice{unpaidInvoices.length > 1 ? "s" : ""} outstanding
                   </p>
                   <p className="text-sm text-slate-500">
@@ -436,7 +436,7 @@ export default async function PortalHomePage({
       )}
 
       {/* ── HOME CARE PLAN (dark card) ─────────────────────────────── */}
-      <div className="rounded-2xl bg-gradient-to-br from-[#0F1B2D] to-[#1e3452] p-5 text-white">
+      <div className="rounded-2xl bg-gradient-to-br from-[#1A2320] to-[#1e3452] p-5 text-white">
         <p className="text-xs font-semibold uppercase tracking-wider text-[#0E7C67] mb-4">Your Home Care Plan</p>
 
         <div className="grid grid-cols-3 gap-3 mb-4">
@@ -488,7 +488,7 @@ export default async function PortalHomePage({
       <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
         <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
           <Home className="h-4 w-4 text-[#0E7C67]" />
-          <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">Property Details</p>
+          <p className="font-semibold text-sm text-[#1A2320] dark:text-white">Property Details</p>
           <Link href={`/portal/property?id=${propertyId}`} className="ml-auto text-xs text-[#0E7C67] flex items-center gap-1 hover:underline">
             Full profile <ArrowRight className="h-3 w-3" />
           </Link>
@@ -517,7 +517,7 @@ export default async function PortalHomePage({
         <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
           <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-[#0E7C67]" />
-            <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">Market Context</p>
+            <p className="font-semibold text-sm text-[#1A2320] dark:text-white">Market Context</p>
             {property.zip && <span className="ml-auto text-xs text-slate-400">{property.zip}</span>}
           </div>
           <div className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -543,7 +543,7 @@ export default async function PortalHomePage({
       {/* ── MAINTENANCE SCHEDULE ─────────────────────────────────────── */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Maintenance Schedule</h2>
+          <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Maintenance Schedule</h2>
           <Link href="/portal/maintenance" className="text-sm text-[#0E7C67] flex items-center gap-1 hover:underline">
             View all <ArrowRight className="h-3 w-3" />
           </Link>
@@ -567,7 +567,7 @@ export default async function PortalHomePage({
                   }`}
                 >
                   <div className="flex-1 min-w-0">
-                    <p className={`font-medium text-sm ${isOverdue ? "text-red-800 dark:text-red-300" : "text-[#0F1B2D] dark:text-white"}`}>
+                    <p className={`font-medium text-sm ${isOverdue ? "text-red-800 dark:text-red-300" : "text-[#1A2320] dark:text-white"}`}>
                       {item.title}
                     </p>
                     <div className="flex items-center gap-2 mt-0.5">
@@ -619,7 +619,7 @@ export default async function PortalHomePage({
       {assets && assets.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Your Home Systems</h2>
+            <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Your Home Systems</h2>
             <Link href="/portal/property" className="text-sm text-[#0E7C67] flex items-center gap-1 hover:underline">
               Details <ArrowRight className="h-3 w-3" />
             </Link>
@@ -645,7 +645,7 @@ export default async function PortalHomePage({
                   }`}
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-[#0F1B2D] dark:text-white">{CATEGORY_LABELS[category] ?? category}</p>
+                    <p className="font-semibold text-sm text-[#1A2320] dark:text-white">{CATEGORY_LABELS[category] ?? category}</p>
                     <p className="text-xs text-slate-400 mt-0.5">{items.length} {items.length === 1 ? "system" : "systems"}</p>
                   </div>
                   {hasExpiring && <AlertCircle className="h-4 w-4 text-amber-500 shrink-0" />}
@@ -663,7 +663,7 @@ export default async function PortalHomePage({
       {openWorkOrders && openWorkOrders.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Active Service</h2>
+            <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Active Service</h2>
             <Link href="/portal/service" className="text-sm text-[#0E7C67] flex items-center gap-1 hover:underline">
               View all <ArrowRight className="h-3 w-3" />
             </Link>
@@ -678,7 +678,7 @@ export default async function PortalHomePage({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     {wo.is_emergency && <span className="text-xs bg-red-100 text-red-700 rounded-full px-2 py-0.5 font-medium">Emergency</span>}
-                    <p className="font-medium text-[#0F1B2D] dark:text-white text-sm">{wo.title}</p>
+                    <p className="font-medium text-[#1A2320] dark:text-white text-sm">{wo.title}</p>
                   </div>
                   <p className="text-xs text-slate-500 mt-0.5">
                     {wo.status === "scheduled" && wo.scheduled_date
@@ -706,7 +706,7 @@ export default async function PortalHomePage({
       {/* ── RECENT WORK ──────────────────────────────────────────────── */}
       {completedWorkOrders && completedWorkOrders.length > 0 && (
         <div>
-          <h2 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white mb-3">Recently Completed</h2>
+          <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white mb-3">Recently Completed</h2>
           <div className="relative">
             <div className="absolute left-4 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-800" />
             <div className="space-y-3 pl-10">
@@ -716,12 +716,12 @@ export default async function PortalHomePage({
                     <div className="h-1.5 w-1.5 rounded-full bg-[#0E7C67]" />
                   </div>
                   <div className="rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 px-4 py-3">
-                    <p className="font-medium text-sm text-[#0F1B2D] dark:text-white">{wo.title}</p>
+                    <p className="font-medium text-sm text-[#1A2320] dark:text-white">{wo.title}</p>
                     <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
                       <span className="capitalize">{(wo.category ?? "").replace("_", " ")}</span>
                       {wo.completed_date && <span>{formatDateShort(wo.completed_date)}</span>}
                       {wo.client_cost && (
-                        <span className="font-semibold text-[#0F1B2D] dark:text-white">{formatCurrency(wo.client_cost)}</span>
+                        <span className="font-semibold text-[#1A2320] dark:text-white">{formatCurrency(wo.client_cost)}</span>
                       )}
                     </div>
                   </div>
@@ -736,11 +736,11 @@ export default async function PortalHomePage({
       <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
         <p className="text-xs uppercase tracking-wider text-slate-400 mb-3">Your Team</p>
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0F1B2D] text-white font-bold shrink-0 text-sm">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1A2320] text-white font-bold shrink-0 text-sm">
             CC
           </div>
           <div className="flex-1">
-            <p className="font-semibold text-[#0F1B2D] dark:text-white">Carefree Casa</p>
+            <p className="font-semibold text-[#1A2320] dark:text-white">Carefree Casa</p>
             <p className="text-sm text-slate-500">Home Management Team</p>
           </div>
           <Link
@@ -760,7 +760,7 @@ function PropRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between items-center px-4 py-2.5">
       <span className="text-sm text-slate-500">{label}</span>
-      <span className="text-sm font-medium text-[#0F1B2D] dark:text-white">{value}</span>
+      <span className="text-sm font-medium text-[#1A2320] dark:text-white">{value}</span>
     </div>
   )
 }

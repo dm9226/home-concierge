@@ -169,7 +169,7 @@ export function RecurringServices({ propertyId }: { propertyId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-display text-lg font-semibold text-[#0F1B2D] dark:text-white">Recurring Services</h3>
+          <h3 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Recurring Services</h3>
           <p className="text-sm text-slate-500">Standing service providers: who comes, how often, and what access they need.</p>
         </div>
         {editingId === null && (
@@ -262,7 +262,7 @@ export function RecurringServices({ propertyId }: { propertyId: string }) {
             <div key={s.id} className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="font-semibold text-[#0F1B2D] dark:text-white">{s.service_type}</p>
+                  <p className="font-semibold text-[#1A2320] dark:text-white">{s.service_type}</p>
                   {(s.company_name || s.frequency) && (
                     <p className="text-sm text-slate-500">
                       {s.company_name}{s.company_name && s.frequency ? " · " : ""}{s.frequency}

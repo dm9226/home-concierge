@@ -83,7 +83,7 @@ export function WorkOrderActions({ workOrder }: { workOrder: any }) {
               type="date"
               value={scheduledDate}
               onChange={e => setScheduledDate(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#0F1B2D]"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#1A2320]"
             />
           </div>
         ) : null}
@@ -98,7 +98,7 @@ export function WorkOrderActions({ workOrder }: { workOrder: any }) {
               value={actualCost}
               onChange={e => setActualCost(e.target.value)}
               placeholder="0.00"
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#0F1B2D]"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#1A2320]"
             />
           </div>
         ) : null}

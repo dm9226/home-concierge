@@ -97,7 +97,7 @@ export function MaintenanceItemCard({
       {/* Header row */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <p className="font-medium text-[#0F1B2D] dark:text-white">{item.title}</p>
+          <p className="font-medium text-[#1A2320] dark:text-white">{item.title}</p>
           <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
             <span className="capitalize">{FREQ_LABELS[item.frequency] ?? item.frequency}</span>
             {item.season && <span className="capitalize">{item.season}</span>}
@@ -110,7 +110,7 @@ export function MaintenanceItemCard({
                     type="number"
                     value={costInput}
                     onChange={e => setCostInput(e.target.value)}
-                    className="w-20 rounded border border-slate-300 px-1.5 py-0.5 text-xs text-[#0F1B2D] dark:bg-slate-800 dark:border-slate-600 dark:text-white"
+                    className="w-20 rounded border border-slate-300 px-1.5 py-0.5 text-xs text-[#1A2320] dark:bg-slate-800 dark:border-slate-600 dark:text-white"
                     placeholder="0"
                     autoFocus
                   />
@@ -178,7 +178,7 @@ export function MaintenanceItemCard({
             value={completedDate}
             max={new Date().toISOString().split("T")[0]}
             onChange={e => setCompletedDate(e.target.value)}
-            className="flex-1 rounded-md border border-slate-300 px-2.5 py-1.5 text-sm text-[#0F1B2D] dark:bg-slate-800 dark:border-slate-600 dark:text-white"
+            className="flex-1 rounded-md border border-slate-300 px-2.5 py-1.5 text-sm text-[#1A2320] dark:bg-slate-800 dark:border-slate-600 dark:text-white"
           />
           <button
             onClick={handleComplete}
@@ -198,7 +198,7 @@ export function MaintenanceItemCard({
       ) : (
         <button
           onClick={() => { setCompleting(true); setCompletedDate(new Date().toISOString().split("T")[0]) }}
-          className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-[#0F1B2D] dark:hover:text-white transition-colors"
+          className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-[#1A2320] dark:hover:text-white transition-colors"
         >
           <CheckCircle2 className="h-3.5 w-3.5" />
           Mark complete

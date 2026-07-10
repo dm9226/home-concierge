@@ -192,7 +192,7 @@ export function AddAssetDialog({ propertyId }: Props) {
               >
                 <Sparkles className="h-8 w-8 text-[#0E7C67]" />
                 <div>
-                  <p className="font-semibold text-[#0F1B2D] text-sm">Scan Label</p>
+                  <p className="font-semibold text-[#1A2320] text-sm">Scan Label</p>
                   <p className="text-xs text-slate-400 mt-0.5">Photo auto-fills details</p>
                 </div>
               </button>
@@ -203,7 +203,7 @@ export function AddAssetDialog({ propertyId }: Props) {
               >
                 <PenLine className="h-8 w-8 text-slate-400" />
                 <div>
-                  <p className="font-semibold text-[#0F1B2D] text-sm">Enter Manually</p>
+                  <p className="font-semibold text-[#1A2320] text-sm">Enter Manually</p>
                   <p className="text-xs text-slate-400 mt-0.5">Type the details yourself</p>
                 </div>
               </button>
@@ -235,7 +235,7 @@ export function AddAssetDialog({ propertyId }: Props) {
               <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-slate-200 py-10">
                 <Sparkles className="h-10 w-10 text-[#0E7C67]" />
                 <div className="text-center">
-                  <p className="font-medium text-[#0F1B2D]">Take a photo of the label</p>
+                  <p className="font-medium text-[#1A2320]">Take a photo of the label</p>
                   <p className="text-xs text-slate-400 mt-0.5">Serial number plate, data tag, or nameplate</p>
                 </div>
               </div>

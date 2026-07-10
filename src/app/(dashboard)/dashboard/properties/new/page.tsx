@@ -13,7 +13,7 @@ export default async function NewPropertyPage() {
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">New Property</h1>
+        <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">New Property</h1>
         <p className="mt-1 text-sm text-slate-500">Add a property to the system. You can assign the owner later.</p>
       </div>
       <NewPropertyForm />

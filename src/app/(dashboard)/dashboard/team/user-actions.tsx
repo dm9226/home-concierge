@@ -65,7 +65,7 @@ export function UserActions({ currentUserId, member, allStaff }: UserActionsProp
                 <select
                   value={reassignTo}
                   onChange={e => setReassignTo(e.target.value)}
-                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-700 focus:border-[#0F1B2D] focus:outline-none"
+                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-700 focus:border-[#1A2320] focus:outline-none"
                 >
                   <option value="">-- select --</option>
                   {otherStaff.map(s => (

@@ -32,7 +32,7 @@ export default async function DashboardMessagesPage() {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
         <MessageSquare className="h-12 w-12 text-slate-300 mb-3" />
-        <h2 className="font-display text-xl font-semibold text-[#0F1B2D]">No conversations yet</h2>
+        <h2 className="font-display text-xl font-semibold text-[#1A2320]">No conversations yet</h2>
       </div>
     )
   }
@@ -63,7 +63,7 @@ export default async function DashboardMessagesPage() {
 
   return (
     <div className="max-w-2xl space-y-4">
-      <h1 className="font-display text-2xl font-semibold text-[#0F1B2D] dark:text-white">Messages</h1>
+      <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Messages</h1>
 
       <div className="space-y-2">
         {sorted.map(property => {
@@ -76,12 +76,12 @@ export default async function DashboardMessagesPage() {
               <Card className="hover:shadow-md transition-all">
                 <CardContent className="pt-4 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0F1B2D] text-white font-semibold text-sm shrink-0">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1A2320] text-white font-semibold text-sm shrink-0">
                       {client ? client.full_name.split(" ").map((n: string) => n[0]).join("") : "?"}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="font-semibold text-[#0F1B2D] dark:text-white truncate">
+                        <p className="font-semibold text-[#1A2320] dark:text-white truncate">
                           {client?.full_name ?? "Client"}
                         </p>
                         {latest && (

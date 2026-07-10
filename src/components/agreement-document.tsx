@@ -45,7 +45,7 @@ function parseBody(body: string): Block[] {
 function renderInline(text: string, k: string): React.ReactNode[] {
   return text.split(/\*\*/).map((p, i) =>
     i % 2 === 1
-      ? <strong key={`${k}-${i}`} className="font-medium text-[#0F1B2D] dark:text-white">{p}</strong>
+      ? <strong key={`${k}-${i}`} className="font-medium text-[#1A2320] dark:text-white">{p}</strong>
       : <React.Fragment key={`${k}-${i}`}>{p}</React.Fragment>
   )
 }
@@ -64,7 +64,7 @@ export function AgreementDocument({
   return (
     <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
       {/* Letterhead */}
-      <div className="bg-[#0F1B2D] px-6 py-6 text-center sm:px-10">
+      <div className="bg-[#1A2320] px-6 py-6 text-center sm:px-10">
         <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#0E7C67]">Carefree Casa</p>
         <h1 className="font-display text-2xl font-semibold text-white sm:text-3xl mt-1">{title}</h1>
       </div>
@@ -80,7 +80,7 @@ export function AgreementDocument({
           {blocks.map((block, i) => {
             if (block.type === "heading") {
               return (
-                <h2 key={i} className="font-display text-base font-semibold text-[#0F1B2D] dark:text-white pt-3">
+                <h2 key={i} className="font-display text-base font-semibold text-[#1A2320] dark:text-white pt-3">
                   {block.num && <span className="text-[#0E7C67]">{block.num}.</span>} {block.title}
                 </h2>
               )
@@ -113,7 +113,7 @@ function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <dt className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{label}</dt>
-      <dd className="mt-0.5 text-sm font-medium text-[#0F1B2D] dark:text-white">{value}</dd>
+      <dd className="mt-0.5 text-sm font-medium text-[#1A2320] dark:text-white">{value}</dd>
     </div>
   )
 }
