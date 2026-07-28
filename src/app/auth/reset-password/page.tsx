@@ -47,9 +47,9 @@ export default function ResetPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#F5F0E8] px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <Link href="/" className="mb-6 inline-flex">
+          <a href="https://carefree-casa.com" className="mb-6 inline-flex">
             <Logo />
-          </Link>
+          </a>
           <h1 className="font-display text-3xl font-semibold text-[#1A2320]">Set new password</h1>
           <p className="mt-2 text-sm text-slate-500">Enter a new password for your account</p>
         </div>

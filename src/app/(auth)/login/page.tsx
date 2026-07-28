@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { LoginForm } from "./login-form"
 import { Logo } from "@/components/logo"
 
@@ -12,9 +11,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen">
       {/* Left panel */}
       <div className="hidden w-1/2 flex-col justify-between navy-gradient p-12 lg:flex">
-        <Link href="/">
+        <a href="https://carefree-casa.com">
           <Logo size="lg" onDark />
-        </Link>
+        </a>
         <div>
           <blockquote className="mb-8">
             <p className="font-display text-3xl font-light leading-relaxed text-white/90">
@@ -35,9 +34,9 @@ export default function LoginPage() {
       <div className="flex flex-1 flex-col items-center justify-center bg-[#F5F0E8] px-6">
         <div className="w-full max-w-sm">
           <div className="mb-8 text-center">
-            <Link href="/" className="mb-6 flex justify-center lg:hidden">
+            <a href="https://carefree-casa.com" className="mb-6 flex justify-center lg:hidden">
               <Logo />
-            </Link>
+            </a>
             <h1 className="font-display text-3xl font-semibold text-[#1A2320]">Welcome back</h1>
             <p className="mt-2 text-sm text-slate-500">Sign in to your Carefree Casa account</p>
           </div>
@@ -45,10 +44,10 @@ export default function LoginPage() {
           <LoginForm />
 
           <p className="mt-6 text-center text-sm text-slate-500">
-            New client?{" "}
-            <Link href="/signup" className="font-medium text-[#0E7C67] hover:underline">
-              Contact us to get started
-            </Link>
+            New to Carefree Casa?{" "}
+            <a href="https://carefree-casa.com" className="font-medium text-[#0E7C67] hover:underline">
+              Visit carefree-casa.com
+            </a>
           </p>
         </div>
       </div>

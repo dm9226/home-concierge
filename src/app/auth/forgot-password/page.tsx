@@ -36,9 +36,9 @@ export default function ForgotPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#F5F0E8] px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <Link href="/" className="mb-6 inline-flex">
+          <a href="https://carefree-casa.com" className="mb-6 inline-flex">
             <Logo />
-          </Link>
+          </a>
           <h1 className="font-display text-3xl font-semibold text-[#1A2320]">Reset password</h1>
           <p className="mt-2 text-sm text-slate-500">
             Enter your email and we'll send a reset link

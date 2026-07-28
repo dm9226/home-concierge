@@ -30,7 +30,7 @@ export async function updateSession(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  const publicRoutes = ["/", "/login", "/signup"]
+  const publicRoutes = ["/", "/login", "/plans"]
   const isPublicRoute =
     publicRoutes.includes(pathname) ||
     pathname.startsWith("/auth/") ||
@@ -43,7 +43,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (user && (pathname === "/login" || pathname === "/signup" || pathname === "/")) {
+  if (user && (pathname === "/login" || pathname === "/")) {
     const url = request.nextUrl.clone()
     const { data: profile } = await supabase
       .from("users")
