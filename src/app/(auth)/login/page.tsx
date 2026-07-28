@@ -14,19 +14,16 @@ export default function LoginPage() {
         <a href="https://carefree-casa.com">
           <Logo size="lg" onDark />
         </a>
-        <div>
-          <blockquote className="mb-8">
-            <p className="font-display text-3xl font-light leading-relaxed text-white/90">
-              "Our home has never been in better condition. Carefree Casa handles everything — we just enjoy it."
-            </p>
-          </blockquote>
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-white/20" />
-            <div>
-              <p className="font-medium text-white">Robert Ashworth</p>
-              <p className="text-sm text-white/60">Client since 2023 — Buckhead</p>
-            </div>
-          </div>
+        <div className="max-w-md">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-[#0E7C67]">
+            Concierge Home Management
+          </p>
+          <p className="font-display text-4xl font-light leading-tight text-white">
+            Homeownership without the headache.
+          </p>
+          <p className="mt-5 text-lg leading-relaxed text-white/70">
+            We treat your home like it&apos;s our own. Quarterly walkthroughs, trusted vendors, and on-demand support.
+          </p>
         </div>
       </div>
 
