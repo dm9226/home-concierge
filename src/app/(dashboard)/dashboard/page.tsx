@@ -75,6 +75,7 @@ export default async function DashboardPage() {
     { data: rawClientMessages },
     { data: expiringWarranties },
     { data: agingAssets },
+    { count: openWorkOrders },
   ] = await Promise.all([
     propertyIds.length
       ? admin.from("work_orders")
@@ -166,6 +167,13 @@ export default async function DashboardPage() {
           .not("install_date", "is", null)
           .not("expected_lifespan_years", "is", null)
       : Promise.resolve({ data: [], error: null }),
+
+    propertyIds.length
+      ? admin.from("work_orders")
+          .select("*", { count: "exact", head: true })
+          .in("property_id", propertyIds)
+          .not("status", "in", '("completed","cancelled")')
+      : Promise.resolve({ count: 0, error: null }),
   ])
 
   const arr = ttmInvoices?.reduce((sum, inv) => sum + inv.total, 0) ?? 0
@@ -188,13 +196,6 @@ export default async function DashboardPage() {
     (submittedOrders?.length ?? 0) +
     (overdueItems?.length ?? 0) +
     unassignedProps.length
-
-  // What the action items actually are (they're not all work orders)
-  const actionSummary = [
-    (submittedOrders?.length ?? 0) > 0 ? `${submittedOrders!.length} work order${submittedOrders!.length === 1 ? "" : "s"}` : null,
-    (overdueItems?.length ?? 0) > 0 ? `${overdueItems!.length} overdue` : null,
-    unassignedProps.length > 0 ? `${unassignedProps.length} need${unassignedProps.length === 1 ? "s" : ""} owner` : null,
-  ].filter(Boolean).join(" · ") || "All caught up"
 
   const hasProactiveAlerts =
     atRiskProperties.length > 0 ||
@@ -295,25 +296,25 @@ export default async function DashboardPage() {
           </Card>
         </Link>
 
-        <a href="#open-action-items" className="group block">
-          <Card className={`h-full hover:shadow-md transition-all cursor-pointer ${totalActionItems > 0 ? "border-amber-200" : ""}`}>
+        <Link href="/dashboard/work-orders" className="group">
+          <Card className={`h-full hover:shadow-md transition-all cursor-pointer ${(openWorkOrders ?? 0) > 0 ? "border-amber-200" : ""}`}>
             <CardContent className="pt-5 pb-5">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Action Items</p>
-                <AlertTriangle className={`h-4 w-4 ${totalActionItems > 0 ? "text-amber-500" : "text-emerald-500"}`} />
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Open Work Orders</p>
+                <Wrench className={`h-4 w-4 ${(openWorkOrders ?? 0) > 0 ? "text-amber-500" : "text-slate-300"}`} />
               </div>
-              <p className={`font-display text-2xl font-bold ${totalActionItems > 0 ? "text-amber-600" : "text-emerald-600"}`}>
-                {totalActionItems}
+              <p className={`font-display text-2xl font-bold ${(openWorkOrders ?? 0) > 0 ? "text-amber-600" : "text-[#1A2320] dark:text-white"}`}>
+                {openWorkOrders ?? 0}
               </p>
               <p className="text-xs text-slate-500 mt-1">
-                {actionSummary}
+                {(submittedOrders?.length ?? 0) > 0 ? `${submittedOrders!.length} awaiting approval` : "None awaiting approval"}
               </p>
               <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#0E7C67] group-hover:underline">
-                View action items <ArrowRight className="h-3 w-3" />
+                View work orders <ArrowRight className="h-3 w-3" />
               </p>
             </CardContent>
           </Card>
-        </a>
+        </Link>
 
         <Link href="/dashboard/invoices" className="group">
           <Card className={`h-full hover:shadow-md transition-all cursor-pointer ${outstanding > 0 ? "border-amber-200" : ""}`}>
@@ -335,7 +336,7 @@ export default async function DashboardPage() {
       {/* Main content */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Open Action Items */}
-        <div id="open-action-items" className="lg:col-span-2 space-y-3 scroll-mt-24">
+        <div className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Open Action Items</h2>
             {totalActionItems > 0 && (
