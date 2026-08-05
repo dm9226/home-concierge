@@ -65,17 +65,28 @@ export function CoverPhotoEditor({
   return (
     <div className={cn("relative overflow-hidden", className)}>
       {displayUrl ? (
-        <img
-          src={displayUrl}
-          alt={address}
-          className="h-full w-full object-cover"
-          onError={() => setUrl(null)}
-        />
+        <>
+          <img
+            src={displayUrl}
+            alt={address}
+            className="h-full w-full object-cover"
+            onError={() => setUrl(null)}
+          />
+          {/* Click the photo to open it full-size in a new tab */}
+          <a
+            href={displayUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open full photo"
+            aria-label="Open full photo"
+            className="absolute inset-0 cursor-zoom-in"
+          />
+        </>
       ) : (
         <PropertyPlaceholder />
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
       {children}
 

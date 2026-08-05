@@ -245,7 +245,7 @@ export default async function PropertyDetailPage({
           latitude={property.latitude ? Number(property.latitude) : null}
           longitude={property.longitude ? Number(property.longitude) : null}
           canEdit
-          className="h-48"
+          className="h-64 sm:h-80"
         >
           <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between">
             <div>
