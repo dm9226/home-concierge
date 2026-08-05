@@ -189,6 +189,13 @@ export default async function DashboardPage() {
     (overdueItems?.length ?? 0) +
     unassignedProps.length
 
+  // What the action items actually are (they're not all work orders)
+  const actionSummary = [
+    (submittedOrders?.length ?? 0) > 0 ? `${submittedOrders!.length} work order${submittedOrders!.length === 1 ? "" : "s"}` : null,
+    (overdueItems?.length ?? 0) > 0 ? `${overdueItems!.length} overdue` : null,
+    unassignedProps.length > 0 ? `${unassignedProps.length} need${unassignedProps.length === 1 ? "s" : ""} owner` : null,
+  ].filter(Boolean).join(" · ") || "All caught up"
+
   const hasProactiveAlerts =
     atRiskProperties.length > 0 ||
     (expiringWarranties?.length ?? 0) > 0 ||
@@ -288,7 +295,7 @@ export default async function DashboardPage() {
           </Card>
         </Link>
 
-        <Link href="/dashboard/work-orders" className="group">
+        <a href="#open-action-items" className="group block">
           <Card className={`h-full hover:shadow-md transition-all cursor-pointer ${totalActionItems > 0 ? "border-amber-200" : ""}`}>
             <CardContent className="pt-5 pb-5">
               <div className="flex items-center justify-between mb-2">
@@ -299,14 +306,14 @@ export default async function DashboardPage() {
                 {totalActionItems}
               </p>
               <p className="text-xs text-slate-500 mt-1">
-                {submittedOrders?.length ?? 0} pending &bull; {overdueItems?.length ?? 0} overdue
+                {actionSummary}
               </p>
               <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#0E7C67] group-hover:underline">
-                View work orders <ArrowRight className="h-3 w-3" />
+                View action items <ArrowRight className="h-3 w-3" />
               </p>
             </CardContent>
           </Card>
-        </Link>
+        </a>
 
         <Link href="/dashboard/invoices" className="group">
           <Card className={`h-full hover:shadow-md transition-all cursor-pointer ${outstanding > 0 ? "border-amber-200" : ""}`}>
@@ -328,7 +335,7 @@ export default async function DashboardPage() {
       {/* Main content */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Open Action Items */}
-        <div className="lg:col-span-2 space-y-3">
+        <div id="open-action-items" className="lg:col-span-2 space-y-3 scroll-mt-24">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Open Action Items</h2>
             {totalActionItems > 0 && (
