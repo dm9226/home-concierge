@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { Camera, Loader2 } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
+import { Camera, Loader2, X } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { PropertyPlaceholder } from "@/components/property-placeholder"
@@ -27,9 +27,17 @@ export function CoverPhotoEditor({
 }: CoverPhotoEditorProps) {
   const [url, setUrl] = useState(initialUrl)
   const [uploading, setUploading] = useState(false)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const displayUrl = url
+
+  useEffect(() => {
+    if (!lightboxOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setLightboxOpen(false) }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [lightboxOpen])
 
   async function handleFile(file: File) {
     setUploading(true)
@@ -72,11 +80,10 @@ export function CoverPhotoEditor({
             className="h-full w-full object-cover"
             onError={() => setUrl(null)}
           />
-          {/* Click the photo to open it full-size in a new tab */}
-          <a
-            href={displayUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          {/* Click the photo to open it full-size in a lightbox */}
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
             title="Open full photo"
             aria-label="Open full photo"
             className="absolute inset-0 cursor-zoom-in"
@@ -112,6 +119,32 @@ export function CoverPhotoEditor({
               const file = e.target.files?.[0]
               if (file) handleFile(file)
             }}
+          />
+        </div>
+      )}
+
+      {/* Full-photo lightbox */}
+      {lightboxOpen && displayUrl && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setLightboxOpen(false)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(false)}
+            aria-label="Close"
+            className="absolute top-4 right-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={displayUrl}
+            alt={address}
+            onClick={e => e.stopPropagation()}
+            className="max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl"
           />
         </div>
       )}
