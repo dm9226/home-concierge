@@ -8,6 +8,7 @@ interface HealthScoreGaugeProps {
   showLabel?: boolean
   showTrend?: boolean
   trendDelta?: number
+  assessed?: boolean
   className?: string
 }
 
@@ -17,6 +18,7 @@ export function HealthScoreGauge({
   showLabel = true,
   showTrend,
   trendDelta,
+  assessed = true,
   className,
 }: HealthScoreGaugeProps) {
   const sizes = {
@@ -30,10 +32,11 @@ export function HealthScoreGauge({
   const cy = dim / 2
   const circumference = 2 * Math.PI * r
   const arcLength = circumference * (250 / 360)
-  const fillLength = arcLength * (Math.min(Math.max(score, 0), 100) / 100)
-  const color = score >= 80 ? "#059669" : score >= 60 ? "#d97706" : "#dc2626"
-  const textColor =
-    score >= 80 ? "text-emerald-600" : score >= 60 ? "text-amber-500" : "text-red-500"
+  const fillLength = assessed ? arcLength * (Math.min(Math.max(score, 0), 100) / 100) : 0
+  const color = !assessed ? "#94a3b8" : score >= 80 ? "#059669" : score >= 60 ? "#d97706" : "#dc2626"
+  const textColor = !assessed
+    ? "text-slate-400"
+    : score >= 80 ? "text-emerald-600" : score >= 60 ? "text-amber-500" : "text-red-500"
 
   return (
     <div className={cn("flex flex-col items-center", className)}>
@@ -75,21 +78,25 @@ export function HealthScoreGauge({
           fill={color}
           fontFamily="var(--font-display), Georgia, serif"
         >
-          {score}
+          {assessed ? score : "–"}
         </text>
-        <text
-          x={cx}
-          y={cx + subSize + 12}
-          textAnchor="middle"
-          fontSize={subSize}
-          fill="#94a3b8"
-          fontFamily="var(--font-sans), system-ui, sans-serif"
-        >
-          / 100
-        </text>
+        {assessed && (
+          <text
+            x={cx}
+            y={cx + subSize + 12}
+            textAnchor="middle"
+            fontSize={subSize}
+            fill="#94a3b8"
+            fontFamily="var(--font-sans), system-ui, sans-serif"
+          >
+            / 100
+          </text>
+        )}
       </svg>
       {showLabel && (
-        <p className={cn("mt-1 font-medium text-sm", textColor)}>{getHealthScoreLabel(score)}</p>
+        <p className={cn("mt-1 font-medium text-sm", textColor)}>
+          {assessed ? getHealthScoreLabel(score) : "Not yet assessed"}
+        </p>
       )}
       {showTrend && trendDelta !== undefined && (
         <p

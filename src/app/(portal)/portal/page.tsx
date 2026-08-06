@@ -187,6 +187,7 @@ export default async function PortalHomePage({
   const pendingRecCount = (recRows ?? []).filter(r => r.status === "pending").length
 
   const healthScore = property.health_score ?? 0
+  const healthAssessed = (inspectionRows?.length ?? 0) > 0
   const healthColor = healthScore >= 80 ? "text-emerald-400" : healthScore >= 60 ? "text-amber-400" : "text-red-400"
   const healthLabel = healthScore >= 80 ? "Excellent" : healthScore >= 60 ? "Good" : "Needs Attention"
   const healthDesc = healthScore >= 80
@@ -248,8 +249,17 @@ export default async function PortalHomePage({
               </p>
             </div>
             <div className="shrink-0 flex flex-col items-center bg-black/40 backdrop-blur-sm rounded-xl px-3 py-2">
-              <p className={`font-display text-2xl font-bold leading-none ${healthColor}`}>{healthScore}</p>
-              <p className="text-[10px] text-white/60 mt-0.5 whitespace-nowrap">{healthLabel}</p>
+              {healthAssessed ? (
+                <>
+                  <p className={`font-display text-2xl font-bold leading-none ${healthColor}`}>{healthScore}</p>
+                  <p className="text-[10px] text-white/60 mt-0.5 whitespace-nowrap">{healthLabel}</p>
+                </>
+              ) : (
+                <>
+                  <p className="font-display text-2xl font-bold leading-none text-white/70">–</p>
+                  <p className="text-[10px] text-white/60 mt-0.5 whitespace-nowrap">Not yet assessed</p>
+                </>
+              )}
             </div>
           </div>
         </CoverPhotoEditor>

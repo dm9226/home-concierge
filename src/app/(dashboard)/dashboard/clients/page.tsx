@@ -31,6 +31,17 @@ export default async function ClientsPage() {
     .eq("role", "client")
     .order("full_name", { ascending: true })
 
+  // Only show a health score once the property has a completed inspection
+  const allClientPropIds = (clients ?? []).flatMap((c: any) => ((c.properties ?? []) as any[]).map(p => p.id))
+  const { data: clAssessedRows } = allClientPropIds.length
+    ? await admin
+        .from("property_inspections")
+        .select("property_id")
+        .eq("status", "complete")
+        .in("property_id", allClientPropIds)
+    : { data: [] }
+  const assessedSet = new Set((clAssessedRows ?? []).map(r => r.property_id))
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -87,7 +98,7 @@ export default async function ClientsPage() {
                           >
                             <Home className="h-3.5 w-3.5 text-slate-400 shrink-0" />
                             {p.address}, {p.city}
-                            {p.health_score && (
+                            {assessedSet.has(p.id) && p.health_score && (
                               <span className="text-xs text-slate-400">&bull; Health {p.health_score}</span>
                             )}
                           </Link>
@@ -98,7 +109,7 @@ export default async function ClientsPage() {
 
                   {/* Health + actions */}
                   <div className="shrink-0 flex items-center gap-3">
-                    {activeProps[0]?.health_score && (
+                    {activeProps[0] && assessedSet.has(activeProps[0].id) && activeProps[0].health_score && (
                       <HealthScoreGauge score={activeProps[0].health_score} size="sm" />
                     )}
                     <ClientActions

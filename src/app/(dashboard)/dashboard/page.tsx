@@ -35,6 +35,17 @@ export default async function DashboardPage() {
     .order("created_at", { ascending: false })
 
   const propertyIds = properties?.map(p => p.id) ?? []
+
+  // Health score only counts once a property has a completed inspection
+  const { data: dashAssessedRows } = propertyIds.length
+    ? await admin
+        .from("property_inspections")
+        .select("property_id")
+        .eq("status", "complete")
+        .in("property_id", propertyIds)
+    : { data: [] }
+  const assessedSet = new Set((dashAssessedRows ?? []).map(r => r.property_id))
+
   const clientIds = properties
     ?.map(p => p.client_id)
     .filter((id): id is string => !!id) ?? []
@@ -52,9 +63,10 @@ export default async function DashboardPage() {
     if (p.client_id && client?.full_name) clientNameById[p.client_id] = client.full_name
   })
 
-  const avgHealthScore = properties?.length
-    ? Math.round(properties.reduce((sum, p) => sum + (p.health_score ?? 0), 0) / properties.length)
-    : 0
+  const assessedProps = (properties ?? []).filter(p => assessedSet.has(p.id))
+  const avgHealthScore = assessedProps.length
+    ? Math.round(assessedProps.reduce((sum, p) => sum + (p.health_score ?? 0), 0) / assessedProps.length)
+    : null
 
   const now = new Date()
   const ttmStart = new Date(now); ttmStart.setFullYear(ttmStart.getFullYear() - 1)
@@ -189,7 +201,7 @@ export default async function DashboardPage() {
     .slice(0, 4)
 
   const unassignedProps = (properties ?? []).filter(p => !p.client_id)
-  const atRiskProperties = (properties ?? []).filter(p => (p.health_score ?? 100) < 65)
+  const atRiskProperties = (properties ?? []).filter(p => assessedSet.has(p.id) && (p.health_score ?? 100) < 65)
   const recentClientMessages = (rawClientMessages ?? []) as any[]
 
   const totalActionItems =
@@ -286,7 +298,7 @@ export default async function DashboardPage() {
               </div>
               <p className="font-display text-2xl font-bold text-[#1A2320] dark:text-white">{properties?.length ?? 0}</p>
               <p className="text-xs text-slate-500 mt-1">
-                Avg health score: {avgHealthScore}
+                {avgHealthScore !== null ? `Avg health score: ${avgHealthScore}` : "Health scores pending inspection"}
                 {myPropertyIds.size > 0 && <span className="text-[#0E7C67]"> &bull; {myPropertyIds.size} yours</span>}
               </p>
               <p className="mt-3 flex items-center gap-1 text-xs font-medium text-[#0E7C67] group-hover:underline">

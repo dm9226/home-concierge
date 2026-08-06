@@ -27,20 +27,32 @@ export default async function ReportsPage() {
   ] = await Promise.all([
     admin.from("work_orders").select("status, priority, created_at, actual_cost, completed_date"),
     admin.from("invoices").select("status, total, paid_date, created_at"),
-    admin.from("properties").select("status, health_score, fee_amount, billing_period"),
+    admin.from("properties").select("id, status, health_score, fee_amount, billing_period"),
     admin.from("vendors").select("id, vendor_scorecards(average_satisfaction_rating, total_jobs)"),
   ])
 
   const activeProperties = properties?.filter(p => p.status === "active") ?? []
   const totalProperties = activeProperties.length
 
+  // Health metrics only count properties with a completed inspection
+  const activePropIds = activeProperties.map(p => p.id)
+  const { data: rptAssessedRows } = activePropIds.length
+    ? await admin
+        .from("property_inspections")
+        .select("property_id")
+        .eq("status", "complete")
+        .in("property_id", activePropIds)
+    : { data: [] }
+  const assessedSet = new Set((rptAssessedRows ?? []).map(r => r.property_id))
+  const assessedProperties = activeProperties.filter(p => assessedSet.has(p.id) && p.health_score)
+
   const annualizedFees = activeProperties.reduce((sum, p) => {
     const multiplier = p.billing_period === "annually" ? 1 : p.billing_period === "quarterly" ? 4 : 12
     return sum + (p.fee_amount ?? 0) * multiplier
   }, 0)
-  const avgHealthScore = activeProperties.length
-    ? Math.round(activeProperties.filter(p => p.health_score).reduce((sum, p) => sum + (p.health_score ?? 0), 0) / (activeProperties.filter(p => p.health_score).length || 1))
-    : 0
+  const avgHealthScore = assessedProperties.length
+    ? Math.round(assessedProperties.reduce((sum, p) => sum + (p.health_score ?? 0), 0) / assessedProperties.length)
+    : null
 
   const completedWOs = workOrders?.filter(wo => wo.status === "completed") ?? []
   const completedThisMonth = completedWOs.filter(wo => wo.completed_date && wo.completed_date >= thirtyDaysAgo).length
@@ -69,7 +81,7 @@ export default async function ReportsPage() {
       {/* KPI cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <KpiCard icon={<Home className="h-5 w-5" />} label="Active Properties" value={totalProperties.toString()} />
-        <KpiCard icon={<TrendingUp className="h-5 w-5" />} label="Avg Health Score" value={avgHealthScore.toString()} sub="out of 100" />
+        <KpiCard icon={<TrendingUp className="h-5 w-5" />} label="Avg Health Score" value={avgHealthScore !== null ? avgHealthScore.toString() : "--"} sub={avgHealthScore !== null ? "out of 100" : "awaiting inspections"} />
         <KpiCard icon={<Wrench className="h-5 w-5" />} label="Completed This Month" value={completedThisMonth.toString()} sub="work orders" />
         <KpiCard icon={<Star className="h-5 w-5" />} label="Avg Vendor Rating" value={avgVendorRating.toString()} sub="out of 5" />
       </div>
@@ -141,8 +153,8 @@ export default async function ReportsPage() {
               { label: "Good (60-79)", min: 60, max: 79, color: "bg-amber-400" },
               { label: "Needs Attention (<60)", min: 0, max: 59, color: "bg-red-400" },
             ].map(band => {
-              const count = properties?.filter(p => p.health_score && p.health_score >= band.min && p.health_score <= band.max).length ?? 0
-              const total = properties?.filter(p => p.health_score).length ?? 1
+              const count = assessedProperties.filter(p => p.health_score && p.health_score >= band.min && p.health_score <= band.max).length
+              const total = assessedProperties.length || 1
               const pct = Math.round((count / total) * 100)
               return (
                 <div key={band.label}>

@@ -261,7 +261,7 @@ export default async function PropertyDetailPage({
 
         <div className="grid grid-cols-2 divide-x divide-slate-200 border-t border-slate-200 sm:grid-cols-2 dark:divide-slate-800 dark:border-slate-800">
           <div className="flex flex-col items-center p-4">
-            <HealthScoreGauge score={property.health_score} size="sm" showLabel />
+            <HealthScoreGauge score={property.health_score} size="sm" showLabel assessed={!!lastInspection} />
           </div>
           <div className="flex flex-col justify-center p-4">
             <ManageOwnersPanel

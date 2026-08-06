@@ -53,6 +53,16 @@ export default async function PropertiesPage({
     unreadByProperty[m.property_id] = (unreadByProperty[m.property_id] ?? 0) + 1
   })
 
+  // A property's health score is only meaningful once it's been inspected
+  const { data: assessedRows } = propertyIds.length
+    ? await admin
+        .from("property_inspections")
+        .select("property_id")
+        .eq("status", "complete")
+        .in("property_id", propertyIds)
+    : { data: [] }
+  const assessedSet = new Set((assessedRows ?? []).map(r => r.property_id))
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -132,7 +142,7 @@ export default async function PropertiesPage({
                         {property.city}, {property.state} {property.zip}
                       </p>
                     </div>
-                    <HealthScoreGauge score={property.health_score} size="sm" showLabel={false} />
+                    <HealthScoreGauge score={property.health_score} size="sm" showLabel={false} assessed={assessedSet.has(property.id)} />
                   </div>
 
                   <div className="mt-4 space-y-1.5">
