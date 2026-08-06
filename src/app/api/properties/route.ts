@@ -41,8 +41,10 @@ export async function POST(request: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Seed standard maintenance schedule (non-fatal)
-  try { await admin.rpc("create_standard_maintenance_schedule", { p_property_id: data.id }) } catch (_) {}
+  // Do NOT auto-seed a maintenance schedule here. Maintenance should reflect
+  // what the home actually has, which isn't known until onboarding/inspection.
+  // The concierge applies the baseline deliberately via the "Load Standard
+  // Schedule" action on the property (or builds it from the inventory).
 
   return NextResponse.json({ id: data.id })
 }
