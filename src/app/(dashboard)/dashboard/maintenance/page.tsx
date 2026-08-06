@@ -7,7 +7,18 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, CheckCircle, Clock } from "lucide-react"
 
-export default async function MaintenanceDashboardPage() {
+const WINDOWS = [
+  { key: "7", label: "Next 7 days", days: 7 },
+  { key: "30", label: "Next 30 days", days: 30 },
+  { key: "90", label: "Next 90 days", days: 90 },
+  { key: "all", label: "All", days: null as number | null },
+]
+
+export default async function MaintenanceDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ window?: string }>
+}) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
@@ -16,6 +27,16 @@ export default async function MaintenanceDashboardPage() {
 
   const { data: profile } = await admin.from("users").select("role").eq("id", user.id).single()
   if (!profile || profile.role === "client") redirect("/portal")
+
+  const { window: winParam } = await searchParams
+  const win = WINDOWS.find(w => w.key === winParam) ?? WINDOWS[1] // default: next 30 days
+
+  let endDateStr: string | null = null
+  if (win.days != null) {
+    const end = new Date()
+    end.setDate(end.getDate() + win.days)
+    endDateStr = end.toISOString().split("T")[0]
+  }
 
   let propertyIds: string[] | null = null
   if (profile.role === "concierge") {
@@ -32,6 +53,9 @@ export default async function MaintenanceDashboardPage() {
     .eq("is_active", true)
     .order("next_due", { ascending: true })
 
+  // Overdue (past) plus anything due within the selected window
+  if (endDateStr) query = query.lte("next_due", endDateStr)
+
   if (propertyIds) {
     if (propertyIds.length === 0) {
       return (
@@ -44,7 +68,7 @@ export default async function MaintenanceDashboardPage() {
     query = query.in("property_id", propertyIds)
   }
 
-  const { data: schedules } = await query.limit(200)
+  const { data: schedules } = await query.limit(500)
 
   const overdue = schedules?.filter(s => {
     const d = s.next_due ? getDaysUntil(s.next_due) : null
@@ -61,9 +85,28 @@ export default async function MaintenanceDashboardPage() {
     return d === null || d > 14
   }) ?? []
 
+  const total = (schedules?.length ?? 0)
+
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Maintenance</h1>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <h1 className="font-display text-2xl font-semibold text-[#1A2320] dark:text-white">Maintenance</h1>
+        <div className="flex flex-wrap gap-2">
+          {WINDOWS.map(w => (
+            <Link
+              key={w.key}
+              href={`/dashboard/maintenance?window=${w.key}`}
+              className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+                w.key === win.key
+                  ? "border-[#1A2320] bg-[#1A2320] text-white"
+                  : "border-slate-200 text-slate-600 hover:border-slate-300"
+              }`}
+            >
+              {w.label}
+            </Link>
+          ))}
+        </div>
+      </div>
 
       <div className="grid grid-cols-3 gap-4">
         <StatCard icon={<AlertTriangle className="h-5 w-5 text-red-500" />} label="Overdue" value={overdue.length} color="red" />
@@ -79,6 +122,14 @@ export default async function MaintenanceDashboardPage() {
       )}
       {upcoming.length > 0 && (
         <Section title="Upcoming" color="slate" items={upcoming} />
+      )}
+
+      {total === 0 && (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <CheckCircle className="h-12 w-12 text-slate-300 mb-3" />
+          <p className="font-medium text-slate-500">Nothing due {win.days != null ? `in the ${win.label.toLowerCase()}` : "yet"}</p>
+          <p className="text-sm text-slate-400 mt-1">Try a longer window to see what's further out.</p>
+        </div>
       )}
     </div>
   )
