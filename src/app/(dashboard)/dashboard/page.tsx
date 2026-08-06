@@ -10,8 +10,9 @@ import { formatCurrency, formatDateShort, getDaysUntil } from "@/lib/utils"
 import {
   Building2, Wrench, Calendar, AlertTriangle, TrendingUp,
   Plus, ArrowRight, Clock, DollarSign, Home, MessageSquare,
-  ShieldAlert, Package, Star,
+  ShieldAlert, Package, Star, ClipboardList, CheckCircle2, Circle,
 } from "lucide-react"
+import { onboardingSteps } from "@/lib/onboarding"
 
 export default async function DashboardPage() {
   // Auth check via session client (respects RLS -- good for auth)
@@ -188,6 +189,51 @@ export default async function DashboardPage() {
       : Promise.resolve({ count: 0, error: null }),
   ])
 
+  // Onboarding progress across every property, computed in bulk so the
+  // dashboard can flag homes that still have setup steps outstanding.
+  const [
+    { data: agreementRows },
+    { data: assetPropRows },
+    { data: servicePropRows },
+    { data: recPropRows },
+    { data: onboardingRows },
+  ] = propertyIds.length
+    ? await Promise.all([
+        admin.from("service_agreements").select("property_id, status").in("property_id", propertyIds),
+        admin.from("assets").select("property_id").in("property_id", propertyIds).eq("status", "active"),
+        admin.from("recurring_services").select("property_id").in("property_id", propertyIds).eq("is_active", true),
+        admin.from("recommendations").select("property_id").in("property_id", propertyIds),
+        admin.from("property_onboarding").select("property_id, hoa_name, utility_providers").in("property_id", propertyIds),
+      ])
+    : [{ data: [] }, { data: [] }, { data: [] }, { data: [] }, { data: [] }] as any
+
+  const agreementAcceptedSet = new Set((agreementRows ?? []).filter((r: any) => r.status === "accepted").map((r: any) => r.property_id))
+  const inventorySet = new Set((assetPropRows ?? []).map((r: any) => r.property_id))
+  const servicesSet = new Set((servicePropRows ?? []).map((r: any) => r.property_id))
+  const recsSet = new Set((recPropRows ?? []).map((r: any) => r.property_id))
+  const infoSet = new Set(
+    (onboardingRows ?? [])
+      .filter((r: any) => !!r.hoa_name || (Array.isArray(r.utility_providers) && r.utility_providers.length > 0))
+      .map((r: any) => r.property_id)
+  )
+
+  const onboardingProperties = (properties ?? [])
+    .map(p => {
+      const steps = onboardingSteps({
+        agreementAccepted: agreementAcceptedSet.has(p.id),
+        hasInspection: assessedSet.has(p.id),
+        hasInfo: p.bedroom_count != null || infoSet.has(p.id),
+        hasInventory: inventorySet.has(p.id),
+        hasServices: servicesSet.has(p.id),
+        hasRecommendations: recsSet.has(p.id),
+      })
+      const remaining = steps.filter(s => !s.done)
+      return { property: p, steps, remaining, done: steps.length - remaining.length, total: steps.length }
+    })
+    .filter(x => x.remaining.length > 0)
+    // Least-complete first, so the homes needing the most work rise to the top
+    .sort((a, b) => a.done - b.done)
+
   const arr = ttmInvoices?.reduce((sum, inv) => sum + inv.total, 0) ?? 0
   const monthRevenue = monthPaidInvoices?.reduce((sum, inv) => sum + inv.total, 0) ?? 0
   const outstanding = outstandingInvoices?.reduce((sum, inv) => sum + inv.total, 0) ?? 0
@@ -344,6 +390,72 @@ export default async function DashboardPage() {
           </Card>
         </Link>
       </div>
+
+      {/* Onboarding in progress */}
+      {onboardingProperties.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <ClipboardList className="h-5 w-5 text-[#0E7C67]" />
+            <h2 className="font-display text-lg font-semibold text-[#1A2320] dark:text-white">Onboarding in progress</h2>
+            <Badge variant="secondary" className="text-xs">
+              {onboardingProperties.length} {onboardingProperties.length === 1 ? "property" : "properties"}
+            </Badge>
+          </div>
+          <p className="text-sm text-slate-500 -mt-1">
+            These homes still have setup steps to finish before they're fully onboarded.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {onboardingProperties.map(({ property: p, steps, remaining, done, total }) => {
+              const pct = Math.round((done / total) * 100)
+              const mine = myPropertyIds.has(p.id)
+              return (
+                <Link key={p.id} href={`/dashboard/properties/${p.id}`}>
+                  <div className="h-full rounded-lg border border-[#0E7C67]/25 bg-[#0E7C67]/[0.03] p-4 hover:shadow-md hover:border-[#0E7C67]/50 transition-all dark:border-[#0E7C67]/30 dark:bg-[#0E7C67]/10">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="min-w-0">
+                        <p className="font-medium text-[#1A2320] dark:text-white truncate">{p.address}</p>
+                        <p className="text-xs text-slate-500 truncate">{p.city}</p>
+                      </div>
+                      {mine && <Star className="h-3.5 w-3.5 text-[#0E7C67] shrink-0 mt-0.5" />}
+                    </div>
+
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                        <div className="h-full rounded-full bg-[#0E7C67]" style={{ width: `${pct}%` }} />
+                      </div>
+                      <span className="text-xs font-medium text-slate-500 shrink-0">{done}/{total}</span>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      {steps.map(s => (
+                        <div key={s.key} className="flex items-center gap-1.5 text-xs">
+                          {s.done ? (
+                            <CheckCircle2 className="h-3.5 w-3.5 text-[#0E7C67] shrink-0" />
+                          ) : (
+                            <Circle className="h-3.5 w-3.5 text-slate-300 shrink-0" />
+                          )}
+                          <span className={s.done ? "text-slate-400 line-through" : "text-[#1A2320] dark:text-slate-200"}>
+                            {s.label}
+                          </span>
+                          {!s.done && s.clientAction && (
+                            <span className="ml-auto text-[10px] font-semibold uppercase tracking-wide text-amber-600 shrink-0">
+                              Client
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <p className="mt-3 text-xs font-medium text-[#0E7C67]">
+                      {remaining.length} {remaining.length === 1 ? "step" : "steps"} left &bull; open property &rarr;
+                    </p>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Main content */}
       <div className="grid gap-6 lg:grid-cols-3">
