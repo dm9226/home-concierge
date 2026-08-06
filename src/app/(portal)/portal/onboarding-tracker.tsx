@@ -37,6 +37,17 @@ export function PortalOnboardingTracker({
             <span className={step.done ? "text-slate-400 line-through" : "text-[#1A2320] dark:text-white"}>
               {step.clientLabel}
             </span>
+            {!step.done && (
+              step.clientAction ? (
+                <span className="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 shrink-0 dark:bg-amber-900/40 dark:text-amber-300">
+                  Needs you
+                </span>
+              ) : (
+                <span className="ml-auto text-[10px] font-medium uppercase tracking-wide text-slate-400 shrink-0">
+                  Your team
+                </span>
+              )
+            )}
           </div>
         ))}
       </div>
